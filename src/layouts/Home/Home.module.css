@@ -1,0 +1,99 @@
+.link {
+    color: blue;
+    font-weight: bold;
+}
+
+.title-header {
+    position: relative;
+    font-family: 'Grind Demolished', sans-serif;
+    font-size: 40px;
+    text-align: center;
+}
+
+.title-header::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 5px;
+    background-color: var(--color-primary);
+}
+
+.list-container {
+    --cols: 3;
+    --spacing: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+
+
+.item-get-around {
+    position: relative;
+    padding-bottom: 50%;
+    height: 0;
+    margin-top: 50px;
+}
+
+.image-get-around {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.line a {
+    color: blue;
+}
+
+.line+.line {
+    margin-top: 8px;
+}
+
+
+.btn-cus {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    cursor: pointer;
+}
+
+.btn-cus::after {
+    border-top-color: var(--color-primary);
+}
+
+.btn-cus::before {
+    border-top-color: var(--color-primary);
+}
+
+.btn-cus:hover {
+    background-color: var(--primary-hover);
+    color: var(--color-white);
+}
+
+.btn-cus:hover::after,
+.btn-cus:hover::before {
+    border-top-color: var(--primary-hover);
+}
+
+/* MOBILE */
+@media (max-width: 46.25em) {
+    .list-container {
+        --cols: 1;
+    }
+
+    .title-header {
+        font-size: 25px;
+    }
+
+    .item-get-around {
+        padding-bottom: 100%;
+    }
+}

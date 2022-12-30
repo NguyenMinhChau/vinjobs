@@ -1,0 +1,42 @@
+/* HEADER_TOP */
+.header_top {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+}
+
+.header_top_btn_social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* DIVEDER */
+.divider {
+    height: 1px;
+    background-color: var(--color-gray);
+    margin: 0 12px;
+}
+
+/* HEADER BOTTOM */
+.header_bottom,
+.header_mobile {
+    position: relative;
+    padding: 10px 12px;
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.header_mobile {
+    display: none;
+}
+
+/* MOBILE */
+@media (max-width: 46.25em) {
+    .header_bottom {
+        display: none;
+    }
+
+    .header_mobile {
+        display: block;
+    }
+}

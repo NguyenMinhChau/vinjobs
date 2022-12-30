@@ -1,0 +1,41 @@
+.container {
+    padding: 10px 12px;
+    border-top: 2px solid var(--color-gray);
+    background-color: var(--color-black);
+    color: var(--color-white);
+}
+
+.top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: bold;
+}
+
+.bottom {
+    font-weight: bold;
+}
+
+.link {
+    color: var(--color-primary);
+}
+
+/* MOBILE */
+@media (max-width: 46.25em) {
+    .container {
+        font-size: 18px;
+    }
+
+    .top {
+        flex-direction: column;
+    }
+
+    .top-image {
+        margin: 24px 0;
+    }
+
+    .logo {
+        width: 100%;
+        align-content: flex-start;
+    }
+}

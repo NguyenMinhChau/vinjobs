@@ -1,0 +1,66 @@
+.list-menu-container {
+    --cols: 7;
+    --spacing: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.menu-item {
+    width: calc((100% / var(--cols)) - (var(--spacing) * 2));
+    position: relative;
+    text-align: center;
+    padding: 12px;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.list-menu-item {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: max-content;
+    min-width: 220px;
+    background-color: var(--color-white);
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 1;
+    animation: fadeIn 0.5s linear;
+    transform-origin: top;
+}
+
+.menu-item-child {
+    padding: 12px;
+    text-align: left;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+/* hover menu-item không làm đổi màu chữ menu-item-child và ngược lại */
+.menu-item:hover,
+.menu-item.active {
+    color: var(--color-primary);
+}
+
+.menu-item:hover .menu-item-child,
+.menu-item.active .menu-item-child {
+    color: initial;
+}
+
+.menu-item-child:hover,
+.menu-item-child.active {
+    color: var(--color-primary) !important;
+}
+
+.logo {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    z-index: 10;
+    object-fit: fill;
+    image-rendering: auto;
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
+}

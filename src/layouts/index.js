@@ -1,0 +1,17 @@
+export { default as DefaultLayouts } from './DefaultLayouts/DefaultLayouts';
+export { default as Header } from './Header/Header';
+export { default as Login } from './Login/Login';
+export { default as Register } from './Register/Register';
+export { default as ForgotPwd } from './ForgotPwd/ForgotPwd';
+export { default as ResetPwd } from './ResetPwd/ResetPwd';
+export { default as Home } from './Home/Home';
+export { default as Introduce } from './AboutUs/Introduce/Introduce';
+export { default as FinancialReport } from './AboutUs/FinancialReport/FinancialReport';
+export { default as Training } from './Training/Training';
+export { default as Web } from './ProductAndService/Web/Web';
+export { default as SoftwareDeliveryService } from './ProductAndService/SoftwareDeliveryService/SoftwareDeliveryService';
+export { default as ProvidentFund } from './ProductAndService/ProvidentFund/ProvidentFund';
+export { default as Recruitment } from './Recruitment/Recruitment';
+export { default as Contact } from './Contact/Contact';
+export { default as Footer } from './Footer/Footer';
+export { default as PageNotFound } from './PageNotFound/PageNotFound';
