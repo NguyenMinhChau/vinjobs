@@ -10,11 +10,6 @@ export default function Header() {
     const [isShowMenu, setIsShowMenu] = React.useState(false);
     const [isShowMenuMobile, setIsShowMenuMobile] = React.useState(false);
     const [id, setId] = React.useState();
-    const toogleMenu = (e, id) => {
-        e.preventDefault();
-        setId(id);
-        setIsShowMenu(!isShowMenu);
-    };
     const MenuChildTrue = (e, id) => {
         e.preventDefault();
         setId(id);
@@ -59,11 +54,7 @@ export default function Header() {
             </div>
             <div className={`${cx('divider')}`}></div>
             <div className={`${cx('header_bottom')}`}>
-                <MenuPC
-                    toogleMenu={toogleMenu}
-                    isShowMenu={isShowMenu}
-                    id={id}
-                />
+                <MenuPC />
             </div>
             <div className={`${cx('header_mobile')}`}>
                 <MenuMobile

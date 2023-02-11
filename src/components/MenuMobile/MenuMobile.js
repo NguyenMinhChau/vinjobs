@@ -86,7 +86,8 @@ export default function MenuMobile({
                                                                                 itemChild?.link
                                                                             }
                                                                             onClick={
-                                                                                !isShowMenu
+                                                                                !isShowMenu ||
+                                                                                itemChild?.children
                                                                                     ? (
                                                                                           e
                                                                                       ) => {
@@ -112,9 +113,66 @@ export default function MenuMobile({
                                                                                 )
                                                                             }
                                                                         >
-                                                                            {
-                                                                                itemChild?.name
-                                                                            }
+                                                                            <div>
+                                                                                <span>
+                                                                                    {
+                                                                                        itemChild?.name
+                                                                                    }
+                                                                                </span>
+                                                                                {itemChild?.children && (
+                                                                                    <span>
+                                                                                        <IconHeader.ArrowMenuIcon />
+                                                                                    </span>
+                                                                                )}
+                                                                            </div>
+                                                                            {itemChild?.children && (
+                                                                                <>
+                                                                                    <ul
+                                                                                        className={`${cx(
+                                                                                            'list-menu-item-mobile-child'
+                                                                                        )}`}
+                                                                                    >
+                                                                                        {itemChild?.children.map(
+                                                                                            (
+                                                                                                itemChildChild,
+                                                                                                index
+                                                                                            ) => {
+                                                                                                return (
+                                                                                                    <NavLink
+                                                                                                        to={
+                                                                                                            itemChildChild?.link
+                                                                                                        }
+                                                                                                        key={
+                                                                                                            index
+                                                                                                        }
+                                                                                                        onClick={
+                                                                                                            toogleMenuMobile
+                                                                                                        }
+                                                                                                        className={(
+                                                                                                            nav
+                                                                                                        ) =>
+                                                                                                            cx(
+                                                                                                                'menu-item-child-mobile',
+                                                                                                                {
+                                                                                                                    active: nav.isActive,
+                                                                                                                }
+                                                                                                            )
+                                                                                                        }
+                                                                                                    >
+                                                                                                        <div>
+                                                                                                            <span>
+                                                                                                                {
+                                                                                                                    itemChildChild?.name
+                                                                                                                }
+                                                                                                            </span>
+                                                                                                        </div>
+                                                                                                    </NavLink>
+                                                                                                );
+                                                                                            }
+                                                                                        )}
+                                                                                    </ul>
+                                                                                </>
+                                                                            )}
                                                                         </NavLink>
                                                                     );
                                                                 }

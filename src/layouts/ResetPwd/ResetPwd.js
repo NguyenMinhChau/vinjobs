@@ -1,12 +1,73 @@
-import React, { useEffect } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from 'react';
 import className from 'classnames/bind';
 import styles from './ResetPwd.module.css';
+import { useAppContext } from '../../utils';
+import { useNavigate } from 'react-router-dom';
+import { Form } from '../../components';
+import { setData } from '../../app/reducer';
+import { routers } from '../../routers';
 
 const cx = className.bind(styles);
 
 export default function ResetPwd() {
+    const { state, dispatch } = useAppContext();
+    const { otpCode } = state.set;
+    const [isProcess, setIsProcess] = useState(false);
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        type: '',
+        message: '',
+    });
+    const history = useNavigate();
     useEffect(() => {
         document.title = `Khôi phục tài khoản | ${process.env.REACT_APP_TITLE_WEB}`;
     }, []);
-    return <div className={`${cx('container')}`}></div>;
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbar({
+            ...snackbar,
+            open: false,
+        });
+    };
+    const handleSendOTP = async () => {
+        await 1;
+        setIsProcess(true);
+        setTimeout(() => {
+            setIsProcess(false);
+            console.log(otpCode);
+            dispatch(
+                setData({
+                    otpCode: '',
+                })
+            );
+            history(routers.login);
+            setSnackbar({
+                open: true,
+                type: 'success',
+                message: 'Xác thực thành công!',
+            });
+        }, 3000);
+    };
+    const onEnter = (e) => {
+        handleSendOTP();
+    };
+    return (
+        <Form
+            titleForm='Xác thực OTP'
+            textBtn='Gửi'
+            onClick={handleSendOTP}
+            bolOtpCode
+            forgotPwdForm
+            className={cx('form-page-reset-password')}
+            onEnter={onEnter}
+            isProcess={isProcess}
+            handleCloseSnackbar={handleClose}
+            openSnackbar={snackbar.open}
+            typeSnackbar={snackbar.type}
+            messageSnackbar={snackbar.message}
+        />
+    );
 }

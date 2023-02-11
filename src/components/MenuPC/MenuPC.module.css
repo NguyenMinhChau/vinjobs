@@ -14,8 +14,15 @@
     transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
 }
 
-.list-menu-item {
+/* EDIT */
+.menu-item:hover .list-menu-item,
+.menu-item-child:hover .list-menu-item-child {
     display: flex;
+}
+
+.list-menu-item,
+.list-menu-item-child {
+    display: none;
     flex-direction: column;
     position: absolute;
     top: 100%;
@@ -26,11 +33,16 @@
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     z-index: 1;
-    animation: fadeIn 0.5s linear;
-    transform-origin: top;
+    transition: all .5s cubic-bezier(0.19, 1, 0.22, 1)
 }
 
-.menu-item-child {
+.list-menu-item-child {
+    top: 70%;
+    transform: translateX(111%);
+}
+
+.menu-item-child,
+.menu-item-child-child {
     padding: 12px;
     text-align: left;
     transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
@@ -38,19 +50,27 @@
 
 /* hover menu-item không làm đổi màu chữ menu-item-child và ngược lại */
 .menu-item:hover,
-.menu-item.active {
+.menu-item-child:hover,
+.menu-item.active,
+.menu-item-child.active {
     color: var(--color-primary);
 }
 
 .menu-item:hover .menu-item-child,
-.menu-item.active .menu-item-child {
+.menu-item-child:hover .menu-item-child-child,
+.menu-item.active .menu-item-child,
+.menu-item-child.active .menu-item-child-child {
     color: initial;
 }
 
 .menu-item-child:hover,
-.menu-item-child.active {
+.menu-item-child.active,
+.menu-item-child-child:hover,
+.menu-item-child-child.active {
     color: var(--color-primary) !important;
 }
+
+/* END EDIT */
 
 .logo {
     position: absolute;

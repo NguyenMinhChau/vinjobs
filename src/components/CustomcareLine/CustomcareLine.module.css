@@ -1,0 +1,33 @@
+.item_desc_container {
+    border-bottom: 1px dashed #ccc;
+    padding: 16px 0;
+}
+
+.border-bottom-none {
+    border-bottom: none;
+}
+
+.item_desc_container:last-child {
+    margin-bottom: 0;
+}
+
+.item_desc_container a {
+    color: var(--color-info);
+    text-decoration: none;
+}
+
+.item_desc_title {
+    display: inline-block;
+    margin: 0 8px;
+    font-weight: bold;
+}
+
+.item_desc_title i {
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.item_desc_text {
+    word-break: break-all;
+    line-height: 1.5;
+}

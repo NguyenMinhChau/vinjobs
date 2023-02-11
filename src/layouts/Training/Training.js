@@ -17,6 +17,14 @@ export default function Training() {
                 title2='TẠO'
                 animateName='animate__bounceInUp'
             />
+            {/* <div>
+                <iframe
+                    frameborder='0'
+                    width='220'
+                    height='140'
+                    src='https://www.mql5.com/en/signals/widget/signal/6f90'
+                ></iframe>
+            </div> */}
         </div>
     );
 }

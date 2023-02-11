@@ -1,10 +1,43 @@
+import { getStore } from '../utils/localStore/localStore';
 import { SET_DATA, SET_TOOGLE } from './actions';
 
 export const initialState = {
     set: {
-        currentUser: null,
+        currentUser: getStore(),
+        userById: null,
+        username: '',
+        email: '',
+        password: '',
+        otpCode: '',
+        bankName: '',
+        accountName: '',
+        accountNumber: '',
+        oldPassword: '',
+        confirmPassword: '',
+        amountWithdraw: '',
+        amountDeposits: '',
+        bankDeposits: '',
+        file: [],
+        investmentFund: '',
+        period: '',
+        sendingTime: new Date(),
+        deposits: '',
     },
     toogle: {},
+};
+
+export const setData = (payload) => {
+    return {
+        type: SET_DATA,
+        payload,
+    };
+};
+
+export const toogle = (payload) => {
+    return {
+        type: SET_TOOGLE,
+        payload,
+    };
 };
 
 export default function reducer(state = initialState, action) {
@@ -12,12 +45,18 @@ export default function reducer(state = initialState, action) {
         case SET_DATA:
             return {
                 ...state,
-                set: action.payload,
+                set: {
+                    ...state.set,
+                    ...action.payload,
+                },
             };
         case SET_TOOGLE:
             return {
                 ...state,
-                toogle: action.payload,
+                toogle: {
+                    ...state.toogle,
+                    ...action.payload,
+                },
             };
         default:
             return state;

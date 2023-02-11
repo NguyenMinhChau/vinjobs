@@ -20,6 +20,9 @@ const FormInput = forwardRef(
             name,
             readOnly,
             onEnter,
+            unit,
+            clearInput,
+            onClickClear,
         },
         ref
     ) => {
@@ -42,7 +45,8 @@ const FormInput = forwardRef(
                         ref={ref}
                         type={showPwd ? (typePwd ? 'text' : 'password') : type}
                         className={classedInput}
-                        placeholder={!readOnly ? placeholder : 'Read only'}
+                        style={{ paddingRight: unit && '60px' }}
+                        placeholder={!readOnly ? placeholder : ''}
                         value={value}
                         onChange={onChange}
                         name={name}
@@ -63,6 +67,11 @@ const FormInput = forwardRef(
                             ) : (
                                 <IconForm.EyeShowIcon className={cx('icon')} />
                             )}
+                        </span>
+                    )}
+                    {unit && (
+                        <span className={`${cx('icon-eye')} fwb`}>
+                            | {unit}
                         </span>
                     )}
                 </div>

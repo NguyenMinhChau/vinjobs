@@ -50,6 +50,33 @@ const HeaderMenu = [
                 id: '5.3',
                 name: 'Quỹ tiết kiệm',
                 link: routers.providentFund,
+                children: [
+                    {
+                        id: '5.3.1',
+                        name: 'Trang chủ',
+                        link: `${routers.providentFund}/${routers.providentFundHome}`,
+                    },
+                    {
+                        id: '5.3.3',
+                        name: 'Nạp tiền',
+                        link: `${routers.providentFund}/${routers.deposits}`,
+                    },
+                    {
+                        id: '5.3.3',
+                        name: 'Rút tiền',
+                        link: `${routers.providentFund}/${routers.withdraws}`,
+                    },
+                    {
+                        id: '5.3.4',
+                        name: 'Giao dịch',
+                        link: `${routers.providentFund}/${routers.transactions}`,
+                    },
+                    {
+                        id: '5.3.4',
+                        name: 'Tài khoản',
+                        link: `${routers.providentFund}/${routers.profile}`,
+                    },
+                ],
             },
         ],
     },

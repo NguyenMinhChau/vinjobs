@@ -12,9 +12,9 @@ export default function Footer() {
         <div className={`${cx('container')}`}>
             <div className={`${cx('top')} mb8`}>
                 <div className={`${cx('top-text')}`}>
-                    Copyright © {new Date().getFullYear()}{' '}
+                    © 2020 - {new Date().getFullYear()}{' '}
                     <Link to='/' className={`${cx('link')}`}>
-                        AIKING INVESMENT
+                        AIKING INVESTMENT
                     </Link>{' '}
                     All Rights Reserved.
                 </div>

@@ -25,7 +25,7 @@ export default function Home() {
             <SliderHome
                 urlImage='https://images.unsplash.com/photo-1531973576160-7125cd663d86?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8Y29tcGFueXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=2000&q=2000'
                 title1='AIKING'
-                title2='INVESMENT'
+                title2='INVESTMENT'
                 desc='Block A, Tòa nhà RiverGate, 151-155 Bến Vân Đồn, Phường
                         6, Quận 4,TP.HCM'
                 btnText='Xem trên Map'
@@ -192,17 +192,19 @@ export default function Home() {
                         <span className='fwb fz14 font-Grind-Demolished'>
                             Phone:
                         </span>{' '}
-                        <a href='tel:0927819273'>0927819273</a>
+                        <a href='tel:0345335422'>0345 335 422</a>
                     </div>
                     <div className={`${cx('line')}`}>
                         <span className='fwb fz14 font-Grind-Demolished'>
                             Email:
                         </span>{' '}
-                        <a href='mailto:info@aiking.com'>info@aiking.com</a>
+                        <a href='mailto:aikinginvestment@gmail.com'>
+                            aikinginvesment@gmail.com
+                        </a>
                     </div>
                     <div className='flex-center mt30'>
                         <ButtonCus
-                            urlBtn='mailto:info@aiking.com'
+                            urlBtn='mailto:aikinginvestment@gmail.com'
                             btnText='Email us'
                             className={`${cx('btn-cus')}`}
                         />

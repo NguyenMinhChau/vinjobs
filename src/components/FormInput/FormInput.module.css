@@ -12,9 +12,9 @@
 .input {
     align-items: center;
     background: var(--color-white);
-    /* border: 1.5px solid var(--search-border-color); */
-    outline: none;
-    /* border-radius: 8px; */
+    outline: none !important;
+    border: 1.5px solid #ccc;
+    border-radius: 8px;
     display: flex;
     flex-direction: row;
     height: 48px;
@@ -34,12 +34,12 @@
 }
 
 .input:hover {
-    box-shadow: 0 0 0 1px var(--boxShadow-input-color);
+    box-shadow: 0 0 0 1px var(--primary-hover);
 }
 
 .input:focus {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 0.2rem var(--boxShadow-input-color);
+    box-shadow: 0 0 0 0.1rem var(--primary-hover);
 }
 
 .input:focus::-webkit-input-placeholder {
@@ -56,7 +56,7 @@
 
 .icon-eye {
     position: absolute;
-    top: 50%;
+    top: 47%;
     right: 8px;
     transform: translateY(-40%);
     cursor: pointer;
