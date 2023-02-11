@@ -80,19 +80,25 @@ export default function Fund() {
                 <TotalAssetsAndFund
                     isShow={isShow}
                     toogleIsShow={toogleIsShow}
-                    cols={3}
+                    cols={1}
                 >
-                    <TotalItem title='Tổng quỹ' price={1000} isShow={isShow} />
-                    <TotalItem
-                        title='Quỹ đầu tư USD'
-                        price={1000}
-                        isShow={isShow}
-                    />
-                    <TotalItem
-                        title='Quỹ phát triển nông nghiệp'
-                        price={1000}
-                        isShow={isShow}
-                    />
+                    <div className={`${cx('total_assets_list_custom')}`}>
+                        <TotalItem
+                            title='Tổng quỹ'
+                            price={1000}
+                            isShow={isShow}
+                        />
+                        <TotalItem
+                            title='Quỹ đầu tư USD'
+                            price={1000}
+                            isShow={isShow}
+                        />
+                        <TotalItem
+                            title='Quỹ phát triển nông nghiệp'
+                            price={1000}
+                            isShow={isShow}
+                        />
+                    </div>
                 </TotalAssetsAndFund>
                 <FundMenuAndSlider
                     imageSliders={IMAGE_SLIDERS}

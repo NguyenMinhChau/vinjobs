@@ -173,16 +173,16 @@ export default function Deposits() {
                                     })
                                 );
                             }}
-                            unit={amountDeposits && 'USD'} // ₫
+                            unit={amountDeposits && 'VND'} // ₫
                         />
-                        {amountDeposits && bankDeposits && (
+                        {/* {amountDeposits && bankDeposits && (
                             <div className={`${cx('money_vnd')} success fwb`}>
                                 Số tiền nạp (VND):{' '}
                                 {formatVND(
                                     convertNumberMultiple(amountDeposits, 23000)
                                 )}
                             </div>
-                        )}
+                        )} */}
                         <Button
                             className={`${cx('btn_submit')} successbgcbold`}
                             onClick={handleSendDeposits}
@@ -216,19 +216,17 @@ export default function Deposits() {
                         title='Ngày rút:'
                         textLink={dateFormat(new Date(), 'DD/MM/YYYY HH:mm:ss')}
                     />
-                    <CustomcareLine
+                    {/* <CustomcareLine
                         nameIcon='fa-solid fa-money-check-dollar'
                         colorIcon='warning'
                         title='Số tiền rút (USD):'
                         textLink={formatUSD(amountDeposits)}
-                    />
+                    /> */}
                     <CustomcareLine
                         nameIcon='fa-solid fa-money-bill'
-                        colorIcon='info'
-                        title='Số tiền rút (VND):'
-                        textLink={formatVND(
-                            convertNumberMultiple(amountDeposits, 23000)
-                        )}
+                        colorIcon='warning'
+                        title='Số tiền rút:'
+                        textLink={formatVND(amountDeposits)}
                     />
                     <CustomcareLine
                         nameIcon='fa fa-bank'

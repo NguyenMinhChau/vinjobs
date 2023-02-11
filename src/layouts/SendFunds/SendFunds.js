@@ -220,9 +220,9 @@ export default function SendFunds() {
                                         })
                                     );
                                 }}
-                                unit={deposits && 'USD'}
+                                unit={deposits && 'VND'}
                             />
-                            {deposits && (
+                            {/* {deposits && (
                                 <div
                                     className={`${cx('money_vnd')} success fwb`}
                                 >
@@ -231,7 +231,7 @@ export default function SendFunds() {
                                         convertNumberMultiple(deposits, 23000)
                                     )}
                                 </div>
-                            )}
+                            )} */}
                         </div>
                     </div>
                     <div className={`${cx('list_info_item')}`}>

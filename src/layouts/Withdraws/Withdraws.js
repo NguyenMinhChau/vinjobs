@@ -173,9 +173,16 @@ export default function Withdraws() {
                                 <>
                                     {checkbank ? (
                                         <CreditCard
-                                            bankName='Vietcombank'
-                                            cardNumber='123456789'
-                                            accountName='Nguyen Minh Chau'
+                                            bankName={
+                                                userById?.payment?.bank
+                                                    ?.bankName
+                                            }
+                                            cardNumber={
+                                                userById?.payment?.bank?.account
+                                            }
+                                            accountName={
+                                                userById?.payment?.bank?.name
+                                            }
                                         />
                                     ) : (
                                         <span>
@@ -212,9 +219,9 @@ export default function Withdraws() {
                                         })
                                     )
                                 }
-                                unit={amountWithdraw && 'USD'}
+                                unit={amountWithdraw && 'VND'}
                             />
-                            {amountWithdraw && (
+                            {/* {amountWithdraw && (
                                 <div
                                     className={`${cx('money_vnd')} cancel fwb`}
                                 >
@@ -226,7 +233,7 @@ export default function Withdraws() {
                                         )
                                     )}
                                 </div>
-                            )}
+                            )} */}
                             <Button
                                 className={`${cx('btn_submit')} successbgcbold`}
                                 onClick={handleSendWithdraw}
@@ -263,19 +270,17 @@ export default function Withdraws() {
                         title='Ngày rút:'
                         textLink={dateFormat(new Date(), 'DD/MM/YYYY HH:mm:ss')}
                     />
-                    <CustomcareLine
+                    {/* <CustomcareLine
                         nameIcon='fa-solid fa-money-check-dollar'
                         colorIcon='warning'
                         title='Số tiền rút (USD):'
                         textLink={formatUSD(amountWithdraw)}
-                    />
+                    /> */}
                     <CustomcareLine
                         nameIcon='fa-solid fa-money-bill'
-                        colorIcon='info'
-                        title='Số tiền rút (VND):'
-                        textLink={formatVND(
-                            convertNumberMultiple(amountWithdraw, 23000)
-                        )}
+                        colorIcon='warning'
+                        title='Số tiền rút:'
+                        textLink={formatVND(amountWithdraw)}
                     />
                     <CustomcareLine
                         nameIcon='fa fa-bank'
