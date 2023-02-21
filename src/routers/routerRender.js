@@ -27,6 +27,7 @@ import {
     ForgotPwd,
     ResetPwd,
     PageNotFound,
+    History,
 } from '../layouts';
 import routers from './routers';
 
@@ -111,6 +112,10 @@ export const privateRouter = [
     {
         path: `${routers.providentFund}/${routers.customcare}`,
         component: Customcare,
+    },
+    {
+        path: `${routers.providentFund}/${routers.history}`,
+        component: History,
     },
     {
         path: routers.recruitment,

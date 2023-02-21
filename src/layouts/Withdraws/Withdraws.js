@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import className from 'classnames/bind';
+import { Link } from 'react-router-dom';
 import styles from './Withdraws.module.css';
 import {
     Button,
@@ -9,6 +10,7 @@ import {
     CustomcareLine,
     FormInput,
     LoginRegisterCp,
+    LoginRegisterCpTwo,
     Modal,
     SliderHeader,
     SnackbarCp,
@@ -22,8 +24,14 @@ import {
     convertNumberMultiple,
 } from '../../utils/format/NumberFormat';
 import { adminGetUserByIdSV } from '../../services/admin';
-import { Link } from 'react-router-dom';
 import { routers } from '../../routers';
+import {
+    userCancelWithdrawSV,
+    userCreateWithdrawSV,
+    userResendOtpWithdrawSV,
+    userVerifyWithdrawSV,
+} from '../../services/user';
+import requestRefreshToken from '../../utils/axios/refreshToken';
 
 const cx = className.bind(styles);
 
@@ -35,8 +43,10 @@ export default function Withdraws() {
         type: '',
         message: '',
     });
-    const [modalVerifyWithdraw, setModalVerifyWithdraw] = useState(false);
     const [isProcessModalWithdraw, setIsProcessModalWithdraw] = useState(false);
+    const [isProcessResendOTP, setIsProcessResendOTP] = useState(false);
+    const [modalVerifyWithdraw, setModalVerifyWithdraw] = useState(false);
+    const [itemWithdraw, setItemWithdraw] = useState(null);
     const [isProcessCancelWithdraw, setIsProcessCancelWithdraw] =
         useState(false);
     const handleModalWithdrawTrue = (e) => {
@@ -66,6 +76,20 @@ export default function Withdraws() {
             open: false,
         });
     };
+    const handleSendWithdrawSV = (data) => {
+        userCreateWithdrawSV({
+            id_user: currentUser?.id,
+            idPayment: userById?.payment?.bank?.idPayment,
+            email_user: currentUser?.email,
+            amountVND: Number(amountWithdraw.replace(/\./g, '')),
+            setSnackbar,
+            token: data?.token,
+            setIsProcessModalWithdraw,
+            setModalVerifyWithdraw,
+            userById: userById,
+            setItemWithdraw,
+        });
+    };
     const handleSendWithdraw = async (e) => {
         await 1;
         if (currentUser) {
@@ -75,19 +99,23 @@ export default function Withdraws() {
                     type: 'error',
                     message: 'Bạn chưa nhập số tiền rút',
                 });
+            } else if (!checkbank) {
+                setSnackbar({
+                    open: true,
+                    type: 'error',
+                    message: 'Bạn chưa thêm tài khoản ngân hàng',
+                });
             } else {
                 setIsProcessModalWithdraw(true);
-                setTimeout(() => {
-                    setIsProcessModalWithdraw(false);
-                    setModalVerifyWithdraw(true);
-                }, 3000);
+                requestRefreshToken(
+                    currentUser,
+                    handleSendWithdrawSV,
+                    state,
+                    dispatch,
+                    setData,
+                    setSnackbar
+                );
             }
-        } else if (!checkbank) {
-            setSnackbar({
-                open: true,
-                type: 'error',
-                message: 'Bạn chưa thêm tài khoản ngân hàng',
-            });
         } else {
             setSnackbar({
                 open: true,
@@ -95,6 +123,17 @@ export default function Withdraws() {
                 message: <LoginRegisterCp />,
             });
         }
+    };
+    const handleSendOTP = (dataToken) => {
+        userVerifyWithdrawSV({
+            id_user: currentUser?.id,
+            dispatch,
+            code: otpCode,
+            token: dataToken?.token,
+            setSnackbar,
+            setIsProcessModalWithdraw,
+            setModalVerifyWithdraw,
+        });
     };
     const handleAuthenWithdraw = async (e) => {
         await 1;
@@ -106,42 +145,74 @@ export default function Withdraws() {
             });
         } else {
             setIsProcessModalWithdraw(true);
-            setTimeout(() => {
-                setIsProcessModalWithdraw(false);
-                setModalVerifyWithdraw(false);
-                console.log(otpCode);
-                setSnackbar({
-                    open: true,
-                    type: 'success',
-                    message: 'Chức năng đang phát triển!',
-                });
-                dispatch(
-                    setData({
-                        amountWithdraw: '',
-                        otpCode: '',
-                    })
-                );
-            }, 3000);
-        }
-    };
-    const handleCancelWithdraw = async (e) => {
-        await 1;
-        setIsProcessCancelWithdraw(true);
-        setTimeout(() => {
-            setIsProcessCancelWithdraw(false);
-            setModalVerifyWithdraw(false);
-            setSnackbar({
-                open: true,
-                type: 'success',
-                message: 'Chức năng đang phát triển!',
-            });
+            requestRefreshToken(
+                currentUser,
+                handleSendOTP,
+                state,
+                dispatch,
+                setData,
+                setSnackbar
+            );
             dispatch(
                 setData({
                     amountWithdraw: '',
                     otpCode: '',
                 })
             );
-        }, 3000);
+        }
+    };
+    const handleCancelWithdrawSV = (dataToken, id) => {
+        userCancelWithdrawSV({
+            id_user: currentUser?.id,
+            dispatch,
+            id_withdraw: id,
+            token: dataToken?.token,
+            setSnackbar,
+            setIsProcessCancelWithdraw,
+            setModalVerifyWithdraw,
+        });
+    };
+    const handleCancelWithdraw = async (id) => {
+        await 1;
+        setIsProcessCancelWithdraw(true);
+        requestRefreshToken(
+            currentUser,
+            handleCancelWithdrawSV,
+            state,
+            dispatch,
+            setData,
+            setSnackbar,
+            id
+        );
+        dispatch(
+            setData({
+                amountWithdraw: '',
+                otpCode: '',
+            })
+        );
+    };
+    const resendOtpSV = (dataToken, id) => {
+        userResendOtpWithdrawSV({
+            id_user: currentUser.id,
+            id_withdraw: id,
+            dispatch,
+            token: dataToken?.token,
+            setSnackbar,
+            setIsProcessResendOTP,
+        });
+    };
+    const handleResendOTP = async (id) => {
+        await 1;
+        setIsProcessResendOTP(true);
+        requestRefreshToken(
+            currentUser,
+            resendOtpSV,
+            state,
+            dispatch,
+            setData,
+            setSnackbar,
+            id
+        );
     };
     const checkbank =
         userById?.payment?.bank?.bankName &&
@@ -198,7 +269,7 @@ export default function Withdraws() {
                                     )}
                                 </>
                             ) : (
-                                <LoginRegisterCp />
+                                <LoginRegisterCp padding='12px' />
                             )}
                         </div>
                     </div>
@@ -221,19 +292,14 @@ export default function Withdraws() {
                                 }
                                 unit={amountWithdraw && 'VND'}
                             />
-                            {/* {amountWithdraw && (
-                                <div
-                                    className={`${cx('money_vnd')} cancel fwb`}
-                                >
-                                    Số tiền rút (VND):{' '}
-                                    {formatVND(
-                                        convertNumberMultiple(
-                                            amountWithdraw,
-                                            23000
-                                        )
-                                    )}
-                                </div>
-                            )} */}
+                            <Link
+                                to={`${routers.providentFund}/${routers.history}`}
+                                className={`${cx(
+                                    'text_seen_history'
+                                )} fwb cancel`}
+                            >
+                                Xem lịch sử nạp tiền/rút tiền
+                            </Link>
                             <Button
                                 className={`${cx('btn_submit')} successbgcbold`}
                                 onClick={handleSendWithdraw}
@@ -256,37 +322,37 @@ export default function Withdraws() {
                     isProcess={isProcessModalWithdraw}
                     isProcessCancel={isProcessCancelWithdraw}
                     onClick={handleAuthenWithdraw}
-                    onClickCancel={handleCancelWithdraw}
+                    onClickCancel={() => handleCancelWithdraw(itemWithdraw?.id)}
                 >
                     <CustomcareLine
                         nameIcon='fa-solid fa-rotate-right'
                         colorIcon='success'
                         title='Trạng thái:'
-                        textLink='Pending'
+                        textLink={itemWithdraw?.status}
                     />
                     <CustomcareLine
                         nameIcon='fa-regular fa-clock'
                         colorIcon='info'
                         title='Ngày rút:'
-                        textLink={dateFormat(new Date(), 'DD/MM/YYYY HH:mm:ss')}
+                        textLink={dateFormat(
+                            itemWithdraw?.createdAt,
+                            'DD/MM/YYYY HH:mm:ss'
+                        )}
                     />
-                    {/* <CustomcareLine
-                        nameIcon='fa-solid fa-money-check-dollar'
-                        colorIcon='warning'
-                        title='Số tiền rút (USD):'
-                        textLink={formatUSD(amountWithdraw)}
-                    /> */}
                     <CustomcareLine
                         nameIcon='fa-solid fa-money-bill'
                         colorIcon='warning'
                         title='Số tiền rút:'
-                        textLink={formatVND(amountWithdraw)}
+                        textLink={formatVND(itemWithdraw?.amount)}
                     />
                     <CustomcareLine
                         nameIcon='fa fa-bank'
                         colorIcon='cancel'
                         title='Ngân hàng thụ hưởng:'
-                        textLink='Vietcombank'
+                        bankMethod
+                        bankName={userById?.payment?.bank?.bankName}
+                        accountName={userById?.payment?.bank?.name}
+                        accountNumber={userById?.payment?.bank?.account}
                     />
                     <FormInput
                         label='Mã xác thực'
@@ -298,6 +364,16 @@ export default function Withdraws() {
                         }
                         classNameField={`mt8`}
                     />
+                    <div
+                        className={`${cx('text_resend')} fwb cancel`}
+                        onClick={
+                            isProcessResendOTP
+                                ? () => {}
+                                : () => handleResendOTP(itemWithdraw?.id)
+                        }
+                    >
+                        {isProcessResendOTP ? 'Đang gửi mã...' : 'Gửi lại mã'}
+                    </div>
                 </Modal>
             )}
         </div>

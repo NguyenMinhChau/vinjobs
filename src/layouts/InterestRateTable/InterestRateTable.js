@@ -5,7 +5,6 @@ import styles from './InterestRateTable.module.css';
 import {
     InterestAgricultural,
     InterestUSDCp,
-    LoginRegisterCp,
     SliderHeader,
     SnackbarCp,
     TotalAssetsAndFund,
@@ -51,15 +50,7 @@ export default function InterestRateTable() {
         });
     };
     const toogleIsShow = () => {
-        if (currentUser) {
-            setIsShow(!isShow);
-        } else {
-            setSnackbar({
-                open: true,
-                type: 'error',
-                message: <LoginRegisterCp />,
-            });
-        }
+        setIsShow(!isShow);
     };
     return (
         <div className={`${cx('container')}`}>
@@ -76,16 +67,29 @@ export default function InterestRateTable() {
                 typeSnackbar={snackbar.type}
             />
             <div className={`${cx('body')}`}>
-                <TotalAssetsAndFund isShow={isShow} toogleIsShow={toogleIsShow}>
-                    <TotalItem
-                        title='Tổng tài sản'
-                        price={1000}
+                {currentUser && (
+                    <TotalAssetsAndFund
                         isShow={isShow}
-                    />
-                    <TotalItem title='Ví quỹ' price={1000} isShow={isShow} />
-                    <TotalItem title='Ví đầu tư' price={1000} isShow={isShow} />
-                    <TotalItem title='Số dư' price={1000} isShow={isShow} />
-                </TotalAssetsAndFund>
+                        toogleIsShow={toogleIsShow}
+                    >
+                        <TotalItem
+                            title='Tổng tài sản'
+                            price={1000}
+                            isShow={isShow}
+                        />
+                        <TotalItem
+                            title='Ví quỹ'
+                            price={1000}
+                            isShow={isShow}
+                        />
+                        <TotalItem
+                            title='Ví đầu tư'
+                            price={1000}
+                            isShow={isShow}
+                        />
+                        <TotalItem title='Số dư' price={1000} isShow={isShow} />
+                    </TotalAssetsAndFund>
+                )}
                 <div className={`${cx('table_interest_container')}`}>
                     <div className={`${cx('table_interest_list')}`}>
                         {LIST_TABS.map((item, index) => (

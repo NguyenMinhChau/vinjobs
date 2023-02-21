@@ -54,7 +54,13 @@ export default function MenuPC() {
                                                     })
                                                 }
                                             >
-                                                <div className='flex-between'>
+                                                <div
+                                                    className={`${cx(
+                                                        'x',
+                                                        itemChild?.children &&
+                                                            'divider'
+                                                    )} flex-between`}
+                                                >
                                                     <span>
                                                         {itemChild?.name}
                                                     </span>

@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
 import className from 'classnames/bind';
 import styles from './Investment.module.css';
-import { SliderHeader } from '../../components';
+import { LoginRegisterCpTwo, SliderHeader } from '../../components';
+import { useAppContext } from '../../utils';
 
 const cx = className.bind(styles);
 
 export default function Investment() {
+    const { state } = useAppContext();
+    const { currentUser } = state.set;
     useEffect(() => {
         document.title = `Đầu tư | ${process.env.REACT_APP_TITLE_WEB}`;
     }, []);
@@ -18,6 +21,7 @@ export default function Investment() {
                 animateName='animate__fadeInTopRight'
             />
             <div className={`${cx('body')}`}>
+                {!currentUser && <LoginRegisterCpTwo />}
                 <div className={`${cx('developer')}`}>
                     <span className={`${cx('text_desc')} success`}>
                         Giao diện đang phát triển, vui lòng quay lại sau. Xin

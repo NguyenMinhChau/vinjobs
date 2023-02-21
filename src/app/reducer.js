@@ -18,10 +18,25 @@ export const initialState = {
         amountDeposits: '',
         bankDeposits: '',
         file: [],
+        dataDepositsHistory: [],
+        dataWithdrawsHistory: [],
+        dataManagerFundUSD: [],
+        dataManagerFundAgriculture: [],
         investmentFund: '',
         period: '',
         sendingTime: new Date(),
         deposits: '',
+        pagination: {
+            page: 1,
+            show: 10,
+        },
+        sort: 'asc',
+        searchValues: {
+            deposits_history: '',
+            withdraws_history: '',
+            manager_fund_usd: '',
+            manager_fund_agriculture: '',
+        },
     },
     toogle: {},
 };
@@ -41,7 +56,7 @@ export const toogle = (payload) => {
 };
 
 export default function reducer(state = initialState, action) {
-    switch (action.type) {
+    switch (action?.type) {
         case SET_DATA:
             return {
                 ...state,

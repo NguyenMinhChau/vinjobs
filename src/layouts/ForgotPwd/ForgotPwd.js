@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { Form } from '../../components';
 import { setData } from '../../app/reducer';
 import { routers } from '../../routers';
+import { userForgotPwdSV } from '../../services/user';
 
 const cx = className.bind(styles);
 
@@ -35,21 +36,17 @@ export default function ForgotPwd() {
     const handleForgot = async () => {
         await 1;
         setIsProcess(true);
-        setTimeout(() => {
-            setIsProcess(false);
-            console.log(email);
-            dispatch(
-                setData({
-                    email: '',
-                })
-            );
-            history(routers.resetPwd);
-            setSnackbar({
-                open: true,
-                type: 'success',
-                message: 'Gửi mã thành công!',
-            });
-        }, 3000);
+        userForgotPwdSV({
+            email_user: email,
+            setIsProcess,
+            setSnackbar,
+            history,
+        });
+        dispatch(
+            setData({
+                email: '',
+            })
+        );
     };
     const onEnter = (e) => {
         handleForgot();

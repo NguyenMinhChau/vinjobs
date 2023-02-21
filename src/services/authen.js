@@ -49,7 +49,7 @@ export const authLoginSV = async (props = {}) => {
         email: email,
         password: password,
     });
-    console.log('authLoginSV: ', resPost);
+    // console.log('authLoginSV: ', resPost);
     switch (resPost.code) {
         case 0:
             await setStore({
@@ -93,7 +93,7 @@ export const authLoginSV = async (props = {}) => {
 export const authLogoutSV = async (props = {}) => {
     const { id_user, history, setSnackbar, dispatch } = props;
     const resGet = await authGet(`logout/${id_user}`, {});
-    console.log('authLogoutSV: ', resGet);
+    // console.log('authLogoutSV: ', resGet);
     switch (resGet.code) {
         case 0:
             await removeStore();

@@ -8,6 +8,7 @@ const cx = className.bind(styles);
 export default function CustomcareLine({
     nameIcon,
     colorIcon,
+    colorStatus,
     link,
     textLink,
     title,
@@ -17,6 +18,11 @@ export default function CustomcareLine({
     eye,
     showEye,
     handleShowEye,
+    bankMethod,
+    bankName,
+    accountName,
+    accountNumber,
+    marginLeft,
 }) {
     return (
         <div
@@ -26,17 +32,35 @@ export default function CustomcareLine({
             )}`}
         >
             <span>
-                <i className={nameIcon + ' ' + colorIcon}></i>
+                <span>
+                    <i className={nameIcon + ' ' + colorIcon}></i>
+                </span>
+                <span
+                    className={`${cx('item_desc_title')}`}
+                    onClick={eye ? handleShowEye : () => {}}
+                    style={{ marginLeft: marginLeft }}
+                >
+                    {title}{' '}
+                    {eye && (
+                        <i
+                            className={`fa fa-${showEye ? 'eye' : 'eye-slash'}`}
+                        ></i>
+                    )}
+                </span>
             </span>
-            <span
-                className={`${cx('item_desc_title')}`}
-                onClick={eye ? handleShowEye : () => {}}
-            >
-                {title}{' '}
-                {eye && (
-                    <i className={`fa fa-${showEye ? 'eye' : 'eye-slash'}`}></i>
-                )}
-            </span>
+            {bankMethod && (
+                <span className={`${cx('bank_method_container')}`}>
+                    <span className={`${cx('item_desc_text')}`}>
+                        {accountName}
+                    </span>
+                    <span className={`${cx('item_desc_text')}`}>
+                        {bankName}
+                    </span>
+                    <span className={`${cx('item_desc_text')}`}>
+                        {accountNumber}
+                    </span>
+                </span>
+            )}
             {link ? (
                 !onClick ? (
                     <a
@@ -56,7 +80,11 @@ export default function CustomcareLine({
                     </Link>
                 )
             ) : (
-                <span className={`${cx('item_desc_text')}`}>
+                <span
+                    className={`${cx('item_desc_text')} ${
+                        colorStatus && colorStatus
+                    }`}
+                >
                     {price ? (showEye ? price : '*****đ') : textLink}
                 </span>
             )}

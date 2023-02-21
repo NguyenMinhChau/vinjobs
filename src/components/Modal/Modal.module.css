@@ -29,6 +29,7 @@
 
 .modal-content-me {
     margin: auto;
+    max-width: 550px;
     min-width: 500px;
     border-radius: 5px;
     /* overflow: hidden; */

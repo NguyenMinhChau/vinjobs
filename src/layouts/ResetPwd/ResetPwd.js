@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { Form } from '../../components';
 import { setData } from '../../app/reducer';
 import { routers } from '../../routers';
+import { userOTPForgotPwdSV } from '../../services/user';
 
 const cx = className.bind(styles);
 
@@ -33,23 +34,20 @@ export default function ResetPwd() {
         });
     };
     const handleSendOTP = async () => {
+        //zlpih5ef
         await 1;
         setIsProcess(true);
-        setTimeout(() => {
-            setIsProcess(false);
-            console.log(otpCode);
-            dispatch(
-                setData({
-                    otpCode: '',
-                })
-            );
-            history(routers.login);
-            setSnackbar({
-                open: true,
-                type: 'success',
-                message: 'Xác thực thành công!',
-            });
-        }, 3000);
+        userOTPForgotPwdSV({
+            code: otpCode,
+            setIsProcess,
+            setSnackbar,
+            history,
+        });
+        dispatch(
+            setData({
+                otpCode: '',
+            })
+        );
     };
     const onEnter = (e) => {
         handleSendOTP();

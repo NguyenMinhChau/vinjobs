@@ -23,6 +23,7 @@ const routers = {
     sendFunds: 'send-funds',
     managerFund: 'manager-fund',
     partner: 'partner',
+    history: 'history',
     customcare: 'customcare',
     recruitment: '/recruitment',
     contact: '/contact',

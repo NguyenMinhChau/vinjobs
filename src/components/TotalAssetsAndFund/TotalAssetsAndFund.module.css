@@ -26,14 +26,14 @@
 .total_assets_item {
     width: calc((100% / var(--cols)) - (var(--spacing) * 2));
     margin: var(--spacing);
-    border: 1.5px solid var(--color-success);
+    border: 1.5px solid var(--color-primary);
     padding: 10px 12px;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: var(--bgc-success);
+    background-color: var(--primary-hover);
 }
 
 .total_assets_item_title {

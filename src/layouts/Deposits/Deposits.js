@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import className from 'classnames/bind';
 import styles from './Deposits.module.css';
+import { Link, useNavigate } from 'react-router-dom';
 import {
     Button,
     CustomcareLine,
@@ -10,6 +11,7 @@ import {
     FundMenuAndSlider,
     Image,
     LoginRegisterCp,
+    LoginRegisterCpTwo,
     Modal,
     SelectValueCp,
     SliderHeader,
@@ -17,13 +19,19 @@ import {
 } from '../../components';
 import { useAppContext } from '../../utils';
 import { setData } from '../../app/reducer';
-import { dataBank } from '../../utils/dataBank';
 import { formatUSD, formatVND } from '../../utils/format/FormatMoney';
 import { dateFormat } from '../../utils/format/DateVN';
 import {
     autoFormatNumberInputChange,
     convertNumberMultiple,
 } from '../../utils/format/NumberFormat';
+import {
+    userCreateDepositsSV,
+    userUploadBillsDepositsSV,
+} from '../../services/user';
+import requestRefreshToken from '../../utils/axios/refreshToken';
+import { dataBankAdmin } from '../../utils/dataBankAdmin';
+import { routers } from '../../routers';
 
 const cx = className.bind(styles);
 const IMAGE_SLIDERS = [
@@ -46,6 +54,8 @@ export default function Deposits() {
     const [isProcessUploadDeposits, setIsProcessUploadDeposits] =
         useState(false);
     const [isModalUploadDeposits, setisModalUploadDeposits] = useState(false);
+    const [dataReturn, setDataReturn] = useState(null);
+    const history = useNavigate();
     const handleModalDepositsTrue = (e) => {
         e.stopPropagation();
         setisModalUploadDeposits(true);
@@ -73,7 +83,20 @@ export default function Deposits() {
             open: false,
         });
     };
-    const handleSendDeposits = async () => {
+    const handleSendDeposits = (dataToken) => {
+        userCreateDepositsSV({
+            id_user: currentUser?.id,
+            email_user: currentUser?.email,
+            idPayment: 1,
+            amountVND: amountDeposits.replace(/\./g, ''),
+            token: dataToken?.token,
+            setIsProcessModalDeposits,
+            setisModalUploadDeposits,
+            setSnackbar,
+            setDataReturn,
+        });
+    };
+    const handleSubmit = async () => {
         await 1;
         if (currentUser) {
             if (!amountDeposits || !bankDeposits) {
@@ -84,11 +107,14 @@ export default function Deposits() {
                 });
             } else {
                 setIsProcessModalDeposits(true);
-                setTimeout(() => {
-                    setIsProcessModalDeposits(false);
-                    setisModalUploadDeposits(true);
-                    console.log(amountDeposits, bankDeposits);
-                }, 3000);
+                requestRefreshToken(
+                    currentUser,
+                    handleSendDeposits,
+                    state,
+                    dispatch,
+                    setData,
+                    setSnackbar
+                );
             }
         } else {
             setSnackbar({
@@ -97,6 +123,18 @@ export default function Deposits() {
                 message: <LoginRegisterCp />,
             });
         }
+    };
+    const handleSendUpload = (dataToken) => {
+        userUploadBillsDepositsSV({
+            id_user: currentUser?.id,
+            dispatch,
+            id_deposits: dataReturn?.id,
+            image: file,
+            token: dataToken?.token,
+            setSnackbar,
+            setIsProcessUploadDeposits,
+            setisModalUploadDeposits,
+        });
     };
     const handleUploadBillDeposits = async () => {
         await 1;
@@ -109,13 +147,14 @@ export default function Deposits() {
         } else {
             setIsProcessUploadDeposits(true);
             setTimeout(() => {
-                setIsProcessUploadDeposits(false);
-                setisModalUploadDeposits(false);
-                setSnackbar({
-                    open: true,
-                    type: 'success',
-                    message: 'Chức năng đang phát triển!',
-                });
+                requestRefreshToken(
+                    currentUser,
+                    handleSendUpload,
+                    state,
+                    dispatch,
+                    setData,
+                    setSnackbar
+                );
                 dispatch(
                     setData({
                         amountDeposits: '',
@@ -153,7 +192,7 @@ export default function Deposits() {
                             label='Tên ngân hàng thụ hưởng'
                             value={bankDeposits?.name}
                             placeholder='---'
-                            data={dataBank}
+                            data={dataBankAdmin}
                             nameSet='bankDeposits'
                             stateSelect={showSelect}
                             setStateSelect={setShowSelect}
@@ -175,17 +214,15 @@ export default function Deposits() {
                             }}
                             unit={amountDeposits && 'VND'} // ₫
                         />
-                        {/* {amountDeposits && bankDeposits && (
-                            <div className={`${cx('money_vnd')} success fwb`}>
-                                Số tiền nạp (VND):{' '}
-                                {formatVND(
-                                    convertNumberMultiple(amountDeposits, 23000)
-                                )}
-                            </div>
-                        )} */}
+                        <Link
+                            to={`${routers.providentFund}/${routers.history}`}
+                            className={`${cx('text_seen_history')} fwb cancel`}
+                        >
+                            Xem lịch sử nạp tiền/rút tiền
+                        </Link>
                         <Button
                             className={`${cx('btn_submit')} successbgcbold`}
-                            onClick={handleSendDeposits}
+                            onClick={handleSubmit}
                             isProcess={isProcessModalDeposits}
                             disabled={isProcessModalDeposits}
                         >
@@ -208,31 +245,31 @@ export default function Deposits() {
                         nameIcon='fa-solid fa-rotate-right'
                         colorIcon='success'
                         title='Trạng thái:'
-                        textLink='Pending'
+                        textLink={dataReturn?.status}
                     />
                     <CustomcareLine
                         nameIcon='fa-regular fa-clock'
                         colorIcon='info'
                         title='Ngày rút:'
-                        textLink={dateFormat(new Date(), 'DD/MM/YYYY HH:mm:ss')}
+                        textLink={dateFormat(
+                            dataReturn?.createdAt,
+                            'DD/MM/YYYY HH:mm:ss'
+                        )}
                     />
-                    {/* <CustomcareLine
-                        nameIcon='fa-solid fa-money-check-dollar'
-                        colorIcon='warning'
-                        title='Số tiền rút (USD):'
-                        textLink={formatUSD(amountDeposits)}
-                    /> */}
                     <CustomcareLine
                         nameIcon='fa-solid fa-money-bill'
                         colorIcon='warning'
                         title='Số tiền rút:'
-                        textLink={formatVND(amountDeposits)}
+                        textLink={formatVND(dataReturn?.amount || 0)}
                     />
                     <CustomcareLine
                         nameIcon='fa fa-bank'
                         colorIcon='cancel'
                         title='Ngân hàng thụ hưởng:'
-                        textLink='Vietcombank'
+                        bankMethod
+                        bankName={bankDeposits?.name}
+                        accountName={bankDeposits?.accountName}
+                        accountNumber={bankDeposits?.accountNumber}
                     />
                     <FileUploadSingle label='Tải hình ảnh' />
                     {urlImageFile && (

@@ -23,11 +23,15 @@ export { default as ManagerFundInterestCp } from './ManagerFundInterestCp/Manage
 export { default as CreditCard } from './CreditCard/CreditCard';
 export { default as SelectValueCp } from './SelectValueCp/SelectValueCp';
 export { default as LoginRegisterCp } from './LoginRegisterCp/LoginRegisterCp';
+export { default as LoginRegisterCpTwo } from './LoginRegisterCpTwo/LoginRegisterCpTwo';
 export { default as SelectDateCp } from './SelectDateCp/SelectDateCp';
 export { default as FileUploadSingle } from './FileUploadSingle/FileUploadSingle';
 export { default as CustomcareLine } from './CustomcareLine/CustomcareLine';
 export { default as SnackbarCp } from './SnackbarCp/SnackbarCp';
 export { default as MenuMobile } from './MenuMobile/MenuMobile';
+export { default as Loading } from './Loading/Loading';
+export { default as TableData } from './TableData/TableData';
+export { default as Search } from './Search/Search';
 export { default as ProgressLine } from './ProgressLine/ProgressLine';
 export * as IconHeader from './Icons/Header';
 export * as IconForm from './Icons/Form';

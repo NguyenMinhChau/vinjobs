@@ -13,5 +13,14 @@
     --bgc-warning: #fff7e6;
     --color-info: #007aff;
     --bgc-info: #e6f5ff;
-    --rgba-modal-bgc: rgba(0, 0, 0, 0.5)
+    --rgba-modal-bgc: rgba(0, 0, 0, 0.5);
+    --table-thead-bgc: #fafafa;
+    --table-border-color: #dfe1e6;
+    --table-tbody-item-color: #616161;
+    --table-countpage-text-color: #bababa;
+    --table-send-icon-color: #212121;
+    --table-received-icon-color: #4CAF50;
+    --search-border-color: #e0e0e0;
+    --search-icon-color: #9e9e9e;
+    --search-input-color: #333333;
 }

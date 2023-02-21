@@ -5,7 +5,7 @@ import { adminGet } from '../utils/axios/axiosInstance';
 export const adminGetUserByIdSV = async (props = {}) => {
     const { id_user, dispatch, setSnackbar } = props;
     const resGet = await adminGet(`user/${id_user}`, {});
-    console.log('adminGetUserByIdSV: ', resGet);
+    // console.log('adminGetUserByIdSV: ', resGet);
     switch (resGet.code) {
         case 0:
             dispatch(

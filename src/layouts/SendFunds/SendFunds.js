@@ -1,11 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import className from 'classnames/bind';
 import styles from './SendFunds.module.css';
 import {
     Button,
+    CustomcareLine,
     FormInput,
     LoginRegisterCp,
+    LoginRegisterCpTwo,
     Modal,
     SelectDateCp,
     SelectValueCp,
@@ -16,13 +19,18 @@ import {
 } from '../../components';
 import { useAppContext } from '../../utils';
 import { setData } from '../../app/reducer';
-import { formatVND } from '../../utils/format/FormatMoney';
+import { formatVND, formatVNDCurrency } from '../../utils/format/FormatMoney';
 import { dateFormat } from '../../utils/format/DateVN';
 import moment from 'moment';
+import { autoFormatNumberInputChange } from '../../utils/format/NumberFormat';
+import useDebounce from '../../utils/hooks/useDebounce';
 import {
-    autoFormatNumberInputChange,
-    convertNumberMultiple,
-} from '../../utils/format/NumberFormat';
+    userAddContractSV,
+    userGetContractSV,
+    userGetTotalMoneySV,
+} from '../../services/user';
+import requestRefreshToken from '../../utils/axios/refreshToken';
+import { useNavigate } from 'react-router-dom';
 
 const cx = className.bind(styles);
 const DATA_INVESTMENT = [
@@ -49,6 +57,11 @@ export default function SendFunds() {
     const [showSelect, setShowSelect] = useState(false);
     const [isProcessSendFund, setIsProcessSendFund] = useState(false);
     const [isModalContract, setIsModalContract] = useState(false);
+    const [isModalSubmit, setIsModalSubmit] = useState(false);
+    const [isProcessSubmit, setIsProcessSubmit] = useState(false);
+    const [disbursement, setDisbursement] = useState(null);
+    const [dataContract, setDataContract] = useState(null);
+    const history = useNavigate();
     const handleCloseSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -66,21 +79,93 @@ export default function SendFunds() {
         e.stopPropagation();
         setIsModalContract(false);
     };
+    const handleModalSubmitTrue = (e) => {
+        e.stopPropagation();
+        setIsModalSubmit(true);
+    };
+    const handleModalSubmitFalse = (e) => {
+        e.stopPropagation();
+        setIsModalSubmit(false);
+    };
+    const useDebouncePeriod = useDebounce(period, 3000);
+    const useDebounceDeposits = useDebounce(deposits, 3000);
+    const handleSendContract = (dataToken) => {
+        userGetContractSV({
+            id_user: currentUser?.id,
+            setSnackbar,
+            setDataContract,
+            token: dataToken?.token,
+        });
+    };
+    const handleGetMoneySV = (dataToken) => {
+        userGetTotalMoneySV({
+            setSnackbar,
+            typeContract:
+                investmentFund?.id === 1
+                    ? 'USD'
+                    : investmentFund?.id === 2
+                    ? 'AGRICULTURE'
+                    : '',
+            cycleContract: useDebouncePeriod,
+            principalContract: useDebounceDeposits.replace(/\./g, ''),
+            setDisbursement,
+            token: dataToken?.token,
+        });
+    };
+    useEffect(() => {
+        setDisbursement(null);
+        if (investmentFund && useDebouncePeriod && useDebounceDeposits) {
+            requestRefreshToken(
+                currentUser,
+                handleGetMoneySV,
+                state,
+                dispatch,
+                setData,
+                setSnackbar
+            );
+        }
+        requestRefreshToken(
+            currentUser,
+            handleSendContract,
+            state,
+            dispatch,
+            setData,
+            setSnackbar
+        );
+    }, [investmentFund, useDebouncePeriod, useDebounceDeposits]);
     useEffect(() => {
         document.title = `Gửi quỹ | ${process.env.REACT_APP_TITLE_WEB}`;
     }, []);
+    const DATA_MERGE =
+        dataContract &&
+        [...dataContract?.usd, ...dataContract?.agriculture]?.sort((a, b) => {
+            return a?.id - b?.id;
+        });
+    const ID_FINAL = DATA_MERGE && DATA_MERGE[DATA_MERGE.length - 1]?.id;
     const toogleIsShow = () => {
-        if (currentUser) {
-            setIsShow(!isShow);
-        } else {
-            setSnackbar({
-                open: true,
-                type: 'error',
-                message: <LoginRegisterCp />,
-            });
-        }
+        setIsShow(!isShow);
     };
-    const handleSendFund = async () => {
+    const handleSendFund = (dataToken) => {
+        userAddContractSV({
+            id_user: currentUser?.id,
+            cycle: period,
+            principal: deposits.replace(/\./g, ''),
+            type:
+                investmentFund?.id === 1
+                    ? 'USD'
+                    : investmentFund?.id === 2
+                    ? 'AGRICULTURE'
+                    : '',
+            timeSend: moment(sendingTime).format('YYYY-MM-DD HH:mm:ss'),
+            setSnackbar,
+            dispatch,
+            setIsModalSubmit,
+            setIsProcessSubmit,
+            token: dataToken?.token,
+            history,
+        });
+    };
+    const handleContinue = async () => {
         await 1;
         if (currentUser) {
             if (!period || !deposits || !investmentFund) {
@@ -89,47 +174,27 @@ export default function SendFunds() {
                     type: 'error',
                     message: 'Vui lòng nhập đầy đủ thông tin',
                 });
-            } else if (sendingTime) {
-                const dateNow = moment(new Date());
-                const dateSending = moment(sendingTime);
-                if (dateNow.isAfter(dateSending)) {
-                    setSnackbar({
-                        open: true,
-                        type: 'error',
-                        message: 'Thời gian gửi không hợp lệ',
-                    });
-                } else {
-                    setIsProcessSendFund(true);
-                    setTimeout(() => {
-                        setSnackbar({
-                            open: true,
-                            type: 'success',
-                            message: 'Chức năng đang phát triển',
-                        });
-                        setIsProcessSendFund(false);
-                        console.log(
-                            investmentFund,
-                            dateFormat(sendingTime, 'DD/MM/YYYY'),
-                            sendingTime,
-                            period,
-                            deposits
-                        );
-                        dispatch(
-                            setData({
-                                sendingTime: '',
-                                period: '',
-                                deposits: '',
-                                investmentFund: '',
-                            })
-                        );
-                    }, 3000);
-                }
-            } else {
+            } else if (moment(sendingTime).isBefore(new Date())) {
                 setSnackbar({
                     open: true,
                     type: 'error',
                     message: 'Thời gian gửi không hợp lệ',
                 });
+            } else if (investmentFund?.id === 2 && parseInt(period) === 1) {
+                setSnackbar({
+                    open: true,
+                    type: 'error',
+                    message:
+                        'Quỹ phát triển nông nghiệp phải gửi từ 2 mùa trở lên.',
+                });
+            } else if (!disbursement) {
+                setSnackbar({
+                    open: true,
+                    type: 'error',
+                    message: 'Vui lòng chờ tính toán tổng giải ngân.',
+                });
+            } else {
+                setIsModalSubmit(true);
             }
         } else {
             setSnackbar({
@@ -138,6 +203,21 @@ export default function SendFunds() {
                 message: <LoginRegisterCp />,
             });
         }
+    };
+    const handleSubmit = async () => {
+        await 1;
+        setIsProcessSubmit(true);
+        requestRefreshToken(
+            currentUser,
+            handleSendFund,
+            state,
+            dispatch,
+            setData,
+            setSnackbar
+        );
+        alert(
+            'Thông tin này đã được gửi về bộ phận quản lý quỹ, bộ phận sẽ sớm liên hệ quý khách để tiến hành làm hợp đồng!'
+        );
     };
     return (
         <div className={`${cx('container')}`}>
@@ -154,16 +234,29 @@ export default function SendFunds() {
                 typeSnackbar={snackbar.type}
             />
             <div className={`${cx('body')}`}>
-                <TotalAssetsAndFund isShow={isShow} toogleIsShow={toogleIsShow}>
-                    <TotalItem
-                        title='Tổng tài sản'
-                        price={1000}
+                {currentUser && (
+                    <TotalAssetsAndFund
                         isShow={isShow}
-                    />
-                    <TotalItem title='Ví quỹ' price={1000} isShow={isShow} />
-                    <TotalItem title='Ví đầu tư' price={1000} isShow={isShow} />
-                    <TotalItem title='Số dư' price={1000} isShow={isShow} />
-                </TotalAssetsAndFund>
+                        toogleIsShow={toogleIsShow}
+                    >
+                        <TotalItem
+                            title='Tổng tài sản'
+                            price={1000}
+                            isShow={isShow}
+                        />
+                        <TotalItem
+                            title='Ví quỹ'
+                            price={1000}
+                            isShow={isShow}
+                        />
+                        <TotalItem
+                            title='Ví đầu tư'
+                            price={1000}
+                            isShow={isShow}
+                        />
+                        <TotalItem title='Số dư' price={1000} isShow={isShow} />
+                    </TotalAssetsAndFund>
+                )}
                 <div className={`${cx('list_info_container')}`}>
                     <div className={`${cx('list_info_item')}`}>
                         <div className={`${cx('item_text')}`}>
@@ -222,23 +315,15 @@ export default function SendFunds() {
                                 }}
                                 unit={deposits && 'VND'}
                             />
-                            {/* {deposits && (
-                                <div
-                                    className={`${cx('money_vnd')} success fwb`}
-                                >
-                                    Số tiền gửi (VND):{' '}
-                                    {formatVND(
-                                        convertNumberMultiple(deposits, 23000)
-                                    )}
-                                </div>
-                            )} */}
                         </div>
                     </div>
                     <div className={`${cx('list_info_item')}`}>
                         <div className={`${cx('menu_conatiner')}`}>
                             <FormInput
                                 label='Tổng tiền giải ngân'
-                                // value='123'
+                                value={formatVNDCurrency(
+                                    disbursement?.disbursement || 0
+                                )}
                                 readOnly
                             />
                             <div
@@ -249,11 +334,11 @@ export default function SendFunds() {
                             </div>
                             <Button
                                 className={`${cx('btn_submit')} infobgcbold`}
-                                onClick={handleSendFund}
+                                onClick={handleContinue}
                                 isProcess={isProcessSendFund}
                                 disabled={isProcessSendFund}
                             >
-                                Gửi
+                                Tiếp tục
                             </Button>
                         </div>
                     </div>
@@ -271,6 +356,66 @@ export default function SendFunds() {
                             Đang cập nhật...
                         </div>
                     </div>
+                </Modal>
+            )}
+            {isModalSubmit && (
+                <Modal
+                    openModal={handleModalSubmitTrue}
+                    closeModal={handleModalSubmitFalse}
+                    titleHeader='Xác nhận hợp đồng'
+                    actionButtonText='Xác nhận'
+                    classNameButton={`infobgcbold`}
+                    onClick={handleSubmit}
+                    isProcess={isProcessSubmit}
+                >
+                    <CustomcareLine
+                        title='Mã HD:'
+                        textLink={`${
+                            ID_FINAL ? ID_FINAL + 1 : 1
+                        }/${new Date().getFullYear()}/${
+                            investmentFund?.id === 1 ? 'HDQDTUSD' : 'HDPTNN'
+                        }`}
+                        marginLeft={0}
+                    />
+                    <CustomcareLine
+                        title='Tên:'
+                        textLink={currentUser?.username}
+                        marginLeft={0}
+                    />
+                    <CustomcareLine
+                        title='Gói:'
+                        textLink={`${
+                            investmentFund?.id === 1
+                                ? 'QUỸ ĐẦU TƯ USD'
+                                : 'QUỸ PHÁT TRIỂN NÔNG NGHIỆP'
+                        }`}
+                        marginLeft={0}
+                    />
+                    <CustomcareLine
+                        title='Thời gian gửi:'
+                        textLink={dateFormat(sendingTime, 'DD/MM/YYYY')}
+                        marginLeft={0}
+                    />
+                    <CustomcareLine
+                        title='Kỳ hạn:'
+                        textLink={`${period} ${
+                            investmentFund?.id === 1 ? 'tháng' : 'mùa'
+                        }`}
+                        marginLeft={0}
+                    />
+                    <CustomcareLine
+                        title='Vốn:'
+                        textLink={formatVND(deposits || 0)}
+                        marginLeft={0}
+                    />
+                    <CustomcareLine
+                        title='Giải ngân:'
+                        textLink={formatVNDCurrency(
+                            disbursement?.disbursement || 0
+                        )}
+                        marginLeft={0}
+                        noneBorderBottom
+                    />
                 </Modal>
             )}
         </div>

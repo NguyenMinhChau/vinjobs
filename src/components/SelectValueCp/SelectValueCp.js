@@ -45,7 +45,10 @@ export default function SelectValueCp({
                                         setStateSelect(false);
                                     }}
                                 >
-                                    {item?.name}
+                                    {item?.name +
+                                        (item?.accountName
+                                            ? ` - ${item?.accountName} - ${item?.accountNumber}`
+                                            : '')}
                                 </div>
                             );
                         })}

@@ -126,7 +126,7 @@ function App() {
                     onClick={toogleGetApp}
                     style={{ right: scrollToTop ? '70px' : '20px' }}
                 >
-                    <span>Get App Mobile</span>
+                    <span>Tải ứng dụng</span>
                     {getApp && (
                         <div
                             className='list-app-container'
@@ -147,40 +147,31 @@ function App() {
                                         <>
                                             <div>
                                                 {valueProgress >= 100
-                                                    ? 'Done!'
-                                                    : 'Downloading, please wait...'}
+                                                    ? 'Hoàn thành!'
+                                                    : 'Đang tải, vui lòng đợi...'}
                                             </div>
                                             <ProgressLine
                                                 value={valueProgress}
                                             />
                                         </>
                                     ) : (
-                                        'Download for Android (.apk)'
+                                        'Tải file .apk cho Android'
                                     )}
                                 </div>
                             </div>
-                            {/* <a
+                            <a
                                 className='list-app-item'
-                                href='##'
+                                href='https://play.google.com/store/apps/details?id=com.mobiletransactions'
                                 target='_blank'
                                 alt='Download on Google Play'
                                 rel='noreferrer'
                             >
                                 <IconGetApp.CHPlayIcon />
                                 <div className='list-app-item-text ml8'>
-                                    Download on Google Play
+                                    Tải trên Google Play
                                 </div>
-                            </a> */}
-                            <div
-                                className='list-app-item'
-                                onClick={() => alert('Đang phát triển')}
-                            >
-                                <IconGetApp.CHPlayIcon />
-                                <div className='list-app-item-text ml8'>
-                                    Download on Google Play
-                                </div>
-                            </div>
-                            <div
+                            </a>
+                            {/* <div
                                 className='list-app-item'
                                 onClick={() => alert('Đang phát triển')}
                             >
@@ -188,7 +179,7 @@ function App() {
                                 <div className='list-app-item-text ml8'>
                                     Download on Apple Store
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     )}
                 </div>

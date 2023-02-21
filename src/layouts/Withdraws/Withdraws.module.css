@@ -58,6 +58,18 @@
     cursor: pointer;
 }
 
+.text_resend {
+    display: inline-block;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.text_seen_history {
+    display: inline-block;
+    margin: 8px 0;
+    cursor: pointer;
+}
+
 /* MOBILE */
 @media (max-width: 46.25em) {
     .list_info_container {

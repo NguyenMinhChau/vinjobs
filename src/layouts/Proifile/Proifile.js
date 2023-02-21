@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import className from 'classnames/bind';
 import styles from './Proifile.module.css';
@@ -8,8 +8,10 @@ import {
     CreditCard,
     CustomcareLine,
     FormInput,
+    IconForm,
     Image,
     LoginRegisterCp,
+    LoginRegisterCpTwo,
     Modal,
     SelectValueCp,
     SliderHeader,
@@ -22,8 +24,13 @@ import { useAppContext } from '../../utils';
 import { setData } from '../../app/reducer';
 import { dataBank } from '../../utils/dataBank';
 import { adminGetUserByIdSV } from '../../services/admin';
-import { userAddPaymentSV } from '../../services/user';
+import {
+    userAddPaymentSV,
+    userChangePasswordSV,
+    userUploadLicenseSV,
+} from '../../services/user';
 import { authLogoutSV } from '../../services/authen';
+import requestRefreshToken from '../../utils/axios/refreshToken';
 
 const cx = className.bind(styles);
 
@@ -55,7 +62,13 @@ export default function Proifile() {
     const [showSelect, setShowSelect] = useState(false);
     const [isProcessModalReciving, setisProcessModalReciving] = useState(false);
     const [modalChangePwd, setmodalChangePwd] = useState(false);
+    const [modalUpload, setModalUpload] = useState(false);
     const [isProcessModalPwd, setisProcessModalPwd] = useState(false);
+    const [isProcessModalUpload, setisProcessModalUpload] = useState(false);
+    const [uploadCCCDFont, setUploadCCCDFont] = useState(null);
+    const [uploadCCCDBeside, setUploadCCCDBeside] = useState(null);
+    const [uploadLicenseFont, setUploadLicenseFont] = useState(null);
+    const [uploadLicenseBeside, setUploadLicenseBeside] = useState(null);
     const handleCloseSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -109,6 +122,18 @@ export default function Proifile() {
                 confirmPassword: '',
             })
         );
+    };
+    const handleModalUploadTrue = (e) => {
+        e.stopPropagation();
+        setModalUpload(true);
+    };
+    const handleModalUploadFalse = (e) => {
+        e.stopPropagation();
+        setModalUpload(false);
+        setUploadCCCDFont(null);
+        setUploadCCCDBeside(null);
+        setUploadLicenseFont(null);
+        setUploadLicenseBeside(null);
     };
     const handleModalAuthenOldEmail = (e) => {
         e.stopPropagation();
@@ -177,6 +202,19 @@ export default function Proifile() {
             }, 3000);
         }
     };
+    const handleSendMethod = (dataToken) => {
+        userAddPaymentSV({
+            id_user: currentUser?.id,
+            account: accountNumber,
+            bankName: bankName?.name,
+            name: accountName,
+            setSnackbar,
+            setisProcessModalReciving,
+            setModalRecivingAccount,
+            history,
+            token: dataToken?.token,
+        });
+    };
     const handleAddMethod = async () => {
         await 1;
         if (!bankName || !accountName || !accountNumber) {
@@ -187,37 +225,38 @@ export default function Proifile() {
             });
         } else {
             setisProcessModalReciving(true);
-            setTimeout(() => {
-                // console.log(bankName, accountName, accountNumber);
-                // setSnackbar({
-                //     open: true,
-                //     type: 'info',
-                //     message: 'Chức năng đang được phát triển!',
-                // });
-                userAddPaymentSV({
-                    id_user: currentUser?.id,
-                    account: accountNumber,
-                    bankName: bankName?.name,
-                    name: accountName,
-                    setSnackbar,
-                    setisProcessModalReciving,
-                    setModalRecivingAccount,
-                    history,
-                });
-                adminGetUserByIdSV({
-                    id_user: currentUser?.id,
-                    dispatch,
-                    setSnackbar,
-                });
-                dispatch(
-                    setData({
-                        bankName: '',
-                        accountName: '',
-                        accountNumber: '',
-                    })
-                );
-            }, 3000);
+            requestRefreshToken(
+                currentUser,
+                handleSendMethod,
+                state,
+                dispatch,
+                setData,
+                setSnackbar
+            );
+            adminGetUserByIdSV({
+                id_user: currentUser?.id,
+                dispatch,
+                setSnackbar,
+            });
+            dispatch(
+                setData({
+                    bankName: '',
+                    accountName: '',
+                    accountNumber: '',
+                })
+            );
         }
+    };
+    const handleSendPwd = (dataToken) => {
+        userChangePasswordSV({
+            id_user: currentUser?.id,
+            token: dataToken?.token,
+            oldPassword: oldPassword,
+            newPassword: password,
+            setSnackbar,
+            setisProcessModalPwd,
+            setmodalChangePwd,
+        });
     };
     const handleChangePwd = async () => {
         await 1;
@@ -235,16 +274,14 @@ export default function Proifile() {
             });
         } else {
             setisProcessModalPwd(true);
-            setTimeout(() => {
-                setisProcessModalPwd(false);
-                console.log(oldPassword, password, confirmPassword);
-                setmodalChangePwd(false);
-                setSnackbar({
-                    open: true,
-                    type: 'info',
-                    message: 'Chức năng đang được phát triển!',
-                });
-            }, 3000);
+            requestRefreshToken(
+                currentUser,
+                handleSendPwd,
+                state,
+                dispatch,
+                setData,
+                setSnackbar
+            );
         }
     };
     const handleLogout = async () => {
@@ -256,10 +293,132 @@ export default function Proifile() {
             dispatch,
         });
     };
+    const handleSendUploadSV = (dataToken) => {
+        userUploadLicenseSV({
+            id_user: currentUser?.id,
+            token: dataToken?.token,
+            setSnackbar,
+            setisProcessModalUpload,
+            setModalUpload,
+            imagePersonNationalityFont: uploadCCCDFont?.file,
+            imagePersonNationalityBeside: uploadCCCDBeside?.file,
+            imageLicenseFont: uploadLicenseFont?.file,
+            imageLicenseBeside: uploadLicenseBeside?.file,
+            setUploadCCCDFont,
+            setUploadCCCDBeside,
+            setUploadLicenseFont,
+            setUploadLicenseBeside,
+        });
+    };
+    const handleUpload = async () => {
+        await 1;
+        if (
+            (userById?.uploadCCCDFont || uploadCCCDFont) &&
+            (userById?.uploadCCCDBeside || uploadCCCDBeside) &&
+            (userById?.uploadLicenseFont || uploadLicenseFont) &&
+            (userById?.uploadLicenseBeside || uploadLicenseBeside)
+        ) {
+            setisProcessModalUpload(true);
+            requestRefreshToken(
+                currentUser,
+                handleSendUploadSV,
+                state,
+                dispatch,
+                setData,
+                setSnackbar
+            );
+        } else {
+            setSnackbar({
+                open: true,
+                type: 'error',
+                message: 'Vui lòng chọn đầy đủ ảnh',
+            });
+        }
+    };
     const checkbank =
         userById?.payment?.bank?.bankName &&
         userById?.payment?.bank?.name &&
         userById?.payment?.bank?.account;
+    const URL_SERVER = process.env.REACT_APP_URL_SERVER;
+    const RenderImageDocument = ({
+        nameFile,
+        idFile,
+        urlImage,
+        urlImagePending,
+        onChange,
+    }) => {
+        return (
+            <label className={`${cx('image-item')}`} id={idFile}>
+                {!urlImage && !urlImagePending ? (
+                    <>
+                        <IconForm.UploadIcon
+                            className={`${cx('icon-upload')}`}
+                        />
+                    </>
+                ) : (
+                    <Image
+                        src={
+                            !urlImagePending
+                                ? `${URL_SERVER}/${urlImage?.replace(
+                                      'uploads/',
+                                      ''
+                                  )}`
+                                : urlImagePending
+                        }
+                        alt=''
+                        className={`${cx('image-view')}`}
+                    />
+                )}
+                <input
+                    type='file'
+                    id={idFile}
+                    className={`${cx('input-file')}`}
+                    name={nameFile}
+                    onChange={onChange}
+                />
+            </label>
+        );
+    };
+    const handleChangeUploadCCCDFont = useCallback(
+        (e) => {
+            const { files } = e.target;
+            setUploadCCCDFont({
+                url: URL.createObjectURL(files[0]),
+                file: files[0],
+            });
+        },
+        [uploadCCCDFont]
+    );
+    const handleChangeUploadCCCDBeside = useCallback(
+        (e) => {
+            const { files } = e.target;
+            setUploadCCCDBeside({
+                url: URL.createObjectURL(files[0]),
+                file: files[0],
+            });
+        },
+        [uploadCCCDBeside]
+    );
+    const handleChangeUploadLicenseFont = useCallback(
+        (e) => {
+            const { files } = e.target;
+            setUploadLicenseFont({
+                url: URL.createObjectURL(files[0]),
+                file: files[0],
+            });
+        },
+        [uploadLicenseFont]
+    );
+    const handleChangeUploadLicenseBeside = useCallback(
+        (e) => {
+            const { files } = e.target;
+            setUploadLicenseBeside({
+                url: URL.createObjectURL(files[0]),
+                file: files[0],
+            });
+        },
+        [uploadLicenseBeside]
+    );
     return (
         <div className={`${cx('container')}`}>
             <SliderHeader
@@ -338,7 +497,14 @@ export default function Proifile() {
                                     onClick={handleModalPwdTrue}
                                 />
                                 <CustomcareLine
-                                    nameIcon='fa-solid fa-arrows-rotate'
+                                    nameIcon='fas fa-upload'
+                                    colorIcon='success'
+                                    link={'##'}
+                                    textLink='Giấy phép lái xe/CCCD'
+                                    onClick={handleModalUploadTrue}
+                                />
+                                <CustomcareLine
+                                    nameIcon='fas fa-link'
                                     colorIcon='warning'
                                     link={'##'}
                                     textLink='Tài khoản liên kết'
@@ -347,7 +513,7 @@ export default function Proifile() {
                                 />
                             </div>
                         ) : (
-                            <LoginRegisterCp padding='22px' />
+                            <LoginRegisterCp padding='24px' />
                         )}
                     </div>
                     <div className={`${cx('list_info_item')}`}>
@@ -445,6 +611,10 @@ export default function Proifile() {
                     onClick={handleAddMethod}
                     hideButton={checkbank}
                 >
+                    <p className={`${cx('text_desc')} info fwb mb8`}>
+                        Nếu đã có tài khoản nhưng không hiện thông tin. Vui lòng
+                        F5 lại trang, xin cảm ơn!
+                    </p>
                     {checkbank ? (
                         <CreditCard
                             bankName={userById?.payment?.bank?.bankName}
@@ -534,6 +704,64 @@ export default function Proifile() {
                             )
                         }
                     />
+                </Modal>
+            )}
+            {modalUpload && (
+                <Modal
+                    openModal={handleModalUploadTrue}
+                    closeModal={handleModalUploadFalse}
+                    titleHeader='Tải giấy tờ'
+                    actionButtonText='Gửi'
+                    isProcess={isProcessModalUpload}
+                    classNameButton={`warningbgc`}
+                    onClick={handleUpload}
+                >
+                    <div className={`${cx('container-document')}`}>
+                        <p className={`${cx('text_desc')} info fwb mb8`}>
+                            Nếu đã tải giấy tờ nhưng không hiện thông tin. Vui
+                            lòng F5 lại trang, xin cảm ơn!
+                        </p>
+                        <div className={`${cx('document-title')}`}>
+                            1. Căn cước công dân
+                        </div>
+                        <div className={`${cx('doucment-image-container')}`}>
+                            <RenderImageDocument
+                                nameFile='uploadCCCDFont'
+                                idFile='uploadCCCDFont'
+                                urlImage={userById?.uploadCCCDFont}
+                                onChange={handleChangeUploadCCCDFont}
+                                urlImagePending={uploadCCCDFont?.url}
+                            />
+                            <RenderImageDocument
+                                nameFile='uploadCCCDBeside'
+                                idFile='uploadCCCDBeside'
+                                urlImage={userById?.uploadCCCDBeside}
+                                onChange={handleChangeUploadCCCDBeside}
+                                urlImagePending={uploadCCCDBeside?.url}
+                            />
+                        </div>
+                    </div>
+                    <div className={`${cx('container-document')}`}>
+                        <div className={`${cx('document-title')}`}>
+                            2. Giấy phép lái xe
+                        </div>
+                        <div className={`${cx('doucment-image-container')}`}>
+                            <RenderImageDocument
+                                nameFile='uploadLicenseFont'
+                                idFile='uploadLicenseFont'
+                                urlImage={userById?.uploadLicenseFont}
+                                onChange={handleChangeUploadLicenseFont}
+                                urlImagePending={uploadLicenseFont?.url}
+                            />
+                            <RenderImageDocument
+                                nameFile='uploadLicenseBeside'
+                                idFile='uploadLicenseBeside'
+                                urlImage={userById?.uploadLicenseBeside}
+                                onChange={handleChangeUploadLicenseBeside}
+                                urlImagePending={uploadLicenseBeside?.url}
+                            />
+                        </div>
+                    </div>
                 </Modal>
             )}
         </div>

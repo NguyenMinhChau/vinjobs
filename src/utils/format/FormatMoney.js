@@ -31,6 +31,14 @@ export const formatVND = (number) => {
         // compactDisplay: 'short'  ,
     }).format(numberConvert);
 };
+export const formatVNDCurrency = (number) => {
+    return new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        // notation: 'compact', // compact, short, long - rút gọn
+        // compactDisplay: 'short'  ,
+    }).format(number);
+};
 export const precisionRound = (number) => {
     let precision = 5;
     let factor = Math.pow(10, precision);

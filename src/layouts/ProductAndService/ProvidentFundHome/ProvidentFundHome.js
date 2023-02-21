@@ -5,6 +5,7 @@ import styles from './ProvidentFundHome.module.css';
 import {
     FundMenuAndSlider,
     LoginRegisterCp,
+    LoginRegisterCpTwo,
     MenuItem as MenuItemFund,
     SliderHeader,
     SnackbarCp,
@@ -13,6 +14,7 @@ import {
 } from '../../../components';
 import { routers } from '../../../routers';
 import { useAppContext } from '../../../utils';
+import { Link } from 'react-router-dom';
 
 const cx = className.bind(styles);
 // const IMAGE_SLIDERS = [
@@ -81,15 +83,7 @@ export default function ProvidentFundHome() {
         });
     };
     const toogleIsShow = () => {
-        if (currentUser) {
-            setIShow(!isShow);
-        } else {
-            setSnackbar({
-                open: true,
-                type: 'error',
-                message: <LoginRegisterCp />,
-            });
-        }
+        setIShow(!isShow);
     };
     return (
         <div className={`${cx('container')}`}>
@@ -106,16 +100,29 @@ export default function ProvidentFundHome() {
                 typeSnackbar={snackbar.type}
             />
             <div className={`${cx('body')}`}>
-                <TotalAssetsAndFund isShow={isShow} toogleIsShow={toogleIsShow}>
-                    <TotalItem
-                        title='Tổng tài sản'
-                        price={1000}
+                {currentUser && (
+                    <TotalAssetsAndFund
                         isShow={isShow}
-                    />
-                    <TotalItem title='Ví quỹ' price={1000} isShow={isShow} />
-                    <TotalItem title='Ví đầu tư' price={1000} isShow={isShow} />
-                    <TotalItem title='Số dư' price={1000} isShow={isShow} />
-                </TotalAssetsAndFund>
+                        toogleIsShow={toogleIsShow}
+                    >
+                        <TotalItem
+                            title='Tổng tài sản'
+                            price={1000}
+                            isShow={isShow}
+                        />
+                        <TotalItem
+                            title='Ví quỹ'
+                            price={1000}
+                            isShow={isShow}
+                        />
+                        <TotalItem
+                            title='Ví đầu tư'
+                            price={1000}
+                            isShow={isShow}
+                        />
+                        <TotalItem title='Số dư' price={1000} isShow={isShow} />
+                    </TotalAssetsAndFund>
+                )}
                 <FundMenuAndSlider
                     imageSlidersProduct={PRODUCT_LISTS}
                     title='Menu'

@@ -42,23 +42,20 @@ export default function Login() {
     const handleLogin = async () => {
         await 1;
         setIsProcess(true);
-        setTimeout(() => {
-            authLoginSV({
-                email,
-                password,
-                setSnackbar,
-                dispatch,
-                history,
-                setIsProcess,
-            });
-            // console.log(email, password);
-            dispatch(
-                setData({
-                    email: '',
-                    password: '',
-                })
-            );
-        }, 3000);
+        authLoginSV({
+            email,
+            password,
+            setSnackbar,
+            dispatch,
+            history,
+            setIsProcess,
+        });
+        dispatch(
+            setData({
+                email: '',
+                password: '',
+            })
+        );
     };
     const onEnter = (e) => {
         handleLogin();

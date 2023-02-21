@@ -26,6 +26,10 @@ export { default as InterestRateTable } from './InterestRateTable/InterestRateTa
 export { default as SendFunds } from './SendFunds/SendFunds';
 export { default as ManagerFunds } from './ManagerFunds/ManagerFunds';
 export { default as Recruitment } from './Recruitment/Recruitment';
+export { default as History } from './History/History';
+export { default as WithdrawsHistory } from './WithdrawsHistory/WithdrawsHistory';
+export { default as DepositsHistory } from './DepositsHistory/DepositsHistory';
+export { default as General } from './General/General';
 export { default as Contact } from './Contact/Contact';
 export { default as Footer } from './Footer/Footer';
 export { default as PageNotFound } from './PageNotFound/PageNotFound';

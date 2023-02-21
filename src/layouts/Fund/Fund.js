@@ -10,6 +10,7 @@ import {
     MenuItem as MenuItemFund,
     SnackbarCp,
     LoginRegisterCp,
+    LoginRegisterCpTwo,
 } from '../../components';
 import { routers } from '../../routers';
 import { useAppContext } from '../../utils';
@@ -52,15 +53,7 @@ export default function Fund() {
         document.title = `Quỹ | ${process.env.REACT_APP_TITLE_WEB}`;
     }, []);
     const toogleIsShow = () => {
-        if (currentUser) {
-            setIsShow(!isShow);
-        } else {
-            setSnackbar({
-                open: true,
-                type: 'error',
-                message: <LoginRegisterCp />,
-            });
-        }
+        setIsShow(!isShow);
     };
     return (
         <div className={`${cx('container')}`}>
@@ -77,36 +70,38 @@ export default function Fund() {
                 typeSnackbar={snackbar.type}
             />
             <div className={`${cx('body')}`}>
-                <TotalAssetsAndFund
-                    isShow={isShow}
-                    toogleIsShow={toogleIsShow}
-                    cols={1}
-                >
-                    <div className={`${cx('total_assets_list_custom')}`}>
-                        <TotalItem
-                            title='Tổng quỹ'
-                            price={1000}
-                            isShow={isShow}
-                        />
-                        <TotalItem
-                            title='Quỹ đầu tư USD'
-                            price={1000}
-                            isShow={isShow}
-                        />
-                        <TotalItem
-                            title='Quỹ phát triển nông nghiệp'
-                            price={1000}
-                            isShow={isShow}
-                        />
-                    </div>
-                </TotalAssetsAndFund>
+                {currentUser && (
+                    <TotalAssetsAndFund
+                        isShow={isShow}
+                        toogleIsShow={toogleIsShow}
+                        cols={1}
+                    >
+                        <div className={`${cx('total_assets_list_custom')}`}>
+                            <TotalItem
+                                title='Tổng quỹ'
+                                price={1000}
+                                isShow={isShow}
+                            />
+                            <TotalItem
+                                title='Quỹ đầu tư USD'
+                                price={1000}
+                                isShow={isShow}
+                            />
+                            <TotalItem
+                                title='Quỹ phát triển nông nghiệp'
+                                price={1000}
+                                isShow={isShow}
+                            />
+                        </div>
+                    </TotalAssetsAndFund>
+                )}
                 <FundMenuAndSlider
                     imageSliders={IMAGE_SLIDERS}
                     title='Menu'
                     nameIconTitle='bx bx-menu'
                 >
                     <MenuItemFund
-                        title='Bảng lãi suất'
+                        title='Bảng quỹ tham khảo'
                         nameIcon='bx bxs-bank'
                         to={`${routers.providentFund}/${routers.fund}/${routers.interestRateTable}`}
                     />

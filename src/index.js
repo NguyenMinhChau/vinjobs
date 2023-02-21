@@ -10,6 +10,7 @@ import './styles/reset.css';
 import './styles/index.css';
 import './styles/general.css';
 import './styles/status.css';
+import './styles/table.css';
 import './styles/colors.css';
 import './styles/reponsive.css';
 

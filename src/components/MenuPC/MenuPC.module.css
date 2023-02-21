@@ -84,3 +84,18 @@
     image-rendering: auto;
     filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
 }
+
+.divider {
+    position: relative;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: -100%;
+    right: -12%;
+    width: 30px;
+    height: 100px;
+    background-color: transparent;
+    z-index: 999999999;
+}

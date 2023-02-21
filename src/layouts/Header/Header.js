@@ -1,15 +1,28 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useState } from 'react';
 import className from 'classnames/bind';
 import { IconHeader, LinkHref, MenuMobile, MenuPC } from '../../components';
-import { HeaderMenu } from '../../utils/';
+import { HeaderMenu, useAppContext } from '../../utils/';
 import styles from './Header.module.css';
+import { Link, useNavigate } from 'react-router-dom';
+import { routers } from '../../routers';
+import { authLogoutSV } from '../../services/authen';
+import { getStore } from '../../utils/localStore/localStore';
 
 const cx = className.bind(styles);
 
 export default function Header() {
+    const { state, dispatch } = useAppContext();
+    const { currentUser } = state;
     const [isShowMenu, setIsShowMenu] = React.useState(false);
     const [isShowMenuMobile, setIsShowMenuMobile] = React.useState(false);
     const [id, setId] = React.useState();
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        type: '',
+        message: '',
+    });
+    const history = useNavigate();
     const MenuChildTrue = (e, id) => {
         e.preventDefault();
         setId(id);
@@ -30,26 +43,62 @@ export default function Header() {
     // lấy ra mảng không chứa phần tử giữa
     const firstHalf = HeaderMenu.slice(0, middle);
     const secondHalf = HeaderMenu.slice(middle + 1, HeaderMenu.length);
+    const handleLogout = async () => {
+        await 1;
+        authLogoutSV({
+            id_user: currentUser?.id,
+            history,
+            setSnackbar,
+            dispatch,
+        });
+    };
     return (
         <div className={`${cx('container')}`}>
             <div className={`${cx('header_top')}`}>
-                <div
-                    className={`${cx(
-                        'header_top_title'
-                    )} mr8 text-upc fz12 fwb`}
-                >
-                    Hỗ trợ khách hàng
+                <div className={`${cx('header_top_item')} flex-start`}>
+                    <div
+                        className={`${cx(
+                            'header_top_title'
+                        )} mr8 text-upc fz12 fwb`}
+                    >
+                        Hỗ trợ khách hàng
+                    </div>
+                    <div className={`${cx('header_top_btn_social')}`}>
+                        <LinkHref url='##'>
+                            <IconHeader.FacebookIcon />
+                        </LinkHref>
+                        <LinkHref url='##'>
+                            <IconHeader.InstagramIcon />
+                        </LinkHref>
+                        <LinkHref url='https://youtube.com/'>
+                            <IconHeader.YoutubeIcon />
+                        </LinkHref>
+                    </div>
                 </div>
-                <div className={`${cx('header_top_btn_social')}`}>
-                    <LinkHref url='##'>
-                        <IconHeader.FacebookIcon />
-                    </LinkHref>
-                    <LinkHref url='##'>
-                        <IconHeader.InstagramIcon />
-                    </LinkHref>
-                    <LinkHref url='https://youtube.com/'>
-                        <IconHeader.YoutubeIcon />
-                    </LinkHref>
+                <div className={`${cx('header_top_item')} flex-end`}>
+                    {!getStore(dispatch) ? (
+                        <div className='flex-end w100'>
+                            <Link
+                                to={`${routers.login}`}
+                                className={`${cx('btn')} mr8 infobgcbold`}
+                            >
+                                Đăng nhập
+                            </Link>
+                            <Link
+                                to={`${routers.register}`}
+                                className={`${cx('btn')} ml8 cancelbgcbold`}
+                            >
+                                Đăng ký
+                            </Link>
+                        </div>
+                    ) : (
+                        <div
+                            onClick={handleLogout}
+                            className={`${cx('btn')} cancelbgcbold`}
+                        >
+                            Đăng xuất
+                        </div>
+                    )}
                 </div>
             </div>
             <div className={`${cx('divider')}`}></div>

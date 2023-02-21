@@ -20,11 +20,10 @@ const requestRefreshToken = async (
                 const res = await refreshToken(
                     `refreshToken/${currentUser?.id}`
                 );
-                console.log('refreshToken', res);
                 if (res.code === 0) {
                     const refreshUser = {
                         ...currentUser,
-                        token: res.newtoken.toString(),
+                        token: res.data.toString(),
                     };
                     await setStore(refreshUser);
                     dispatch(
@@ -32,14 +31,15 @@ const requestRefreshToken = async (
                             currentUser: getStore(),
                         })
                     );
-                    currentUser.token = `${res.newtoken}`;
+                    currentUser.token = `${res.data}`;
                     handleFunc(refreshUser, id ? id : '');
                     return refreshUser;
                 } else {
                     setSnackbar({
                         open: true,
                         type: 'error',
-                        message: 'RefreshToken not found- Please login again',
+                        message:
+                            'Refresh token không tìm thấy. Vui lòng đăng xuất và đăng nhập lại, xin cảm ơn!',
                     });
                 }
             } else {

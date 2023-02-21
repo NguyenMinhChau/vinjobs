@@ -1,9 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
 import className from 'classnames/bind';
 import styles from './ManagerFunds.module.css';
 import {
     LoginRegisterCp,
+    LoginRegisterCpTwo,
     ManagerFundInterestCp,
     ManagerFundUSDCp,
     SliderHeader,
@@ -12,6 +15,9 @@ import {
     TotalItem,
 } from '../../components';
 import { useAppContext } from '../../utils';
+import { userGetContractSV } from '../../services/user';
+import requestRefreshToken from '../../utils/axios/refreshToken';
+import { setData } from '../../app/reducer';
 
 const cx = className.bind(styles);
 const LIST_TABS = [
@@ -28,7 +34,7 @@ const LIST_TABS = [
 ];
 
 export default function ManagerFunds() {
-    const { state } = useAppContext();
+    const { state, dispatch } = useAppContext();
     const { currentUser } = state.set;
     const [isShow, setIsShow] = useState(false);
     const [idTab, setIdTab] = useState(1);
@@ -37,8 +43,32 @@ export default function ManagerFunds() {
         type: '',
         message: '',
     });
+    const [dataContract, setDataContract] = useState(null);
+    const handleSendContract = (dataToken) => {
+        userGetContractSV({
+            id_user: currentUser?.id,
+            setSnackbar,
+            setDataContract,
+            token: dataToken?.token,
+        });
+    };
     useEffect(() => {
         document.title = `Quản lý quỹ | ${process.env.REACT_APP_TITLE_WEB}`;
+        requestRefreshToken(
+            currentUser,
+            handleSendContract,
+            state,
+            dispatch,
+            setData,
+            setSnackbar
+        );
+        if (!currentUser) {
+            setSnackbar({
+                open: true,
+                type: 'error',
+                message: <LoginRegisterCp />,
+            });
+        }
     }, []);
     const handleCloseSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
@@ -50,15 +80,7 @@ export default function ManagerFunds() {
         });
     };
     const toogleIsShow = () => {
-        if (currentUser) {
-            setIsShow(!isShow);
-        } else {
-            setSnackbar({
-                open: true,
-                type: 'error',
-                message: <LoginRegisterCp />,
-            });
-        }
+        setIsShow(!isShow);
     };
     return (
         <div className={`${cx('container')}`}>
@@ -75,16 +97,29 @@ export default function ManagerFunds() {
                 typeSnackbar={snackbar.type}
             />
             <div className={`${cx('body')}`}>
-                <TotalAssetsAndFund isShow={isShow} toogleIsShow={toogleIsShow}>
-                    <TotalItem
-                        title='Tổng tài sản'
-                        price={1000}
+                {currentUser && (
+                    <TotalAssetsAndFund
                         isShow={isShow}
-                    />
-                    <TotalItem title='Ví quỹ' price={1000} isShow={isShow} />
-                    <TotalItem title='Ví đầu tư' price={1000} isShow={isShow} />
-                    <TotalItem title='Số dư' price={1000} isShow={isShow} />
-                </TotalAssetsAndFund>
+                        toogleIsShow={toogleIsShow}
+                    >
+                        <TotalItem
+                            title='Tổng tài sản'
+                            price={1000}
+                            isShow={isShow}
+                        />
+                        <TotalItem
+                            title='Ví quỹ'
+                            price={1000}
+                            isShow={isShow}
+                        />
+                        <TotalItem
+                            title='Ví đầu tư'
+                            price={1000}
+                            isShow={isShow}
+                        />
+                        <TotalItem title='Số dư' price={1000} isShow={isShow} />
+                    </TotalAssetsAndFund>
+                )}
                 <div className={`${cx('table_manager_container')}`}>
                     <div className={`${cx('table_manager_list')}`}>
                         {LIST_TABS.map((item, index) => (
@@ -110,7 +145,12 @@ export default function ManagerFunds() {
                         {LIST_TABS.map((item, index) => {
                             if (item?.id === idTab) {
                                 const Component = item?.component;
-                                return <Component key={index} />;
+                                return (
+                                    <Component
+                                        key={index}
+                                        data={dataContract}
+                                    />
+                                );
                             }
                         })}
                     </div>

@@ -36,31 +36,21 @@ export default function Register() {
     const handleRegister = async () => {
         await 1;
         setIsProcess(true);
-        setTimeout(() => {
-            // setIsProcess(false);
-            // console.log(username, email, password);
-            authRegisterSV({
-                email,
-                password,
-                username,
-                history,
-                setIsProcess,
-                setSnackbar,
-            });
-            dispatch(
-                setData({
-                    username: '',
-                    email: '',
-                    password: '',
-                })
-            );
-            // history(routers.login);
-            // setSnackbar({
-            //     open: true,
-            //     type: 'success',
-            //     message: 'Đăng ký thành công!',
-            // });
-        }, 3000);
+        authRegisterSV({
+            email,
+            password,
+            username,
+            history,
+            setIsProcess,
+            setSnackbar,
+        });
+        dispatch(
+            setData({
+                username: '',
+                email: '',
+                password: '',
+            })
+        );
     };
     const onEnter = (e) => {
         handleRegister();

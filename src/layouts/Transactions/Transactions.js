@@ -1,11 +1,15 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
 import className from 'classnames/bind';
 import styles from './Transactions.module.css';
-import { SliderHeader } from '../../components';
+import { LoginRegisterCpTwo, SliderHeader } from '../../components';
+import { useAppContext } from '../../utils';
 
 const cx = className.bind(styles);
 
 export default function Transactions() {
+    const { state } = useAppContext();
+    const { currentUser } = state.set;
     useEffect(() => {
         document.title = `Giao dịch | ${process.env.REACT_APP_TITLE_WEB}`;
     }, []);
