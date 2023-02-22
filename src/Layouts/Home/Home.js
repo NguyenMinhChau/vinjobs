@@ -1,0 +1,25 @@
+import React, { useEffect } from 'react';
+import className from 'classnames/bind';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import styles from './Home.module.css';
+import { useAppContext } from '../../utils';
+
+const cx = className.bind(styles);
+
+function Home() {
+    const { state } = useAppContext();
+    const { currentUser } = state.set;
+    console.log(currentUser);
+    useEffect(() => {
+        document.title = `Home | ${process.env.REACT_APP_TITLE_WEB}`;
+    }, []);
+    return (
+        <div className={`${cx('home-container')}`}>
+            <Skeleton height={100} style={{ marginBottom: '10px' }} />
+            <Skeleton height={200} />
+        </div>
+    );
+}
+
+export default Home;
