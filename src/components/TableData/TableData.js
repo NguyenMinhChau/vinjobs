@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import className from 'classnames/bind';
@@ -219,8 +220,7 @@ function TableData({
                 </thead>
                 {(!PaginationCus ? data : dataPagiCus)?.length > 0 ? (
                     <tbody className='tbody'>{children}</tbody>
-                ) : (search?.length === 0 || search?.length > 0) &&
-                  (!PaginationCus ? data : dataPagiCus)?.length === 0 ? (
+                ) : (
                     <tbody className='tbody'>
                         <tr>
                             <td
@@ -231,8 +231,6 @@ function TableData({
                             </td>
                         </tr>
                     </tbody>
-                ) : (
-                    <Loading />
                 )}
             </table>
             {(!PaginationCus ? data : dataPagiCus)?.length > 0 && (
