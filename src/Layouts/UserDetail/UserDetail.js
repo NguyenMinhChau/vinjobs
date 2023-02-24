@@ -12,17 +12,10 @@ import {
     Modal,
     Image,
     ModalViewImage,
+    SnackbarCp,
 } from '../../components';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-// import {
-//     checkErrorUsers,
-//     getUserById,
-//     changePasswordUser,
-//     refreshPasswordUser,
-//     blockAndUnblockUser,
-//     updateUSDGift,
-// } from '../../services/users';
 import {
     useAppContext,
     requestRefreshToken,
@@ -35,6 +28,12 @@ import {
 } from '../../utils';
 import { actions } from '../../app/';
 import styles from './UserDetail.module.css';
+import {
+    blockUserByEmailSV,
+    changePwdUserSV,
+    getUserByIdSV,
+    refreshPwdUserSV,
+} from '../../services/admin';
 
 const cx = className.bind(styles);
 
@@ -45,33 +44,50 @@ function UserDetail() {
         edit,
         currentUser,
         form: { password },
-        message: { upd, error },
-        quantityCoin,
     } = state.set;
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        type: '',
+        message: '',
+    });
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbar({
+            ...snackbar,
+            open: false,
+        });
+    };
     const { modalDelete } = state.toggle;
     const [isModalImage, setIsModalImage] = useState(false);
     const [indexImage, setIndexImage] = useState(0);
+    const [userById, setUserById] = useState(null);
     const [isProcessUpdateUsd, setIsProcessUpdateUsd] = useState(false);
     const [isProcessChangePwd, setIsProcessChangePwd] = useState(false);
     const [isProcessBlockUser, setIsProcessBlockUser] = useState(false);
     const [isProcessRefreshPwd, setIsProcessRefreshPwd] = useState(false);
-    const x = edit?.itemData && edit?.itemData;
+    const x = userById ? userById : edit?.itemData && edit?.itemData;
+    const handleSendUser = (dataToken) => {
+        getUserByIdSV({
+            id_user: idUser,
+            setSnackbar,
+            token: dataToken?.token,
+            setUserById,
+        });
+    };
     useEffect(() => {
-        document.title = `Detail | ${process.env.REACT_APP_TITLE_WEB}`;
+        document.title = `Chi tiết | ${process.env.REACT_APP_TITLE_WEB}`;
+        requestRefreshToken(
+            currentUser,
+            handleSendUser,
+            state,
+            dispatch,
+            actions
+        );
     }, []);
     const changeInput = (e) => {
         return formUtils.changeForm(e, dispatch, state, actions);
-    };
-    const changeQuantity = (e) => {
-        dispatch(
-            actions.setData({
-                ...state.set,
-                quantityCoin: e.target.value,
-            })
-        );
-    };
-    const handleCloseAlert = () => {
-        return alertUtils.closeAlert(dispatch, state, actions);
     };
     const modalChangePwdTrue = (e, id) => {
         return deleteUtils.deleteTrue(e, id, dispatch, state, actions);
@@ -102,10 +118,91 @@ function UserDetail() {
         setIsModalImage(false);
         setIndexImage(0);
     };
-    const changePwd = async (id) => {};
-    const refreshPwd = async (id) => {};
-    const updateUSD = async (id) => {};
-    const onBlockAndUnblockUser = async (id) => {};
+    const handleSendChangePwd = (dataToken) => {
+        changePwdUserSV({
+            email_user: x?.payment?.email,
+            id_user: x?._id,
+            password: password,
+            setUserById,
+            setSnackbar,
+            token: dataToken?.token,
+            setIsProcessChangePwd,
+            dispatch,
+        });
+    };
+    const changePwd = async (id) => {
+        await 1;
+        setSnackbar({
+            open: true,
+            type: 'success',
+            message: 'Chức năng đang phát triển',
+        });
+        dispatch(
+            actions.toggleModal({
+                modalDelete: false,
+            })
+        );
+        // setIsProcessChangePwd(true);
+        // requestRefreshToken(
+        //     currentUser,
+        //     handleSendChangePwd,
+        //     state,
+        //     dispatch,
+        //     actions
+        // );
+    };
+    const handleSendRefresh = (dataToken) => {
+        refreshPwdUserSV({
+            email_user: x.payment.email,
+            id_user: x._id,
+            setIsProcessRefreshPwd,
+            setUserById,
+            setSnackbar,
+            token: dataToken?.token,
+        });
+    };
+    const refreshPwd = async (id) => {
+        await 1;
+        setSnackbar({
+            open: true,
+            type: 'success',
+            message: 'Chức năng đang phát triển',
+        });
+        // setIsProcessRefreshPwd(true);
+        // requestRefreshToken(
+        //     currentUser,
+        //     handleSendRefresh,
+        //     state,
+        //     dispatch,
+        //     actions
+        // );
+    };
+    const handleSendBlockUser = (dataToken) => {
+        blockUserByEmailSV({
+            email_user: x.payment.email,
+            id_user: x._id,
+            setIsProcessBlockUser,
+            setUserById,
+            setSnackbar,
+            token: dataToken?.token,
+        });
+    };
+    const onBlockAndUnblockUser = async (id) => {
+        await 1;
+        setSnackbar({
+            open: true,
+            type: 'success',
+            message: 'Chức năng đang phát triển',
+        });
+        // setIsProcessBlockUser(true);
+        // requestRefreshToken(
+        //     currentUser,
+        //     handleSendBlockUser,
+        //     state,
+        //     dispatch,
+        //     actions
+        // );
+    };
     function ItemRender({
         title,
         info,
@@ -208,19 +305,16 @@ function UserDetail() {
 
     return (
         <>
+            <SnackbarCp
+                openSnackbar={snackbar.open}
+                handleCloseSnackbar={handleCloseSnackbar}
+                messageSnackbar={snackbar.message}
+                typeSnackbar={snackbar.type}
+            />
             <div className={`${cx('buySellDetail-container')}`}>
-                {(upd || error) && (
-                    <Alert
-                        severity={upd ? 'success' : 'error'}
-                        style={{ width: '100%' }}
-                        onClose={handleCloseAlert}
-                    >
-                        {upd || error}
-                    </Alert>
-                )}
                 <div className={`${cx('detail-container')}`}>
                     <div className='detail-item'>
-                        <div className='detail-title'>Rank</div>
+                        <div className='detail-title'>Hạng</div>
                         <div className={`${cx('detail-status')}`}>
                             {x ? (
                                 <>
@@ -240,32 +334,32 @@ function UserDetail() {
                         </div>
                     </div>
                     <ItemRender
-                        title='Username'
+                        title='Họ và tên'
                         info={x && x.payment.username}
                     />
                     <ItemRender title='Email' info={x && x.payment.email} />
-                    <ItemRender title='Rule' info={x && x.payment.rule} />
+                    <ItemRender title='Quyền' info={x && x.payment.rule} />
                     <ItemRender
                         bankInfo
-                        title='Bank Name'
+                        title='Phương thức thanh toán'
                         methodBank={x && x.payment.bank.bankName}
                         nameAccount={x && x.payment.bank.name}
                         numberAccount={x && x.payment.bank.account}
                     />
                     <ItemRender
-                        title='Deposits'
-                        info={x && numberUtils.formatUSD(x.Wallet.deposit)}
+                        title='Tổng tiền nạp'
+                        info={x && numberUtils.formatVND(x.Wallet.deposit)}
                     />
                     <ItemRender
-                        title='Withdraw'
-                        info={x && numberUtils.formatUSD(x.Wallet.withdraw)}
+                        title='Tổng tiền rút'
+                        info={x && numberUtils.formatVND(x.Wallet.withdraw)}
                     />
                     <ItemRender
-                        title='Balance'
-                        info={x && numberUtils.formatUSD(x.Wallet.balance)}
+                        title='Tổng tài sản'
+                        info={x && numberUtils.formatVND(x.Wallet.balance)}
                     />
                     <ItemRender
-                        title='Created At'
+                        title='Ngày tạo'
                         info={
                             x &&
                             moment(x.createdAt).format('DD/MM/YYYY HH:mm:ss')
@@ -273,42 +367,15 @@ function UserDetail() {
                     />
                 </div>
                 <div className={`${cx('detail-container')}`}>
-                    <div className='w100'>
-                        <div className='detail-item flex-column p0'>
-                            <label className='label mr-auto'>Give USD</label>
-                            <div className={`${cx('detail-coins-list')} w100`}>
-                                <FormInput
-                                    type='text'
-                                    name='quantityCoin'
-                                    placeholder='Quantity'
-                                    classNameInput={`${cx(
-                                        'fee-input'
-                                    )} w100 mt0`}
-                                    value={quantityCoin}
-                                    onChange={changeQuantity}
-                                />
-                            </div>
-                        </div>
-                        <div className='detail-item justify-flex-end'>
-                            <Button
-                                onClick={() => updateUSD(idUser)}
-                                className='vipbgc'
-                                disabled={!quantityCoin || isProcessUpdateUsd}
-                                isProcess={isProcessUpdateUsd}
-                            >
-                                Change
-                            </Button>
-                        </div>
-                    </div>
                     <div className={`${cx('document-user-container')} w100`}>
                         <ImageUploadRender
-                            label='1. Citizen Identification'
+                            label='1. Căn cước công dân'
                             isCheck={x?.uploadCCCDFont && x?.uploadCCCDBeside}
                             imageFrontUrl={x?.uploadCCCDFont}
                             imageBesideUrl={x?.uploadCCCDBeside}
                         />
                         <ImageUploadRender
-                            label='2. License'
+                            label='2. Giấy phép lái xe'
                             isCheck={
                                 x?.uploadLicenseFont && x?.uploadLicenseBeside
                             }
@@ -325,7 +392,7 @@ function UserDetail() {
                         <div className='flex-center'>
                             <Icons.RefreshIcon className='fz12 mr8' />
                             <span className={`${cx('general-button-text')}`}>
-                                Refresh Page
+                                Tải lại trang
                             </span>
                         </div>
                     </Button>
@@ -344,7 +411,9 @@ function UserDetail() {
                                 <Icons.UnBlockUserIcon />
                             )}{' '}
                             <span className='ml8'>
-                                {!x?.blockUser ? 'Block User' : 'Unblock User'}
+                                {!x?.blockUser
+                                    ? 'Chặn tài khoản'
+                                    : 'Bỏ chặn tài khoản'}
                             </span>
                         </div>
                     </Button>
@@ -356,7 +425,7 @@ function UserDetail() {
                     >
                         <div className='flex-center'>
                             <Icons.RefreshPageIcon />{' '}
-                            <span className='ml8'>Refresh Password</span>
+                            <span className='ml8'>Đặt lại mật khẩu</span>
                         </div>
                     </Button>
                     <Button
@@ -365,7 +434,7 @@ function UserDetail() {
                     >
                         <div className='flex-center'>
                             <Icons.EditIcon />{' '}
-                            <span className='ml8'>Change Password</span>
+                            <span className='ml8'>Đổi mật khẩu</span>
                         </div>
                     </Button>
                 </div>
@@ -379,8 +448,8 @@ function UserDetail() {
             />
             {modalDelete && (
                 <Modal
-                    titleHeader='Change Password'
-                    actionButtonText='Change'
+                    titleHeader='Thay đổi mật khẩu'
+                    actionButtonText='Gửi'
                     closeModal={modalChangePwdFalse}
                     openModal={modalChangePwdTrue}
                     classNameButton='vipbgc'
@@ -391,8 +460,8 @@ function UserDetail() {
                     <FormInput
                         type='password'
                         name='password'
-                        placeholder='Enter new password...'
-                        label='Password'
+                        placeholder='Nhập mật khẩu mới'
+                        label='Mật khẩu'
                         showPwd
                         onChange={changeInput}
                     />

@@ -18,10 +18,7 @@ function App() {
     const [getApp, setGetApp] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
     const [valueProgress, setValueProgress] = React.useState(0);
-    const Routers =
-        currentUser?.rule === 'admin' || currentUser?.rule === 'manager'
-            ? privateRouter
-            : publicRouter;
+    const Routers = privateRouter;
     const history = useNavigate();
     const toogleGetApp = (e) => {
         e.stopPropagation();
@@ -134,10 +131,10 @@ function App() {
                 }}
             >
                 <Alert
-                    severity='info'
+                    severity='error'
                     style={{ minWidth: '80%', fontSize: '16px' }}
                 >
-                    Website only support on PC!
+                    Website chỉ hỗ trợ trên PC!
                 </Alert>
             </div>
             <div
@@ -145,7 +142,7 @@ function App() {
                 onClick={toogleGetApp}
                 style={{ right: scrollToTop ? '70px' : '20px' }}
             >
-                <span>Get App Mobile</span>
+                <span>Tải ứng dụng</span>
                 {getApp && (
                     <div className='list-app-container' onClick={getAppTrue}>
                         <div
@@ -163,34 +160,34 @@ function App() {
                                     <>
                                         <div>
                                             {valueProgress >= 100
-                                                ? 'Done!'
-                                                : 'Downloading, please wait...'}
+                                                ? 'Hoàn thành!'
+                                                : 'Đang tải, vui lòng đợi...'}
                                         </div>
                                         <ProgressLine value={valueProgress} />
                                     </>
                                 ) : (
-                                    'Download for Android (.apk)'
+                                    'Tải file .apk cho Android'
                                 )}
                             </div>
                         </div>
                         <a
                             className='list-app-item'
-                            href='##'
+                            href='https://play.google.com/store/apps/details?id=com.mobiletransactions'
                             target='_blank'
                             alt='Download on Google Play'
                             rel='noreferrer'
                         >
                             <Icons.CHPlayIcon />
                             <div className='list-app-item-text ml8'>
-                                Download on Google Play
+                                Tải trên Google Play
                             </div>
                         </a>
-                        <div className='list-app-item'>
+                        {/* <div className='list-app-item'>
                             <Icons.AppleStoreIcon />
                             <div className='list-app-item-text ml8'>
                                 Download on Apple Store
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 )}
             </div>

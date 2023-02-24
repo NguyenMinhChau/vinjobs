@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import className from 'classnames/bind';
-import Alert from '@mui/material/Alert';
-import { Image, FormInput, Button } from '../../components';
-import { useAppContext, formUtils, alertUtils } from '../../utils';
+import { Image, FormInput, Button, SnackbarCp } from '../../components';
+import { useAppContext, formUtils } from '../../utils';
 import { actions } from '../../app/';
 import styles from './Form.module.css';
 import { Link } from 'react-router-dom';
@@ -28,16 +27,16 @@ function Form({
     isProcess,
     className,
     children,
+    openSnackbar,
+    handleCloseSnackbar,
+    messageSnackbar,
+    typeSnackbar,
 }) {
     const { state, dispatch } = useAppContext();
     const { email, password, username, otpCode } = state.set.form;
-    const { error } = state.set.message;
     const classed = cx('form-container', className);
     const handleChange = (e) => {
         return formUtils.changeForm(e, dispatch, state, actions);
-    };
-    const handleCloseAlert = () => {
-        return alertUtils.closeAlert(dispatch, state, actions);
     };
     return (
         <div
@@ -53,21 +52,18 @@ function Form({
                         alt='login-logo'
                         className={`${cx('form-logo')}`}
                     />
+                    <SnackbarCp
+                        openSnackbar={openSnackbar}
+                        handleCloseSnackbar={handleCloseSnackbar}
+                        messageSnackbar={messageSnackbar}
+                        typeSnackbar={typeSnackbar}
+                    />
                     <p className={`${cx('form-title')}`}>{titleForm}</p>
-                    {error && (
-                        <Alert
-                            severity='error'
-                            style={{ width: '100%' }}
-                            onClose={handleCloseAlert}
-                        >
-                            {error}
-                        </Alert>
-                    )}
                     {bolUsername && (
                         <FormInput
-                            label='Username'
+                            label='Họ và tên'
                             type='text'
-                            placeholder='Enter your username'
+                            placeholder='Nhập họ và tên'
                             classNameField={`${cx('custom-field')}`}
                             value={username}
                             name='username'
@@ -79,7 +75,7 @@ function Form({
                         <FormInput
                             label='Email'
                             type='email'
-                            placeholder='Enter your email'
+                            placeholder='Nhập email'
                             classNameField={`${cx('custom-field')}`}
                             value={email}
                             name='email'
@@ -89,9 +85,9 @@ function Form({
                     )}
                     {bolOtpCode && (
                         <FormInput
-                            label='OTP Code'
+                            label='Mã OTP'
                             type='text'
-                            placeholder='Enter your OTP'
+                            placeholder='Nhập mã OTP'
                             classNameField={`${cx('custom-field')}`}
                             value={otpCode}
                             name='otpCode'
@@ -101,9 +97,9 @@ function Form({
                     )}
                     {bolPassword && (
                         <FormInput
-                            label='Password'
+                            label='Mật khẩu'
                             type='password'
-                            placeholder='Enter your password'
+                            placeholder='Nhập mật khẩu'
                             classNameField={`${cx('custom-field')}`}
                             value={password}
                             name='password'
@@ -125,8 +121,8 @@ function Form({
                         <div className={`${cx('form-help')}`}>
                             <span>
                                 {loginForm
-                                    ? "Don't have an account?"
-                                    : 'Have an account?'}{' '}
+                                    ? 'Bạn chưa có tài khoản?'
+                                    : 'Bạn đã có một tài khoản?'}{' '}
                             </span>
                             <Link
                                 className={`${cx('form-link')}`}
@@ -136,28 +132,28 @@ function Form({
                                         : `${routers.login}`
                                 }
                             >
-                                {loginForm ? 'Register' : 'Login'}
+                                {loginForm ? 'Đăng ký' : 'Đăng nhập'}
                             </Link>
                         </div>
                     )}
                     {(forgotPwdForm || resetPwdForm) && (
                         <>
                             <div className={`${cx('form-help')}`}>
-                                <span>Have an account? </span>
+                                <span>Bạn đã có một tài khoản? </span>
                                 <Link
                                     className={`${cx('form-link')}`}
                                     to={`${routers.login}`}
                                 >
-                                    Login
+                                    Đăng nhập
                                 </Link>
                             </div>
                             <div className={`${cx('form-help')}`}>
-                                <span>Don't have an account? </span>
+                                <span>Bạn chưa có tài khoản? </span>
                                 <Link
                                     className={`${cx('form-link')}`}
                                     to={`${routers.register}`}
                                 >
-                                    Register
+                                    Đăng ký
                                 </Link>
                             </div>
                         </>

@@ -36,13 +36,14 @@
 
 .pagination-container {
     flex: 2 !important;
-    align-items: center !important;
+    align-items: flex-start !important;
 }
 
 .countpage-container {
+    flex: 1;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 
 .countpage-text {

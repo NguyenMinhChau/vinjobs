@@ -6,7 +6,13 @@ import styles from './Search.module.css';
 
 const cx = className.bind(styles);
 
-function Search({ className, placeholder = 'Search', onChange, name, value }) {
+function Search({
+    className,
+    placeholder = 'Tìm kiếm',
+    onChange,
+    name,
+    value,
+}) {
     const classed = cx('search-container', className);
     return (
         <div className={classed}>

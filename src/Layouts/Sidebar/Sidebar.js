@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
@@ -16,53 +17,32 @@ const LIST_SIDEBAR = [
         icon: <Icons.DashboardIcon className={`${cx('custom-icon')}`} />,
     },
     {
-        name: 'Deposits',
+        name: 'Nạp tiền',
         path: routers.deposits,
         icon: <Icons.DepositsIcon className={`${cx('custom-icon')}`} />,
     },
     {
-        name: 'Withdraws',
+        name: 'Rút tiền',
         path: routers.withdraw,
         icon: <Icons.WithdrawIcon className={`${cx('custom-icon')}`} />,
     },
     {
-        name: 'User',
+        name: 'Hợp đồng USD',
+        path: routers.contractUsd,
+        icon: <Icons.ContratUsdIcon className={`${cx('custom-icon')}`} />,
+    },
+    {
+        name: 'Hợp đồng nông nghiệp',
+        path: routers.contractAgriculture,
+        icon: <Icons.ContratAgriIcon className={`${cx('custom-icon')}`} />,
+    },
+    {
+        name: 'Tài khoản',
         path: routers.user,
         icon: <Icons.UserIcon className={`${cx('custom-icon')}`} />,
     },
 ];
-const LIST_SIDEBAR_USER = [
-    {
-        name: 'Home Page',
-        path: routers.homeUser,
-        icon: <Icons.HomePageIcon className={`${cx('custom-icon')}`} />,
-    },
-    {
-        name: 'Buy History',
-        path: routers.buyHistoryUser,
-        icon: <Icons.HistoryIcon className={`${cx('custom-icon')}`} />,
-    },
-    {
-        name: 'Sell History',
-        path: routers.sellHistoryUser,
-        icon: <Icons.HistoryIcon className={`${cx('custom-icon')}`} />,
-    },
-    {
-        name: 'Profile',
-        path: routers.profileUser,
-        icon: <Icons.ProfileIcon className={`${cx('custom-icon')}`} />,
-    },
-    {
-        name: 'Contact',
-        path: routers.contactUser,
-        icon: <Icons.ContactIcon className={`${cx('custom-icon')}`} />,
-    },
-    {
-        name: 'Live Chat',
-        path: routers.liveChatUser,
-        icon: <Icons.LiveChatIcon className={`${cx('custom-icon')}`} />,
-    },
-];
+const LIST_SIDEBAR_USER = [];
 
 function Sidebar({ className }) {
     const { state, dispatch } = useAppContext();
@@ -85,10 +65,7 @@ function Sidebar({ className }) {
     };
     return (
         <div className={classed}>
-            {(currentUser?.rule === 'user'
-                ? LIST_SIDEBAR_USER
-                : LIST_SIDEBAR
-            ).map((item, index) => (
+            {LIST_SIDEBAR.map((item, index) => (
                 <NavLink
                     onClick={handleBlacklistUser}
                     to={item.path}

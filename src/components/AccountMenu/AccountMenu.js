@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import className from 'classnames/bind';
 import {
@@ -17,6 +18,8 @@ import routers from '../../routers/routers';
 import { useAppContext, localStoreUtils, axiosUtils } from '../../utils';
 import { actions } from '../../app/';
 import styles from './AccountMenu.module.css';
+import { authLogoutSV } from '../../services/authen';
+import SnackbarCp from '../SnackbarCp/SnackbarCp';
 
 const cx = className.bind(styles);
 
@@ -24,6 +27,20 @@ function AccountMenu({ className }) {
     const { state, dispatch } = useAppContext();
     const { accountMenu, currentUser } = state.set;
     const open = Boolean(accountMenu);
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        type: '',
+        message: '',
+    });
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbar({
+            ...snackbar,
+            open: false,
+        });
+    };
     const history = useNavigate();
     const handleClickMenu = (e) => {
         dispatch(
@@ -42,25 +59,24 @@ function AccountMenu({ className }) {
         );
     };
     const handleLogout = async () => {
-        try {
-            await axiosUtils.authPost('logout');
-            await localStoreUtils.removeStore();
-            dispatch(
-                actions.setData({
-                    ...state.set,
-                    currentUser: null,
-                    accountMenu: null,
-                })
-            );
-            history(`${routers.login}`);
-        } catch (err) {
-            console.log(err);
-        }
+        await 1;
+        authLogoutSV({
+            id_user: currentUser?.id,
+            dispatch,
+            history,
+            setSnackbar,
+        });
     };
     const classed = cx('accountMenu-container', className);
-    const avatarPlaceholder = '/svgs/logo01.svg';
+    const avatarPlaceholder = '/images/header-logo01.png';
     return (
         <>
+            <SnackbarCp
+                openSnackbar={snackbar.open}
+                handleCloseSnackbar={handleCloseSnackbar}
+                messageSnackbar={snackbar.message}
+                typeSnackbar={snackbar.type}
+            />
             <Box className={classed}>
                 <Tooltip title=''>
                     <IconButton
@@ -73,7 +89,7 @@ function AccountMenu({ className }) {
                     >
                         <Avatar
                             sx={{ width: 30, height: 30 }}
-                            src={currentUser.avatar || avatarPlaceholder}
+                            src={currentUser?.avatar || avatarPlaceholder}
                         ></Avatar>
                     </IconButton>
                 </Tooltip>
@@ -114,27 +130,21 @@ function AccountMenu({ className }) {
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 <MenuItem>
-                    <Avatar src={currentUser.avatar || avatarPlaceholder} />{' '}
-                    {currentUser.username}
+                    <Avatar src={currentUser?.avatar || avatarPlaceholder} />{' '}
+                    {currentUser?.username}
                 </MenuItem>
                 <Divider />
                 <MenuItem>
                     <ListItemIcon>
-                        <PersonAdd fontSize='small' />
-                    </ListItemIcon>
-                    Add another account
-                </MenuItem>
-                <MenuItem>
-                    <ListItemIcon>
                         <Settings fontSize='small' />
                     </ListItemIcon>
-                    Settings
+                    Cài đặt
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>
                     <ListItemIcon>
                         <Logout fontSize='small' />
                     </ListItemIcon>
-                    Logout
+                    Đăng xuất
                 </MenuItem>
             </Menu>
         </>

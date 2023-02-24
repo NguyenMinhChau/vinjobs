@@ -1,28 +1,29 @@
-const DataUsers = (Icons) => {
+const DataFundUsdHeader = (Icons) => {
     return {
         headers: {
-            name: process.env.REACT_APP_USER_NAME,
+            name: process.env.REACT_APP_FUND_USD_HEADER,
             index: {
                 title: 'STT',
             },
+
             h1: {
-                title: 'Họ và tên',
+                title: 'Tài khoản',
                 iconSort: <i className='fa-solid fa-sort'></i>,
             },
             h2: {
-                title: 'Email',
+                title: 'Mã HD',
             },
             h3: {
-                title: 'Ngày tạo',
+                title: 'Kỳ hạn',
             },
             h4: {
-                title: 'Quyền',
+                title: 'Số tiền gửi',
             },
             h5: {
-                title: 'Hạng',
+                title: 'Trạng thái',
             },
         },
     };
 };
 
-export default DataUsers;
+export default DataFundUsdHeader;

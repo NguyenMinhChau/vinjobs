@@ -1,13 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Alert from '@mui/material/Alert';
 import className from 'classnames/bind';
-import {
-    useAppContext,
-    alertUtils,
-    searchUtils,
-    refreshPage,
-} from '../../utils';
+import { useAppContext, searchUtils, refreshPage } from '../../utils';
 import { Search, Button, TableData, Icons } from '../../components';
 import { actions } from '../../app/';
 import styles from './General.module.css';
@@ -29,13 +23,12 @@ function General({
     className,
     classNameButton,
     classNameButtonUpdateAllFields,
+    PaginationCus,
+    startPagiCus,
+    endPagiCus,
+    dataPagiCus,
 }) {
     const { state, dispatch } = useAppContext();
-    const { del, upd, cre, error } = state.set.message;
-    const { alertModal } = state.toggle;
-    const closeAlert = () => {
-        return alertUtils.closeAlert(dispatch, state, actions);
-    };
     const changeSearch = (e) => {
         return searchUtils.logicSearch(e, dispatch, state, actions);
     };
@@ -48,15 +41,6 @@ function General({
     return (
         <>
             <div className={classed}>
-                {(del || upd || cre || error) && alertModal && (
-                    <Alert
-                        severity='success'
-                        className='mb8'
-                        onClose={closeAlert}
-                    >
-                        {del ? del : upd ? upd : cre ? cre : error}
-                    </Alert>
-                )}
                 <div className={`${cx('general-top')}`}>
                     <Search
                         name={nameSearch}
@@ -108,7 +92,7 @@ function General({
                                 <span
                                     className={`${cx('general-button-text')}`}
                                 >
-                                    Refresh Page
+                                    Tải lại trang
                                 </span>
                             </div>
                         </Button>
@@ -116,10 +100,14 @@ function General({
                 </div>
                 <div className={`${cx('general-table-container')}`}>
                     <TableData
-                        data={dataFlag}
+                        data={PaginationCus ? dataPagiCus : dataFlag}
                         totalData={totalData}
                         headers={dataHeaders}
                         search={valueSearch}
+                        PaginationCus={PaginationCus}
+                        startPagiCus={startPagiCus}
+                        endPagiCus={endPagiCus}
+                        dataPagiCus={dataPagiCus}
                     >
                         {children}
                     </TableData>

@@ -29,7 +29,8 @@
 
 .modal-content-me {
     margin: auto;
-    min-width: 500px;
+    min-width: 400px;
+    max-width: 500px;
     border-radius: 5px;
     overflow: hidden;
     background-color: var(--color-white);

@@ -1,26 +1,29 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import className from 'classnames/bind';
+import styles from './ResetPwd.module.css';
 import { useNavigate } from 'react-router-dom';
-import { Form } from '../../components';
-import styles from './ForgotPwd.module.css';
+import { setData } from '../../app/reducer';
 import { useAppContext } from '../../utils';
-import routers from '../../routers/routers';
-import { actions } from '../../app/';
-import { userForgotPwdSV } from '../../services/users';
+import { Form } from '../../components';
+import { userOTPForgotPwdSV } from '../../services/users';
 
 const cx = className.bind(styles);
 
-function ForgotPwd() {
+export default function ResetPwd() {
     const { state, dispatch } = useAppContext();
-    const { email } = state.set.form;
+    const { otpCode } = state.set.form;
     const [isProcess, setIsProcess] = useState(false);
     const [snackbar, setSnackbar] = useState({
         open: false,
         type: '',
         message: '',
     });
-    const handleCloseSnackbar = (event, reason) => {
+    const history = useNavigate();
+    useEffect(() => {
+        document.title = `Xác thực OTP | ${process.env.REACT_APP_TITLE_WEB}`;
+    }, []);
+    const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
@@ -29,41 +32,34 @@ function ForgotPwd() {
             open: false,
         });
     };
-    const history = useNavigate();
-    useEffect(() => {
-        document.title = `Quên mật khẩu | ${process.env.REACT_APP_TITLE_WEB}`;
-    }, []);
-    const handleForgot = async (e) => {
+    const handleSendOTP = async () => {
         await 1;
         setIsProcess(true);
-        userForgotPwdSV({
-            email_user: email,
+        userOTPForgotPwdSV({
+            code: otpCode,
             setIsProcess,
             setSnackbar,
             history,
         });
-        dispatch(actions.setData({ form: { email: '' } }));
+        dispatch(setData({ form: { otpCode: '' } }));
     };
     const onEnter = (e) => {
-        handleForgot(e);
+        handleSendOTP();
     };
-
     return (
         <Form
-            titleForm='Quên mật khẩu'
-            textBtn='Tiếp tục'
-            onClick={handleForgot}
-            bolEmail
+            titleForm='Xác thực OTP'
+            textBtn='Gửi'
+            onClick={handleSendOTP}
+            bolOtpCode
             forgotPwdForm
-            className={cx('form-page-login')}
+            className={cx('form-page-reset-password')}
             onEnter={onEnter}
             isProcess={isProcess}
-            handleCloseSnackbar={handleCloseSnackbar}
+            handleCloseSnackbar={handleClose}
             openSnackbar={snackbar.open}
             typeSnackbar={snackbar.type}
             messageSnackbar={snackbar.message}
         />
     );
 }
-
-export default ForgotPwd;

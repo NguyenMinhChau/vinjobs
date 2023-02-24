@@ -3,23 +3,23 @@ const DataUserBalance = () => {
         headers: {
             name: process.env.REACT_APP_DASHBOARD_NAME,
             index: {
-                title: 'No',
+                title: 'STT',
             },
             h1: {
-                title: 'Username',
+                title: 'Họ và tên',
                 iconSort: <i className='fa-solid fa-sort'></i>,
             },
             h2: {
                 title: 'Email',
             },
             h3: {
-                title: 'Balance',
+                title: 'Tài sản',
             },
             h4: {
-                title: 'Rule',
+                title: 'Quyền',
             },
             h5: {
-                title: 'Rank',
+                title: 'Hạng',
             },
         },
     };

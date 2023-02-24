@@ -6,41 +6,68 @@ import className from 'classnames/bind';
 import { useParams, useLocation } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { Button, Icons, Image } from '../../components';
+import { Button, Icons, Image, SnackbarCp } from '../../components';
 import moment from 'moment';
 import {
     useAppContext,
     textUtils,
     refreshPage,
     numberUtils,
+    requestRefreshToken,
 } from '../../utils';
-import styles from './DepositsWithdrawDetail.module.css';
-
-import {
-    adminGetWithdrawByIdSV,
-    adminGetDepositByIdSV,
-    getDepositsWithdrawById,
-} from '../../services/admin';
+import styles from './UsdAgricultureDetail.module.css';
+import { getDisbursementById, getUsdAgriById } from '../../services/admin';
+import { actions } from '../../app/';
 
 const cx = className.bind(styles);
 
-function DepositsWithdrawDetail() {
-    const { idDeposits, idWithdraw } = useParams();
+function UsdAgricultureDetail() {
+    const { idContractUsd, idContractAgri } = useParams();
     const { state, dispatch } = useAppContext();
     const location = useLocation();
-    const [withdrawValue, setWithdrawValue] = useState({});
+    const [disbursement, setDisbursement] = useState(null);
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        type: '',
+        message: '',
+    });
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbar({
+            ...snackbar,
+            open: false,
+        });
+    };
     const {
+        currentUser,
         edit,
         data: { dataUser },
     } = state.set;
+    const handleSendDisbursement = (dataToken) => {
+        getDisbursementById({
+            setDisbursement,
+            id_fund: idContractUsd ? idContractUsd : idContractAgri,
+            setSnackbar,
+            token: dataToken?.token,
+        });
+    };
     useEffect(() => {
         document.title = `Chi tiết | ${process.env.REACT_APP_TITLE_WEB}`;
-        getDepositsWithdrawById({
+        getUsdAgriById({
+            idContractUsd,
+            idContractAgri,
+            dispatch,
+            state,
+        });
+        requestRefreshToken(
+            currentUser,
+            handleSendDisbursement,
             state,
             dispatch,
-            idDeposits,
-            idWithdraw,
-        });
+            actions
+        );
     }, []);
     function ItemRender({
         title,
@@ -102,21 +129,18 @@ function DepositsWithdrawDetail() {
         .username;
     const email = dataUser?.data?.find((t) => t?._id === x.userId)?.payment
         .email;
-    const bankName = dataUser?.data?.find((t) => t?._id === x.userId)?.payment
-        ?.bank?.bankName;
-    const accountNumber = dataUser?.data?.find((t) => t?._id === x.userId)
-        ?.payment?.bank?.account;
-    const accountName = dataUser?.data?.find((t) => t?._id === x.userId)
-        ?.payment?.bank?.name;
     const infoUser = {
         name: username,
         email: email,
-        bankName: bankName,
-        accountNumber: accountNumber,
-        accountName: accountName,
     };
     return (
         <>
+            <SnackbarCp
+                openSnackbar={snackbar.open}
+                handleCloseSnackbar={handleCloseSnackbar}
+                messageSnackbar={snackbar.message}
+                typeSnackbar={snackbar.type}
+            />
             <Button
                 className='confirmbgc mb8'
                 onClick={refreshPage.refreshPage}
@@ -150,6 +174,15 @@ function DepositsWithdrawDetail() {
                             )}
                         </div>
                     </div>
+                    <ItemRender title='Loại HD' info={x && x.type} />
+                    <ItemRender
+                        title='Kỳ hạn'
+                        info={
+                            x &&
+                            x.cycle + `${idContractUsd ? ' tháng' : ' mùa'}`
+                        }
+                    />
+                    <ItemRender title='Giá' info={x && x.rate} />
                     <ItemRender
                         title='Họ và tên'
                         info={infoUser?.name && infoUser?.name}
@@ -159,83 +192,69 @@ function DepositsWithdrawDetail() {
                         info={infoUser?.email && infoUser?.email}
                     />
                     <ItemRender
-                        title={`Ngày ${idDeposits ? 'nạp' : 'rút'}`}
+                        title='Ngày tạo'
                         info={
                             x &&
                             moment(x.createdAt).format('DD/MM/YYYY HH:mm:ss')
                         }
                     />
                     <ItemRender
-                        title={`Số tiền ${idDeposits ? 'nạp' : 'rút'}`}
-                        info={x && numberUtils.formatVND(x.amount)}
+                        title='Thời gian gửi'
+                        info={
+                            x &&
+                            moment(x.date_start).format('DD/MM/YYYY HH:mm:ss')
+                        }
                     />
                     <ItemRender
-                        title='Phương thức thanh toán'
-                        bankInfo
-                        methodBank={
-                            location.pathname.includes('withdraw')
-                                ? infoUser?.bankName
-                                : 'Vietcombank'
-                        }
-                        nameAccount={
-                            location.pathname.includes('withdraw')
-                                ? infoUser?.accountName
-                                : 'AIKING GROUP'
-                        }
-                        numberAccount={
-                            x && location.pathname.includes('withdraw')
-                                ? infoUser?.accountNumber
-                                : '00725345179'
+                        title='Số tiền gửi'
+                        info={x && numberUtils.formatVND(x.principal)}
+                    />
+                    <ItemRender
+                        title='Tiền giải ngân'
+                        info={
+                            disbursement &&
+                            numberUtils.formatVND(disbursement?.disbursement)
                         }
                     />
-                    {idDeposits && (
-                        <ItemRender
-                            title='Hóa đơn'
-                            info={
-                                x && (
-                                    <a
-                                        href={`${process.env.REACT_APP_URL_SERVER}${x.statement}`}
-                                        target='_blank'
-                                    >
-                                        {x.statement ? (
-                                            x.statement.replace('/images/', '')
-                                        ) : (
-                                            <Skeleton width='30px' />
-                                        )}
-                                    </a>
-                                )
-                            }
-                        />
-                    )}
+                    <ItemRender
+                        title='Hóa đơn'
+                        info={
+                            x && (
+                                <a
+                                    href={`${process.env.REACT_APP_URL_SERVER}${x.statement}`}
+                                    target='_blank'
+                                >
+                                    {x.statement ? (
+                                        x.statement.replace('/images/', '')
+                                    ) : (
+                                        <Skeleton width='30px' />
+                                    )}
+                                </a>
+                            )
+                        }
+                    />
                 </div>
-                {idDeposits && (
-                    <div className={`${cx('detail-container')}`}>
-                        <div className={`${cx('document-review-container')}`}>
-                            <div className={`${cx('document-review-title')}`}>
-                                Xem hóa đơn
-                            </div>
-                            {x?.statement ? (
-                                <div className={`${cx('document-container')}`}>
-                                    <Image
-                                        src={`${process.env.REACT_APP_URL_SERVER}/${x?.statement}`}
-                                        alt={x.statement.replace(
-                                            '/images/',
-                                            ''
-                                        )}
-                                        className={`${cx(
-                                            'document-review-image'
-                                        )}`}
-                                    />
-                                </div>
-                            ) : (
-                                <Skeleton width='100%' height='200px' />
-                            )}
+                <div className={`${cx('detail-container')}`}>
+                    <div className={`${cx('document-review-container')}`}>
+                        <div className={`${cx('document-review-title')}`}>
+                            Xem hóa đơn
                         </div>
+                        {x?.statement ? (
+                            <div className={`${cx('document-container')}`}>
+                                <Image
+                                    src={`${process.env.REACT_APP_URL_SERVER}/${x?.statement}`}
+                                    alt={x.statement.replace('/images/', '')}
+                                    className={`${cx('document-review-image')}`}
+                                />
+                            </div>
+                        ) : (
+                            <Skeleton width='100%' height='200px' />
+                        )}
                     </div>
-                )}
+                </div>
             </div>
         </>
     );
 }
 
-export default DepositsWithdrawDetail;
+export default UsdAgricultureDetail;

@@ -37,6 +37,8 @@ const initialState = {
             dataDeposits: [],
             dataWithdraw: [],
             dataUser: [],
+            dataFundUsd: [],
+            dataFundAgri: [],
         },
         searchValues: {
             dateFrom: '',
@@ -49,6 +51,8 @@ const initialState = {
             bank: '',
             buyHistory: '',
             sellHistory: '',
+            fundUsd: '',
+            fundAgri: '',
         },
         edit: {
             id: '',

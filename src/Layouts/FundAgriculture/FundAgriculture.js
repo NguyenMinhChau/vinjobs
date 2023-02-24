@@ -5,13 +5,11 @@ import className from 'classnames/bind';
 import moment from 'moment';
 import {
     useAppContext,
-    DataDeposits,
     deleteUtils,
     handleUtils,
     localStoreUtils,
     numberUtils,
     requestRefreshToken,
-    useDebounce,
 } from '../../utils';
 import {
     Icons,
@@ -24,26 +22,28 @@ import { actions } from '../../app/';
 import routers from '../../routers/routers';
 import { General } from '../';
 import { TrObjectNoIcon, TrStatus } from '../../components/TableData/TableData';
-import styles from './Deposits.module.css';
+import styles from './FundAgriculture.module.css';
 import Skeleton from 'react-loading-skeleton';
-import {
-    adminGetAllDepositsSV,
-    deleteDepositsSV,
-    updateDepositsSV,
-} from '../../services/admin';
 import { getStore } from '../../utils/localStore/localStore';
+import DataFundAgriHeader from '../../utils/FakeData/FundAgriHeader';
+import {
+    deleteFundAgrisSV,
+    getContractAgriSV,
+    updateFundAgriSV,
+} from '../../services/admin';
+import { dateFormat } from '../../utils/format/DateVN';
 
 const cx = className.bind(styles);
 
-function Deposits() {
+function FundAgriculture() {
     const { state, dispatch } = useAppContext();
     const {
         currentUser,
         statusUpdate,
         statusCurrent,
-        searchValues: { deposits },
+        searchValues: { fundAgri },
         pagination: { page, show },
-        data: { dataDeposits, dataUser },
+        data: { dataFundAgri, dataUser },
     } = state.set;
     let showPage = 10;
     const start = (page - 1) * showPage + 1;
@@ -64,33 +64,32 @@ function Deposits() {
     };
     const { modalStatus, modalDelete } = state.toggle;
     const [isProcess, setIsProcess] = useState(false);
-    const useDebounceDeposits = useDebounce(deposits, 3000);
     useEffect(() => {
-        document.title = `Nạp tiền | ${process.env.REACT_APP_TITLE_WEB}`;
-        adminGetAllDepositsSV({
+        document.title = `Quỹ phát triển nông nghiệp | ${process.env.REACT_APP_TITLE_WEB}`;
+        getContractAgriSV({
             dispatch,
             state,
             setSnackbar,
-            page,
-            show,
-            search: useDebounceDeposits,
         });
-    }, [useDebounceDeposits]);
-    let dataDepositsFlag = dataDeposits?.deposits || [];
-    if (deposits) {
-        dataDepositsFlag = dataDepositsFlag.filter((item) => {
+    }, []);
+    let dataFundAgriFlag = dataFundAgri || [];
+    if (fundAgri) {
+        dataFundAgriFlag = dataFundAgriFlag.filter((item) => {
             return (
+                dateFormat(item?.date_start, 'DD/MM/YYYY')
+                    ?.toLowerCase()
+                    .includes(fundAgri?.toLowerCase()) ||
                 numberUtils
-                    .formatVND(item?.amount)
+                    .formatVND(item?.principal)
                     .replace(/\./g, '')
-                    .toLowerCase()
-                    .includes(deposits?.toLowerCase()) ||
-                moment(item.createdAt)
-                    .format('DD/MM/YYYY HH:mm:ss')
-                    .toLowerCase()
-                    .includes(deposits?.toLowerCase()) ||
-                item?.note.toLowerCase().includes(deposits?.toLowerCase()) ||
-                item?.status.toLowerCase().includes(deposits?.toLowerCase())
+                    ?.toLowerCase()
+                    .includes(fundAgri?.toLowerCase()) ||
+                item.status?.toLowerCase().includes(fundAgri?.toLowerCase()) ||
+                item.cycle?.toLowerCase().includes(fundAgri?.toLowerCase()) ||
+                item?.id
+                    ?.toString()
+                    ?.toLowerCase()
+                    .includes(fundAgri?.toLowerCase())
             );
         });
     }
@@ -101,29 +100,29 @@ function Deposits() {
     const toggleEditFalse = (e) => {
         return deleteUtils.statusFalse(e, dispatch, state, actions);
     };
-    const modalDeleteTrue = async (e, id) => {
+    const modalDeleteTrue = (e, id) => {
         return deleteUtils.deleteTrue(e, id, dispatch, state, actions);
     };
     const modalDeleteFalse = (e) => {
         return deleteUtils.deleteFalse(e, dispatch, state, actions);
     };
     // Edit + Delete Deposits
-    const handleSendDel = (dataToken, id) => {
-        deleteDepositsSV({
-            id_deposits: id,
+    const handleSendContract = (dataToken, id) => {
+        deleteFundAgrisSV({
+            id_fund: id,
             token: dataToken?.token,
             setSnackbar,
-            setIsProcess,
             dispatch,
+            setIsProcess,
             state,
         });
     };
-    const deleteDeposits = async (id) => {
+    const deleteContracts = async (id) => {
         await 1;
         setIsProcess(true);
         requestRefreshToken(
             currentUser,
-            handleSendDel,
+            handleSendContract,
             state,
             dispatch,
             actions,
@@ -131,15 +130,15 @@ function Deposits() {
         );
     };
     const handleEditStatus = async (dataToken, id) => {
-        updateDepositsSV({
-            id_deposits: id,
+        updateFundAgriSV({
+            id_fund: id,
             setIsProcess,
+            state,
             token: dataToken?.token,
             dispatch,
             statusCurrent,
             statusUpdate,
             setSnackbar,
-            state,
         });
     };
     const editStatus = async (id) => {
@@ -184,22 +183,20 @@ function Deposits() {
                     return (
                         <tr key={index}>
                             <td>{handleUtils.indexTable(page, show, index)}</td>
-                            <td>{numberUtils.formatVND(item?.amount)}</td>
-                            <td className='item-w150'>
+                            <td>
                                 {infoUser?.name ? (
                                     <TrObjectNoIcon item={infoUser} />
                                 ) : (
                                     <Skeleton width='50px' />
                                 )}
                             </td>
-                            <td className='item-w100'>
-                                {moment(item.createdAt).format(
-                                    'DD/MM/YYYY HH:mm:ss'
-                                )}
+                            <td>
+                                {item?.id}/{dateFormat(item?.createdAt, 'YYYY')}
+                                /HDPTNN-
+                                {dateFormat(item?.date_start, 'DD/MM/YYYY')}
                             </td>
-                            <td className='item-w150'>
-                                {item.note || <Skeleton width='50px' />}
-                            </td>
+                            <td>{item?.cycle} mùa</td>
+                            <td>{numberUtils.formatVND(item?.principal)}</td>
                             <td>
                                 <TrStatus
                                     item={item.status}
@@ -220,7 +217,7 @@ function Deposits() {
                             <td>
                                 <ActionsTable
                                     view
-                                    linkView={`${routers.deposits}/${item.id}`}
+                                    linkView={`${routers.contractAgriculture}/${item.id}`}
                                     onClickDel={async (e) => {
                                         modalDeleteTrue(e, item.id);
                                         await localStoreUtils.setStore({
@@ -251,29 +248,24 @@ function Deposits() {
                 typeSnackbar={snackbar.type}
             />
             <General
-                className={cx('deposits')}
-                valueSearch={deposits}
-                nameSearch='deposits'
-                dataHeaders={DataDeposits(Icons).headers}
-                totalData={
-                    dataDeposits?.total || dataDeposits?.data?.total
-                        ? dataDeposits.total || dataDeposits?.data?.total
-                        : dataDepositsFlag?.length
-                }
-                dataFlag={dataDepositsFlag}
-                dataPagiCus={dataDepositsFlag}
-                PaginationCus={
-                    !(dataDeposits?.total || dataDeposits?.data?.total)
-                }
+                className={cx('fundAgri')}
+                valueSearch={fundAgri}
+                nameSearch='fundAgri'
+                dataHeaders={DataFundAgriHeader(Icons).headers}
+                // dataFlag={dataFundAgriFlag}
+                // totalData={dataFundAgri?.total || dataFundAgri?.data?.total}
+                totalData={dataFundAgriFlag?.length}
+                PaginationCus={true}
+                dataPagiCus={dataFundAgriFlag}
                 startPagiCus={start}
                 endPagiCus={end}
             >
-                <RenderBodyTable data={dataDepositsFlag} />
+                <RenderBodyTable data={dataFundAgriFlag} />
             </General>
             {modalStatus && (
                 <Modal
-                    titleHeader='Thay đổi trạng thái'
-                    actionButtonText='Gửi'
+                    titleHeader='Thay đổi trạng thái HDPTNN'
+                    actionButtonText='Thay đổi'
                     openModal={toggleEditTrue}
                     closeModal={toggleEditFalse}
                     classNameButton='vipbgc'
@@ -281,7 +273,7 @@ function Deposits() {
                     isProcess={isProcess}
                 >
                     <p className='modal-delete-desc'>
-                        Bạn có chắc muốn thay đổi trạng thái [
+                        Bạn có chắc muốn thay đổi trạng thái HDPTNN này [
                         {currentUser?.idUpdate}]?
                     </p>
                     <SelectStatus />
@@ -289,16 +281,17 @@ function Deposits() {
             )}
             {modalDelete && (
                 <Modal
-                    titleHeader='Xác nhận xóa'
-                    actionButtonText='Gửi'
+                    titleHeader='Xác nhận xóa HDPTNN'
+                    actionButtonText='Xóa'
                     openModal={modalDeleteTrue}
                     closeModal={modalDeleteFalse}
                     classNameButton='cancelbgc'
-                    onClick={() => deleteDeposits(currentUser?.idUpdate)}
+                    onClick={() => deleteContracts(currentUser?.idUpdate)}
                     isProcess={isProcess}
                 >
                     <p className='modal-delete-desc'>
-                        Bạn có chắc muốn xóa [{currentUser?.idUpdate}]?
+                        Bạn có chắc muốn xóa HDPTNN này [{currentUser?.idUpdate}
+                        ]?
                     </p>
                 </Modal>
             )}
@@ -306,4 +299,4 @@ function Deposits() {
     );
 }
 
-export default Deposits;
+export default FundAgriculture;

@@ -74,8 +74,12 @@ function TableData({
     search,
     noActions,
     children,
+    PaginationCus,
+    startPagiCus,
+    endPagiCus,
+    dataPagiCus,
 }) {
-    const { name, index, h1, h2, h3, h4, h5, h6 } = headers;
+    const { name, index, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10 } = headers;
     const { state, dispatch } = useAppContext();
     const { show, page } = state.set.pagination;
     const { sort } = state.set;
@@ -198,12 +202,17 @@ function TableData({
                         <Thead item={h4} />
                         <Thead item={h5} />
                         <Thead item={h6} />
+                        <Thead item={h7} />
+                        <Thead item={h8} />
+                        <Thead item={h9} />
+                        <Thead item={h10} />
                         {!noActions && <th></th>}
                     </tr>
                 </thead>
-                {data.length > 0 ? (
+                {(!PaginationCus ? data : dataPagiCus)?.length > 0 ? (
                     <tbody className='tbody'>{children}</tbody>
-                ) : search.length === 0 && data.length === 0 ? (
+                ) : (search?.length === 0 || search?.length > 0) &&
+                  (!PaginationCus ? data : dataPagiCus)?.length === 0 ? (
                     <tbody className='tbody'>
                         <tr>
                             <td
@@ -218,9 +227,32 @@ function TableData({
                     <Loading />
                 )}
             </table>
-            {data.length > 0 && (
+            {(!PaginationCus ? data : dataPagiCus)?.length > 0 && (
                 <div className={`${cx('pagination-countpage')}`}>
-                    <div className={`${cx('notvalue')}`}></div>
+                    <div className={`${cx('countpage-container')}`}>
+                        {!PaginationCus && (
+                            <select
+                                className={`${cx('countpage-select')}`}
+                                value={show}
+                                onChange={handleChangeLimitPage}
+                            >
+                                <option value='10'>10</option>
+                                <option value='20'>20</option>
+                                <option value='30'>30</option>
+                                <option value='50'>50</option>
+                            </select>
+                        )}
+                        <span className={`${cx('countpage-text')}`}>
+                            items per page |{' '}
+                            {PaginationCus ? startPagiCus : start} -{' '}
+                            {PaginationCus
+                                ? totalData < endPagiCus
+                                    ? totalData
+                                    : endPagiCus
+                                : end}{' '}
+                            of {totalData}
+                        </span>
+                    </div>
                     <Stack
                         spacing={2}
                         className={`${cx('pagination-container')}`}
@@ -230,26 +262,17 @@ function TableData({
                             page={page}
                             showFirstButton
                             showLastButton
-                            count={parseInt(Math.ceil(totalData / show)) || 0}
+                            count={
+                                parseInt(
+                                    Math.ceil(
+                                        totalData / (PaginationCus ? 10 : show)
+                                    )
+                                ) || 0
+                            }
                             variant='outlined'
                             shape='rounded'
                         />
                     </Stack>
-                    <div className={`${cx('countpage-container')}`}>
-                        <select
-                            className={`${cx('countpage-select')}`}
-                            value={show}
-                            onChange={handleChangeLimitPage}
-                        >
-                            <option value='10'>10</option>
-                            <option value='20'>20</option>
-                            <option value='30'>30</option>
-                            <option value='50'>50</option>
-                        </select>
-                        <span className={`${cx('countpage-text')}`}>
-                            items per page | {start} - {end} of {totalData}
-                        </span>
-                    </div>
                 </div>
             )}
         </>

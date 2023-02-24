@@ -1,8 +1,7 @@
 :root {
-    /*  */
     --mainpage-bgc: #f5f5f5;
-    --color-primary: #4CAF50;
-    --primary-hover: #00980f;
+    --color-primary: #007aff;
+    --primary-hover: #e6f5ff;
     --color-white: white;
     --color-black: black;
     --color-error: #f44336;
@@ -12,7 +11,7 @@
 
     --rgba-hover: rgba(0, 0, 0, 0.5);
     --rgba-modal-bgc: rgba(0, 0, 0, 0.5);
-    --siderbar-active: #4CAF50;
+    --siderbar-active: #007aff;
     --siderbar-bgc-active: #424242;
     --sidebar-with: 220px;
     --cancel-btn-border-color: #eee;
@@ -34,7 +33,7 @@
     --search-border-color: #e0e0e0;
     --search-icon-color: #9e9e9e;
     --search-input-color: #333333;
-    --boxShadow-input-color: rgba(136, 255, 0, 0.25);
+    --boxShadow-input-color: rgba(0, 132, 255, 0.25);
     --breadcrumb-link-color: #757575;
 }
 

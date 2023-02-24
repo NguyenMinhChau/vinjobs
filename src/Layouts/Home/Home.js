@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
 import className from 'classnames/bind';
 import Skeleton from 'react-loading-skeleton';
@@ -10,7 +11,6 @@ const cx = className.bind(styles);
 function Home() {
     const { state } = useAppContext();
     const { currentUser } = state.set;
-    console.log(currentUser);
     useEffect(() => {
         document.title = `Home | ${process.env.REACT_APP_TITLE_WEB}`;
     }, []);

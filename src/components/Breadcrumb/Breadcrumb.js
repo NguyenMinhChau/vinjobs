@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -51,11 +52,7 @@ function Breadcrumb({ titleList, linkList }) {
                     }
                 >
                     <Link
-                        to={
-                            currentUser?.rule === 'user'
-                                ? routers.homeUser
-                                : routers.dashboard
-                        }
+                        to={routers.dashboard}
                         className={`${cx(
                             'breadcrumb-link'
                         )} cl-primary hv-primary`}

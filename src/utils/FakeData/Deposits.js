@@ -1,31 +1,28 @@
 const DataDeposits = (Icons) => {
-  return {
-    headers: {
-      name: process.env.REACT_APP_DEPOSITS_NAME,
-      index: {
-        title: "No",
-      },
-      // h1: {
-      //     title: 'Code',
-      // },
-      h2: {
-        title: "Amount",
-      },
-      h3: {
-        title: "User",
-      },
-      h4: {
-        title: "Created At",
-        iconSort: <i className="fa-solid fa-sort"></i>,
-      },
-      h5: {
-        title: "Created By",
-      },
-      h6: {
-        title: "Status",
-      },
-    },
-  };
+    return {
+        headers: {
+            name: process.env.REACT_APP_DEPOSITS_NAME,
+            index: {
+                title: 'STT',
+            },
+            h1: {
+                title: 'Số tiền nạp',
+            },
+            h2: {
+                title: 'Tài khoản',
+            },
+            h3: {
+                title: 'Ngày nạp',
+                iconSort: <i className='fa-solid fa-sort'></i>,
+            },
+            h4: {
+                title: 'Tạo bởi',
+            },
+            h5: {
+                title: 'Trạng thái',
+            },
+        },
+    };
 };
 
 export default DataDeposits;
