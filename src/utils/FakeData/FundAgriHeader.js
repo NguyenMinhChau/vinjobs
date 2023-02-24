@@ -8,10 +8,10 @@ const DataFundAgriHeader = (Icons) => {
 
             h1: {
                 title: 'Tài khoản',
-                iconSort: <i className='fa-solid fa-sort'></i>,
             },
             h2: {
                 title: 'Mã HD',
+                iconSort: <i className='fa-solid fa-sort'></i>,
             },
             h3: {
                 title: 'Kỳ hạn',

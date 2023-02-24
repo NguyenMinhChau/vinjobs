@@ -143,6 +143,10 @@ function TableData({
                 case process.env.REACT_APP_DASHBOARD_NAME:
                     sortASC('symbol');
                     break;
+                case process.env.REACT_APP_FUND_USD_HEADER:
+                case process.env.REACT_APP_FUND_AGRI_HEADER:
+                    sortASC('id');
+                    break;
                 default:
                     sortASC('_id');
             }
@@ -163,6 +167,10 @@ function TableData({
                     break;
                 case process.env.REACT_APP_DASHBOARD_NAME:
                     sortDESC('symbol');
+                    break;
+                case process.env.REACT_APP_FUND_USD_HEADER:
+                case process.env.REACT_APP_FUND_AGRI_HEADER:
+                    sortDESC('id');
                     break;
                 default:
                     sortDESC('_id');

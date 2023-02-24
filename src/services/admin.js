@@ -62,7 +62,7 @@ export const deleteDepositsSV = async (props = {}) => {
             token: token,
         },
     });
-    console.log('deleteDepositsSV', resDel);
+    // console.log('deleteDepositsSV', resDel);
     switch (resDel.code) {
         case 0:
             const resGet = await adminGet('deposits', {});
@@ -115,7 +115,7 @@ export const deleteWithdrawsSV = async (props = {}) => {
             token: token,
         },
     });
-    console.log('deleteWithdrawsSV', resDel);
+    // console.log('deleteWithdrawsSV', resDel);
     switch (resDel.code) {
         case 0:
             const resGet = await adminGet('withdraws', {});
@@ -177,7 +177,7 @@ export const updateDepositsSV = async (props = {}) => {
             token: token,
         },
     });
-    console.log('updateDepositsSV', resPut);
+    // console.log('updateDepositsSV', resPut);
     switch (resPut.code) {
         case 0:
             const resGet = await adminGet('deposits', {});
@@ -241,7 +241,7 @@ export const updateWithdrawsSV = async (props = {}) => {
             token: token,
         },
     });
-    console.log('updateWithdrawsSV', resPut);
+    // console.log('updateWithdrawsSV', resPut);
     switch (resPut.code) {
         case 0:
             const resGet = await adminGet('withdraws', {});
@@ -291,7 +291,7 @@ export const getContractUSDSV = async (props = {}) => {
     const { dispatch, setSnackbar, state } = props;
     const resGet = await adminGet('contracts', {});
     const processUser = await adminGet('/allUsers');
-    const data = resGet?.data?.contracts?.filter((item) => item.type === 'USD');
+    const data = resGet?.data?.filter((item) => item.type === 'USD');
     switch (resGet.code) {
         case 0:
             dispatch(
@@ -329,14 +329,12 @@ export const deleteFundUSDsSV = async (props = {}) => {
             token: token,
         },
     });
-    console.log('deleteFundUSDsSV', resDel);
+    // console.log('deleteFundUSDsSV', resDel);
     switch (resDel.code) {
         case 0:
             const resGet = await adminGet('contracts', {});
             const processUser = await adminGet('/allUsers');
-            const data = resGet?.data?.contracts?.filter(
-                (item) => item.type === 'USD'
-            );
+            const data = resGet?.data?.filter((item) => item.type === 'USD');
             dispatch(
                 actions.setData({
                     data: {
@@ -396,14 +394,12 @@ export const updateFundUsdSV = async (props = {}) => {
             token: token,
         },
     });
-    console.log('updateFundUsdSV', resPut);
+    // console.log('updateFundUsdSV', resPut);
     switch (resPut.code) {
         case 0:
             const resGet = await adminGet('contracts', {});
             const processUser = await adminGet('/allUsers');
-            const data = resGet?.data?.contracts?.filter(
-                (item) => item.type === 'USD'
-            );
+            const data = resGet?.data?.filter((item) => item.type === 'USD');
             dispatch(
                 actions.setData({
                     data: {
@@ -451,9 +447,7 @@ export const getContractAgriSV = async (props = {}) => {
     const { dispatch, setSnackbar, state } = props;
     const resGet = await adminGet('contracts', {});
     const processUser = await adminGet('/allUsers');
-    const data = resGet?.data?.contracts?.filter(
-        (item) => item.type === 'AGRICULTURE'
-    );
+    const data = resGet?.data?.filter((item) => item.type === 'AGRICULTURE');
     switch (resGet.code) {
         case 0:
             dispatch(
@@ -491,12 +485,12 @@ export const deleteFundAgrisSV = async (props = {}) => {
             token: token,
         },
     });
-    console.log('deleteFundAgriSV', resDel);
+    // console.log('deleteFundAgriSV', resDel);
     switch (resDel.code) {
         case 0:
             const resGet = await adminGet('contracts', {});
             const processUser = await adminGet('/allUsers');
-            const data = resGet?.data?.contracts?.filter(
+            const data = resGet?.data?.filter(
                 (item) => item.type === 'AGRICULTURE'
             );
             dispatch(
@@ -558,12 +552,12 @@ export const updateFundAgriSV = async (props = {}) => {
             token: token,
         },
     });
-    console.log('updateFundAgriSV', resPut);
+    // console.log('updateFundAgriSV', resPut);
     switch (resPut.code) {
         case 0:
             const resGet = await adminGet('contracts', {});
             const processUser = await adminGet('/allUsers');
-            const data = resGet?.data?.contracts?.filter(
+            const data = resGet?.data?.filter(
                 (item) => item.type === 'AGRICULTURE'
             );
             dispatch(
@@ -801,7 +795,7 @@ export const deleteUserSV = async (props = {}) => {
             token: token,
         },
     });
-    console.log('deleteUserSV', resDel);
+    // console.log('deleteUserSV', resDel);
     switch (resDel.code) {
         case 0:
             const resGet = await adminGet(`allUsers`, {});
@@ -891,7 +885,7 @@ export const blockUserByEmailSV = async (props = {}) => {
             token: token,
         },
     });
-    console.log('blockUserByEmailSV', resPut);
+    // console.log('blockUserByEmailSV', resPut);
     switch (resPut.code) {
         case 0:
             const resGet = await adminGet(`user/${id_user}`, {
@@ -940,7 +934,7 @@ export const refreshPwdUserSV = async (props = {}) => {
             token: token,
         },
     });
-    console.log('refreshPwdUserSV', resPost);
+    // console.log('refreshPwdUserSV', resPost);
     switch (resPost.code) {
         case 0:
             const resGet = await adminGet(`user/${id_user}`, {
@@ -992,7 +986,7 @@ export const changePwdUserSV = async (props = {}) => {
             token: token,
         },
     });
-    console.log('changePwdUserSV', resPost);
+    // console.log('changePwdUserSV', resPost);
     switch (resPost.code) {
         case 0:
             const resGet = await adminGet(`user/${id_user}`, {
@@ -1042,7 +1036,7 @@ export const adminGetAllDepositsSV = async (props = {}) => {
         `deposits?page=${page}&show=${show}&search=${search}`,
         {}
     );
-    console.log(resGet);
+    // console.log(resGet);
     const resGetUser = await adminGet('allUsers', {});
     switch (resGet.code) {
         case 0:
