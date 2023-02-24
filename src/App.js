@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { Fragment, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
@@ -137,7 +138,7 @@ function App() {
                     Website chỉ hỗ trợ trên PC!
                 </Alert>
             </div>
-            <div
+            {/* <div
                 className='btn-down-app'
                 onClick={toogleGetApp}
                 style={{ right: scrollToTop ? '70px' : '20px' }}
@@ -182,15 +183,15 @@ function App() {
                                 Tải trên Google Play
                             </div>
                         </a>
-                        {/* <div className='list-app-item'>
+                         <div className='list-app-item'>
                             <Icons.AppleStoreIcon />
                             <div className='list-app-item-text ml8'>
                                 Download on Apple Store
                             </div>
-                        </div> */}
+                        </div> 
                     </div>
                 )}
-            </div>
+            </div> */}
         </>
     );
 }
