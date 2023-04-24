@@ -24,11 +24,7 @@ import { useAppContext } from '../../utils';
 import { setData } from '../../app/reducer';
 import { dataBank } from '../../utils/dataBank';
 import { adminGetUserByIdSV } from '../../services/admin';
-import {
-    userAddPaymentSV,
-    userChangePasswordSV,
-    userUploadLicenseSV,
-} from '../../services/user';
+import { userAddPaymentSV, userChangePasswordSV, userUploadLicenseSV } from '../../services/user';
 import { authLogoutSV } from '../../services/authen';
 import requestRefreshToken from '../../utils/axios/refreshToken';
 
@@ -274,14 +270,7 @@ export default function Proifile() {
             });
         } else {
             setisProcessModalPwd(true);
-            requestRefreshToken(
-                currentUser,
-                handleSendPwd,
-                state,
-                dispatch,
-                setData,
-                setSnackbar
-            );
+            requestRefreshToken(currentUser, handleSendPwd, state, dispatch, setData, setSnackbar);
         }
     };
     const handleLogout = async () => {
@@ -340,29 +329,18 @@ export default function Proifile() {
         userById?.payment?.bank?.name &&
         userById?.payment?.bank?.account;
     const URL_SERVER = process.env.REACT_APP_URL_SERVER;
-    const RenderImageDocument = ({
-        nameFile,
-        idFile,
-        urlImage,
-        urlImagePending,
-        onChange,
-    }) => {
+    const RenderImageDocument = ({ nameFile, idFile, urlImage, urlImagePending, onChange }) => {
         return (
             <label className={`${cx('image-item')}`} id={idFile}>
                 {!urlImage && !urlImagePending ? (
                     <>
-                        <IconForm.UploadIcon
-                            className={`${cx('icon-upload')}`}
-                        />
+                        <IconForm.UploadIcon className={`${cx('icon-upload')}`} />
                     </>
                 ) : (
                     <Image
                         src={
                             !urlImagePending
-                                ? `${URL_SERVER}/${urlImage?.replace(
-                                      'uploads/',
-                                      ''
-                                  )}`
+                                ? `${URL_SERVER}/${urlImage?.replace('uploads/', '')}`
                                 : urlImagePending
                         }
                         alt=''
@@ -448,28 +426,24 @@ export default function Proifile() {
                                         alt='image_user'
                                         className={`${cx('image_user')}`}
                                     />
-                                    <div
-                                        className={`${cx(
-                                            'authen_email_container'
-                                        )}`}
-                                    >
+                                    <div className={`${cx('authen_email_container')}`}>
                                         <div className={`${cx('name_user')}`}>
                                             {currentUser?.username || '---'}
                                         </div>
                                         <div
                                             className={`${cx('email_authen')}`}
-                                            onClick={handleModalEmailTrue}
-                                        >
-                                            <span>
-                                                {currentUser?.email || '---'}
-                                            </span>
+                                            onClick={handleModalEmailTrue}>
+                                            <span>{currentUser?.email || '---'}</span>
                                             <i class='bx bx-chevron-right'></i>
                                         </div>
-                                        <div
+                                        {/* <div
                                             className={`${cx('btn_authen')}`}
                                             onClick={handleModalAuthenOldEmail}
                                         >
                                             Xác thực
+                                        </div> */}
+                                        <div className={`${cx('btn_authen', 'success')}`}>
+                                            Đã xác thực
                                         </div>
                                     </div>
                                 </div>
@@ -555,11 +529,8 @@ export default function Proifile() {
                             />
                             {currentUser && (
                                 <div
-                                    className={`${cx(
-                                        'btn_logout'
-                                    )} cancelbgcbold`}
-                                    onClick={handleLogout}
-                                >
+                                    className={`${cx('btn_logout')} cancelbgcbold`}
+                                    onClick={handleLogout}>
                                     Đăng xuất
                                 </div>
                             )}
@@ -575,17 +546,14 @@ export default function Proifile() {
                     actionButtonText={isShowOTP ? 'Xác thực' : 'Gửi OTP'}
                     classNameButton={'infobgc'}
                     isProcess={isProcessModalEmail}
-                    onClick={isShowOTP ? handleAuthenOTP : handleSubmitNewEmail}
-                >
+                    onClick={isShowOTP ? handleAuthenOTP : handleSubmitNewEmail}>
                     {isShowOTP ? (
                         <FormInput
                             label='Mã OTP'
                             placeholder='Nhập mã'
                             name='otpCode'
                             value={otpCode}
-                            onChange={(e) =>
-                                dispatch(setData({ otpCode: e.target.value }))
-                            }
+                            onChange={(e) => dispatch(setData({ otpCode: e.target.value }))}
                         />
                     ) : (
                         <FormInput
@@ -593,9 +561,7 @@ export default function Proifile() {
                             placeholder='Ví dụ: example@gmail.com'
                             name='email'
                             value={email}
-                            onChange={(e) =>
-                                dispatch(setData({ email: e.target.value }))
-                            }
+                            onChange={(e) => dispatch(setData({ email: e.target.value }))}
                         />
                     )}
                 </Modal>
@@ -609,11 +575,10 @@ export default function Proifile() {
                     classNameButton={`warningbgc`}
                     isProcess={isProcessModalReciving}
                     onClick={handleAddMethod}
-                    hideButton={checkbank}
-                >
+                    hideButton={checkbank}>
                     <p className={`${cx('text_desc')} info fwb mb8`}>
-                        Nếu đã có tài khoản nhưng không hiện thông tin. Vui lòng
-                        F5 lại trang, xin cảm ơn!
+                        Nếu đã có tài khoản nhưng không hiện thông tin. Vui lòng F5 lại trang, xin
+                        cảm ơn!
                     </p>
                     {checkbank ? (
                         <CreditCard
@@ -670,17 +635,14 @@ export default function Proifile() {
                     actionButtonText='Gửi'
                     isProcess={isProcessModalPwd}
                     classNameButton={`warningbgc`}
-                    onClick={handleChangePwd}
-                >
+                    onClick={handleChangePwd}>
                     <FormInput
                         label='Mật khẩu cũ'
                         placeholder='Nhập mật khẩu cũ'
                         name='oldPassword'
                         value={oldPassword}
                         showPwd
-                        onChange={(e) =>
-                            dispatch(setData({ oldPassword: e.target.value }))
-                        }
+                        onChange={(e) => dispatch(setData({ oldPassword: e.target.value }))}
                     />
                     <FormInput
                         label='Mật khẩu mới'
@@ -688,9 +650,7 @@ export default function Proifile() {
                         name='password'
                         value={password}
                         showPwd
-                        onChange={(e) =>
-                            dispatch(setData({ password: e.target.value }))
-                        }
+                        onChange={(e) => dispatch(setData({ password: e.target.value }))}
                     />
                     <FormInput
                         label='Xác thực mật khẩu'
@@ -698,11 +658,7 @@ export default function Proifile() {
                         name='confirmPassword'
                         value={confirmPassword}
                         showPwd
-                        onChange={(e) =>
-                            dispatch(
-                                setData({ confirmPassword: e.target.value })
-                            )
-                        }
+                        onChange={(e) => dispatch(setData({ confirmPassword: e.target.value }))}
                     />
                 </Modal>
             )}
@@ -714,16 +670,13 @@ export default function Proifile() {
                     actionButtonText='Gửi'
                     isProcess={isProcessModalUpload}
                     classNameButton={`warningbgc`}
-                    onClick={handleUpload}
-                >
+                    onClick={handleUpload}>
                     <div className={`${cx('container-document')}`}>
                         <p className={`${cx('text_desc')} info fwb mb8`}>
-                            Nếu đã tải giấy tờ nhưng không hiện thông tin. Vui
-                            lòng F5 lại trang, xin cảm ơn!
+                            Nếu đã tải giấy tờ nhưng không hiện thông tin. Vui lòng F5 lại trang,
+                            xin cảm ơn!
                         </p>
-                        <div className={`${cx('document-title')}`}>
-                            1. Căn cước công dân
-                        </div>
+                        <div className={`${cx('document-title')}`}>1. Căn cước công dân</div>
                         <div className={`${cx('doucment-image-container')}`}>
                             <RenderImageDocument
                                 nameFile='uploadCCCDFont'
@@ -742,9 +695,7 @@ export default function Proifile() {
                         </div>
                     </div>
                     <div className={`${cx('container-document')}`}>
-                        <div className={`${cx('document-title')}`}>
-                            2. Giấy phép lái xe
-                        </div>
+                        <div className={`${cx('document-title')}`}>2. Giấy phép lái xe</div>
                         <div className={`${cx('doucment-image-container')}`}>
                             <RenderImageDocument
                                 nameFile='uploadLicenseFont'

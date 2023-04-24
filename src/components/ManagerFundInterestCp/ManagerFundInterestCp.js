@@ -9,12 +9,17 @@ import { indexTable } from '../../utils/tableIndex';
 import SnackbarCp from '../SnackbarCp/SnackbarCp';
 import { General } from '../../layouts';
 import DataManagerFundAgricultureHeader from '../../utils/fakeData/dataManagerFundAgricultureHeader';
-import { userGetDisbursementByIdContractSV } from '../../services/user';
+import {
+    userCancelContractSV,
+    userGetDisbursementByIdContractSV,
+} from '../../services/user';
 import CustomcareLine from '../CustomcareLine/CustomcareLine';
 import { formatVND, formatVNDCurrency } from '../../utils/format/FormatMoney';
 import { dateFormat } from '../../utils/format/DateVN';
 import Modal from '../Modal/Modal';
 import dataFilterManagerFund from '../../utils/dataTableCusFilter/dataFilterManagerFund';
+import requestRefreshToken from '../../utils/axios/refreshToken';
+import { setData } from '../../app/reducer';
 
 const cx = className.bind(styles);
 
@@ -48,7 +53,7 @@ export default function ManagerFundInterestCp({ data }) {
         setIsModalDetailAgriculture(false);
     };
     let dataManagerFundAgricultureFlag =
-        data?.agriculture.sort((a, b) => b?.id - a?.id) || [];
+        data?.agriculture?.sort((a, b) => b?.id - a?.id) || [];
     if (manager_fund_agriculture) {
         dataManagerFundAgricultureFlag = dataManagerFundAgricultureFlag.filter(
             (item) => {
@@ -158,7 +163,9 @@ export default function ManagerFundInterestCp({ data }) {
                                 {formatVND(item?.principal)}
                             </td>
                             <td className='item-w150'>
-                                {formatVNDCurrency(item?.disbursement)}
+                                {item?.disbursement
+                                    ? formatVNDCurrency(item?.disbursement)
+                                    : 'Đang tải'}
                             </td>
                             <td className='item-w100'>
                                 <span
@@ -175,18 +182,29 @@ export default function ManagerFundInterestCp({ data }) {
             </>
         );
     }
+    const handleCancelContractSV = (dataToken, id) => {
+        userCancelContractSV({
+            id_contract: id,
+            id_user: currentUser?.id,
+            setSnackbar,
+            token: dataToken?.token,
+            setIsProcessModal,
+            setIsModalDetailAgriculture,
+            dispatch,
+        });
+    };
     const handleCancelContract = async (id) => {
         await 1;
         setIsProcessModal(true);
-        setTimeout(() => {
-            setIsProcessModal(false);
-            setIsModalDetailAgriculture(false);
-            setSnackbar({
-                open: true,
-                type: 'success',
-                message: `Hủy hợp đồng id = ${id}. Chức năng đang phát triển!`,
-            });
-        }, 3000);
+        requestRefreshToken(
+            currentUser,
+            handleCancelContractSV,
+            state,
+            dispatch,
+            setData,
+            setSnackbar,
+            id
+        );
     };
     return (
         <div className={`${cx('container')}`}>

@@ -15,7 +15,7 @@ import {
     TotalItem,
 } from '../../components';
 import { useAppContext } from '../../utils';
-import { userGetContractSV } from '../../services/user';
+import { userGetAssetSV, userGetContractSV } from '../../services/user';
 import requestRefreshToken from '../../utils/axios/refreshToken';
 import { setData } from '../../app/reducer';
 
@@ -35,7 +35,7 @@ const LIST_TABS = [
 
 export default function ManagerFunds() {
     const { state, dispatch } = useAppContext();
-    const { currentUser } = state.set;
+    const { currentUser, dataContracts, dataAssets } = state.set;
     const [isShow, setIsShow] = useState(false);
     const [idTab, setIdTab] = useState(1);
     const [snackbar, setSnackbar] = useState({
@@ -43,13 +43,21 @@ export default function ManagerFunds() {
         type: '',
         message: '',
     });
-    const [dataContract, setDataContract] = useState(null);
+    // const [dataContract, setDataContract] = useState(null);
     const handleSendContract = (dataToken) => {
         userGetContractSV({
             id_user: currentUser?.id,
             setSnackbar,
-            setDataContract,
+            dispatch,
             token: dataToken?.token,
+        });
+    };
+    const handleSendAssets = (dataToken) => {
+        userGetAssetSV({
+            id_user: currentUser?.id,
+            token: dataToken?.token,
+            dispatch,
+            setSnackbar,
         });
     };
     useEffect(() => {
@@ -57,6 +65,14 @@ export default function ManagerFunds() {
         requestRefreshToken(
             currentUser,
             handleSendContract,
+            state,
+            dispatch,
+            setData,
+            setSnackbar
+        );
+        requestRefreshToken(
+            currentUser,
+            handleSendAssets,
             state,
             dispatch,
             setData,
@@ -82,6 +98,7 @@ export default function ManagerFunds() {
     const toogleIsShow = () => {
         setIsShow(!isShow);
     };
+    const totalAssets = dataAssets?.fund_wallet + 0 + dataAssets?.surplus;
     return (
         <div className={`${cx('container')}`}>
             <SliderHeader
@@ -104,20 +121,24 @@ export default function ManagerFunds() {
                     >
                         <TotalItem
                             title='Tổng tài sản'
-                            price={1000}
+                            price={totalAssets}
                             isShow={isShow}
                         />
                         <TotalItem
                             title='Ví quỹ'
-                            price={1000}
+                            price={dataAssets?.fund_wallet || 0}
                             isShow={isShow}
                         />
                         <TotalItem
                             title='Ví đầu tư'
-                            price={1000}
+                            price={0}
                             isShow={isShow}
                         />
-                        <TotalItem title='Số dư' price={1000} isShow={isShow} />
+                        <TotalItem
+                            title='Số dư'
+                            price={dataAssets?.surplus || 0}
+                            isShow={isShow}
+                        />
                     </TotalAssetsAndFund>
                 )}
                 <div className={`${cx('table_manager_container')}`}>
@@ -148,7 +169,7 @@ export default function ManagerFunds() {
                                 return (
                                     <Component
                                         key={index}
-                                        data={dataContract}
+                                        data={dataContracts}
                                     />
                                 );
                             }

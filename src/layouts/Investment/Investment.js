@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
 import className from 'classnames/bind';
 import styles from './Investment.module.css';
@@ -21,7 +22,6 @@ export default function Investment() {
                 animateName='animate__fadeInTopRight'
             />
             <div className={`${cx('body')}`}>
-                {!currentUser && <LoginRegisterCpTwo />}
                 <div className={`${cx('developer')}`}>
                     <span className={`${cx('text_desc')} success`}>
                         Giao diện đang phát triển, vui lòng quay lại sau. Xin

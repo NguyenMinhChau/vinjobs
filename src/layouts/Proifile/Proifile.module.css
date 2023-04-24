@@ -95,6 +95,12 @@
     width: 200px;
 }
 
+.btn_authen.success {
+    background-color: var(--bgc-success);
+    color: var(--color-success);
+    cursor: default;
+}
+
 .btn_logout {
     padding: 12px 14px;
     border-radius: 10px;
@@ -149,8 +155,6 @@
 .input-file {
     display: none;
 }
-
-
 
 /* MOBILE */
 @media (max-width: 46.25em) {

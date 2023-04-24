@@ -630,7 +630,7 @@ export const userAddContractSV = async (props = {}) => {
 };
 // GET CONTRACT
 export const userGetContractSV = async (props = {}) => {
-    const { setSnackbar, token, id_user, setDataContract } = props;
+    const { setSnackbar, token, id_user, dispatch } = props;
     const resGet = await userGet(`contract/${id_user}`, {
         headers: {
             token: token,
@@ -639,7 +639,11 @@ export const userGetContractSV = async (props = {}) => {
     // console.log('userGetContractSV: ', resGet);
     switch (resGet.code) {
         case 0:
-            setDataContract(resGet?.data);
+            dispatch(
+                setData({
+                    dataContracts: resGet?.data,
+                })
+            );
             break;
         case 1:
         case 2:
@@ -649,6 +653,62 @@ export const userGetContractSV = async (props = {}) => {
                 open: true,
                 type: 'error',
                 message: resGet?.message || 'Tải dữ liệu thất bại',
+            });
+            break;
+        default:
+            break;
+    }
+};
+// HỦY HỢP ĐỒNG
+export const userCancelContractSV = async (props = {}) => {
+    const {
+        id_contract,
+        id_user,
+        setSnackbar,
+        token,
+        setIsProcessModal,
+        setIsModalDetailAgriculture,
+        setIsModalDetail,
+        dispatch,
+    } = props;
+    const resPost = await userPost(`destroy/contract/${id_contract}`, {
+        token: token,
+        headers: {
+            token: token,
+        },
+    });
+    // console.log('userCancelContractSV: ', resPost);
+    switch (resPost.code) {
+        case 0:
+            const resGet = await userGet(`contract/${id_user}`, {
+                headers: {
+                    token: token,
+                },
+            });
+            dispatch(
+                setData({
+                    dataContracts: resGet?.data,
+                })
+            );
+            setIsProcessModal(false);
+            setIsModalDetailAgriculture && setIsModalDetailAgriculture(false);
+            setIsModalDetail && setIsModalDetail(false);
+            setSnackbar({
+                open: true,
+                type: 'success',
+                message:
+                    'Hủy hợp đồng thành công. Vui lòng chờ admin xét duyệt.',
+            });
+            break;
+        case 1:
+        case 2:
+        case 304:
+        case 500:
+            setIsProcessModal(false);
+            setSnackbar({
+                open: true,
+                type: 'error',
+                message: resPost?.message || 'Hủy hợp đồng thất bại',
             });
             break;
         default:
@@ -706,6 +766,7 @@ export const userUploadLicenseSV = async (props = {}) => {
             cccdBeside: imagePersonNationalityBeside,
             licenseFont: imageLicenseFont,
             licenseBeside: imageLicenseBeside,
+            token: token,
             headers: {
                 token: token,
             },
@@ -742,6 +803,38 @@ export const userUploadLicenseSV = async (props = {}) => {
                 type: 'error',
                 message:
                     'Cập nhật giấy tờ thất bại. Vui lòng chọn lại tất cả 4 ảnh để cập nhật, xin cảm ơn!',
+            });
+            break;
+        default:
+            break;
+    }
+};
+// LẤY TÀI SẢN
+export const userGetAssetSV = async (props = {}) => {
+    const { id_user, token, setSnackbar, dispatch } = props;
+    const resGet = await userGet(`total/assets/${id_user}`, {
+        token: token,
+        headers: {
+            token: token,
+        },
+    });
+    // console.log('userGetAssetSV: ', resGet);
+    switch (resGet.code) {
+        case 0:
+            dispatch(
+                setData({
+                    dataAssets: resGet?.data,
+                })
+            );
+            break;
+        case 1:
+        case 2:
+        case 304:
+        case 500:
+            setSnackbar({
+                open: true,
+                type: 'error',
+                message: resGet?.message || 'Tải dữ liệu thất bại',
             });
             break;
         default:

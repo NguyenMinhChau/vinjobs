@@ -49,7 +49,7 @@ export const authLoginSV = async (props = {}) => {
         email: email,
         password: password,
     });
-    // console.log('authLoginSV: ', resPost);
+    console.log('authLoginSV: ', resPost);
     switch (resPost.code) {
         case 0:
             await setStore({

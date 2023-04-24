@@ -5,6 +5,7 @@ export const initialState = {
     set: {
         currentUser: getStore(),
         userById: null,
+        item: null,
         username: '',
         email: '',
         password: '',
@@ -20,6 +21,8 @@ export const initialState = {
         file: [],
         dataDepositsHistory: [],
         dataWithdrawsHistory: [],
+        dataContracts: [],
+        dataAssets: null,
         dataManagerFundUSD: [],
         dataManagerFundAgriculture: [],
         investmentFund: '',

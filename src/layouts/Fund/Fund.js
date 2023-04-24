@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import className from 'classnames/bind';
@@ -14,6 +15,9 @@ import {
 } from '../../components';
 import { routers } from '../../routers';
 import { useAppContext } from '../../utils';
+import { userGetAssetSV } from '../../services/user';
+import requestRefreshToken from '../../utils/axios/refreshToken';
+import { setData } from '../../app/reducer';
 
 const cx = className.bind(styles);
 const IMAGE_SLIDERS = [
@@ -32,8 +36,8 @@ const IMAGE_SLIDERS = [
 ];
 
 export default function Fund() {
-    const { state } = useAppContext();
-    const { currentUser } = state.set;
+    const { state, dispatch } = useAppContext();
+    const { currentUser, dataAssets } = state.set;
     const [isShow, setIsShow] = React.useState(false);
     const [snackbar, setSnackbar] = useState({
         open: false,
@@ -49,12 +53,22 @@ export default function Fund() {
             open: false,
         });
     };
+    const handleSendAssets = (dataToken) => {
+        userGetAssetSV({
+            id_user: currentUser?.id,
+            token: dataToken?.token,
+            dispatch,
+            setSnackbar,
+        });
+    };
     useEffect(() => {
         document.title = `Quỹ | ${process.env.REACT_APP_TITLE_WEB}`;
+        requestRefreshToken(currentUser, handleSendAssets, state, dispatch, setData, setSnackbar);
     }, []);
     const toogleIsShow = () => {
         setIsShow(!isShow);
     };
+    const totalFund = dataAssets?.sum_usd_contract + dataAssets?.sum_agriculture_contract;
     return (
         <div className={`${cx('container')}`}>
             <SliderHeader
@@ -71,25 +85,17 @@ export default function Fund() {
             />
             <div className={`${cx('body')}`}>
                 {currentUser && (
-                    <TotalAssetsAndFund
-                        isShow={isShow}
-                        toogleIsShow={toogleIsShow}
-                        cols={1}
-                    >
+                    <TotalAssetsAndFund isShow={isShow} toogleIsShow={toogleIsShow} cols={1}>
                         <div className={`${cx('total_assets_list_custom')}`}>
-                            <TotalItem
-                                title='Tổng quỹ'
-                                price={1000}
-                                isShow={isShow}
-                            />
+                            <TotalItem title='Tổng quỹ' price={totalFund} isShow={isShow} />
                             <TotalItem
                                 title='Quỹ đầu tư USD'
-                                price={1000}
+                                price={dataAssets?.sum_usd_contract}
                                 isShow={isShow}
                             />
                             <TotalItem
                                 title='Quỹ phát triển nông nghiệp'
-                                price={1000}
+                                price={dataAssets?.sum_agriculture_contract}
                                 isShow={isShow}
                             />
                         </div>
@@ -98,8 +104,7 @@ export default function Fund() {
                 <FundMenuAndSlider
                     imageSliders={IMAGE_SLIDERS}
                     title='Menu'
-                    nameIconTitle='bx bx-menu'
-                >
+                    nameIconTitle='bx bx-menu'>
                     <MenuItemFund
                         title='Bảng quỹ tham khảo'
                         nameIcon='bx bxs-bank'
@@ -109,6 +114,9 @@ export default function Fund() {
                         title='Gửi quỹ'
                         nameIcon='bx bx-donate-heart'
                         to={`${routers.providentFund}/${routers.fund}/${routers.sendFunds}`}
+                        onClick={() => {
+                            dispatch(setData({ item: null }));
+                        }}
                     />
                     <MenuItemFund
                         title='Quản lý quỹ'

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from 'react';
 import className from 'classnames/bind';
@@ -11,6 +12,9 @@ import {
     TotalItem,
 } from '../../components';
 import { useAppContext } from '../../utils';
+import { userGetAssetSV } from '../../services/user';
+import requestRefreshToken from '../../utils/axios/refreshToken';
+import { setData } from '../../app/reducer';
 
 const cx = className.bind(styles);
 
@@ -28,8 +32,8 @@ const LIST_TABS = [
 ];
 
 export default function InterestRateTable() {
-    const { state } = useAppContext();
-    const { currentUser } = state.set;
+    const { state, dispatch } = useAppContext();
+    const { currentUser, dataAssets } = state.set;
     const [isShow, setIsShow] = useState(false);
     const [idTab, setIdTab] = useState(1);
     const [snackbar, setSnackbar] = useState({
@@ -37,8 +41,24 @@ export default function InterestRateTable() {
         type: '',
         message: '',
     });
+    const handleSendAssets = (dataToken) => {
+        userGetAssetSV({
+            id_user: currentUser?.id,
+            token: dataToken?.token,
+            dispatch,
+            setSnackbar,
+        });
+    };
     useEffect(() => {
         document.title = `Bảng lãi suất | ${process.env.REACT_APP_TITLE_WEB}`;
+        requestRefreshToken(
+            currentUser,
+            handleSendAssets,
+            state,
+            dispatch,
+            setData,
+            setSnackbar
+        );
     }, []);
     const handleCloseSnackbar = (event, reason) => {
         if (reason === 'clickaway') {
@@ -52,6 +72,7 @@ export default function InterestRateTable() {
     const toogleIsShow = () => {
         setIsShow(!isShow);
     };
+    const totalAssets = dataAssets?.fund_wallet + 0 + dataAssets?.surplus;
     return (
         <div className={`${cx('container')}`}>
             <SliderHeader
@@ -74,20 +95,24 @@ export default function InterestRateTable() {
                     >
                         <TotalItem
                             title='Tổng tài sản'
-                            price={1000}
+                            price={totalAssets}
                             isShow={isShow}
                         />
                         <TotalItem
                             title='Ví quỹ'
-                            price={1000}
+                            price={dataAssets?.fund_wallet || 0}
                             isShow={isShow}
                         />
                         <TotalItem
                             title='Ví đầu tư'
-                            price={1000}
+                            price={0}
                             isShow={isShow}
                         />
-                        <TotalItem title='Số dư' price={1000} isShow={isShow} />
+                        <TotalItem
+                            title='Số dư'
+                            price={dataAssets?.surplus || 0}
+                            isShow={isShow}
+                        />
                     </TotalAssetsAndFund>
                 )}
                 <div className={`${cx('table_interest_container')}`}>

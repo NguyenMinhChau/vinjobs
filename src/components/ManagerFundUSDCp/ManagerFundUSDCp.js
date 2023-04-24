@@ -12,12 +12,16 @@ import { useAppContext } from '../../utils';
 import SnackbarCp from '../SnackbarCp/SnackbarCp';
 import { General } from '../../layouts';
 import DataManagerFundUsdHeader from '../../utils/fakeData/dataManagerFundUsdHeader';
-import { userGetDisbursementByIdContractSV } from '../../services/user';
+import {
+    userCancelContractSV,
+    userGetDisbursementByIdContractSV,
+} from '../../services/user';
 import { dateFormat } from '../../utils/format/DateVN';
 import Modal from '../Modal/Modal';
 import CustomcareLine from '../CustomcareLine/CustomcareLine';
 import { setData } from '../../app/reducer';
 import dataFilterManagerFund from '../../utils/dataTableCusFilter/dataFilterManagerFund';
+import requestRefreshToken from '../../utils/axios/refreshToken';
 
 const cx = className.bind(styles);
 
@@ -49,7 +53,7 @@ export default function ManagerFundUSDCp({ data }) {
         e.stopPropagation();
         setIsModalDetail(false);
     };
-    let dataManagerFundUSDFlag = data?.usd.sort((a, b) => b?.id - a?.id) || [];
+    let dataManagerFundUSDFlag = data?.usd?.sort((a, b) => b?.id - a?.id) || [];
     if (manager_fund_usd) {
         dataManagerFundUSDFlag = dataManagerFundUSDFlag.filter((item) => {
             return (
@@ -157,7 +161,7 @@ export default function ManagerFundUSDCp({ data }) {
                                 {formatVND(item?.principal)}
                             </td>
                             <td className='item-w150'>
-                                {formatVNDCurrency(item?.disbursement)}
+                                {item?.disbursement ? formatVNDCurrency(item?.disbursement) : 'Đang tải'}
                             </td>
                             <td className='item-w100'>
                                 <span
@@ -174,18 +178,29 @@ export default function ManagerFundUSDCp({ data }) {
             </>
         );
     }
+    const handleCancelContractSV = (dataToken, id) => {
+        userCancelContractSV({
+            id_contract: id,
+            id_user: currentUser?.id,
+            setSnackbar,
+            token: dataToken?.token,
+            setIsProcessModal,
+            setIsModalDetail,
+            dispatch,
+        });
+    };
     const handleCancelContract = async (id) => {
         await 1;
         setIsProcessModal(true);
-        setTimeout(() => {
-            setIsProcessModal(false);
-            setIsModalDetail(false);
-            setSnackbar({
-                open: true,
-                type: 'success',
-                message: `Hủy hợp đồng id = ${id}. Chức năng đang phát triển!`,
-            });
-        }, 3000);
+        requestRefreshToken(
+            currentUser,
+            handleCancelContractSV,
+            state,
+            dispatch,
+            setData,
+            setSnackbar,
+            id
+        );
     };
     return (
         <div className={`${cx('container')}`}>
