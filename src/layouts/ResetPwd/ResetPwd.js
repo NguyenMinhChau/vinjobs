@@ -6,66 +6,50 @@ import { useAppContext } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import { Form } from '../../components';
 import { setData } from '../../app/reducer';
-import { routers } from '../../routers';
 import { userOTPForgotPwdSV } from '../../services/user';
 
 const cx = className.bind(styles);
 
 export default function ResetPwd() {
-    const { state, dispatch } = useAppContext();
-    const { otpCode } = state.set;
-    const [isProcess, setIsProcess] = useState(false);
-    const [snackbar, setSnackbar] = useState({
-        open: false,
-        type: '',
-        message: '',
-    });
-    const history = useNavigate();
-    useEffect(() => {
-        document.title = `Khôi phục tài khoản | ${process.env.REACT_APP_TITLE_WEB}`;
-    }, []);
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setSnackbar({
-            ...snackbar,
-            open: false,
-        });
-    };
-    const handleSendOTP = async () => {
-        //zlpih5ef
-        await 1;
-        setIsProcess(true);
-        userOTPForgotPwdSV({
-            code: otpCode,
-            setIsProcess,
-            setSnackbar,
-            history,
-        });
-        dispatch(
-            setData({
-                otpCode: '',
-            })
-        );
-    };
-    const onEnter = (e) => {
-        handleSendOTP();
-    };
-    return (
-        <Form
-            titleForm='Xác thực OTP'
-            textBtn='Gửi'
-            onClick={handleSendOTP}
-            bolOtpCode
-            forgotPwdForm
-            className={cx('form-page-reset-password')}
-            onEnter={onEnter}
-            isProcess={isProcess}
-            handleCloseSnackbar={handleClose}
-            openSnackbar={snackbar.open}
-            typeSnackbar={snackbar.type}
-            messageSnackbar={snackbar.message}
-        />
-    );
+	const { state, dispatch } = useAppContext();
+	const { otpCode } = state.set;
+	const [isProcess, setIsProcess] = useState(false);
+	const [snackbar, setSnackbar] = useState({
+		open: false,
+		type: '',
+		message: '',
+	});
+	const history = useNavigate();
+	useEffect(() => {
+		document.title = `Khôi phục tài khoản | ${process.env.REACT_APP_TITLE_WEB}`;
+	}, []);
+	const handleClose = (event, reason) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+		setSnackbar({
+			...snackbar,
+			open: false,
+		});
+	};
+	const handleSendOTP = async () => {};
+	const onEnter = (e) => {
+		handleSendOTP();
+	};
+	return (
+		<Form
+			titleForm="Xác thực OTP"
+			textBtn="Gửi"
+			onClick={handleSendOTP}
+			bolOtpCode
+			forgotPwdForm
+			className={cx('form-page-reset-password')}
+			onEnter={onEnter}
+			isProcess={isProcess}
+			handleCloseSnackbar={handleClose}
+			openSnackbar={snackbar.open}
+			typeSnackbar={snackbar.type}
+			messageSnackbar={snackbar.message}
+		/>
+	);
 }

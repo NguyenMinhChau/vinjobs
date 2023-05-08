@@ -8,32 +8,32 @@ import { Link } from 'react-router-dom';
 const cx = className.bind(styles);
 
 export default function Footer() {
-    return (
-        <div className={`${cx('container')}`}>
-            <div className={`${cx('top')} mb8`}>
-                <div className={`${cx('top-text')}`}>
-                    © 2020 - {new Date().getFullYear()}{' '}
-                    <Link to='/' className={`${cx('link')}`}>
-                        AIKING INVESTMENT
-                    </Link>{' '}
-                    All Rights Reserved.
-                </div>
-                <div className={`${cx('top-image')}`}>
-                    <Image
-                        src={logoCheckout}
-                        alt=''
-                        className={`${cx('logo')}`}
-                    />
-                </div>
-            </div>
-            <div className={`${cx('bottom')}`}>
-                <div className={`${cx('bottom-text')}`}>
-                    Web Development by:{' '}
-                    <Link to='/' className={`${cx('link')}`}>
-                        AIKING GROUP
-                    </Link>
-                </div>
-            </div>
-        </div>
-    );
+	return (
+		<div className={`${cx('container')}`}>
+			<div className={`${cx('top')} mb8`}>
+				<div className={`${cx('top-text')}`}>
+					© 2020 - {new Date().getFullYear()}{' '}
+					<Link to="/" className={`${cx('link')}`}>
+						VIN JOBS
+					</Link>{' '}
+					All Rights Reserved.
+				</div>
+				<div className={`${cx('top-image')}`}>
+					<Image
+						src={logoCheckout}
+						alt=""
+						className={`${cx('logo')}`}
+					/>
+				</div>
+			</div>
+			<div className={`${cx('bottom')}`}>
+				<div className={`${cx('bottom-text')}`}>
+					Web Development by:{' '}
+					<Link to="/" className={`${cx('link')}`}>
+						AIKING GROUP
+					</Link>
+				</div>
+			</div>
+		</div>
+	);
 }
