@@ -1,24 +1,48 @@
 .general-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	justify-content: space-between;
 }
 
 .general-button {
-    text-transform: capitalize;
+	text-transform: capitalize;
 }
 
 .general-button.link {
-    color: inherit;
+	color: inherit;
 }
 
 .general-button-text {
-    padding-left: 6.31px;
-    padding-right: 6.9px;
-    font-size: 14px;
+	padding-left: 6.31px;
+	padding-right: 6.9px;
+	font-size: 14px;
 }
 
 .general-table-container {
-    margin-top: 8px;
-    font-size: 15px;
+	margin-top: 8px;
+	font-size: 15px;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+.general-table-container::-webkit-scrollbar {
+	display: none;
+}
+
+/* TABLET */
+@media (min-width: 46.25em) and (max-width: 63.9375em) {
+	.btn_container {
+		width: 100%;
+		justify-content: flex-end !important;
+		margin-top: 10px;
+	}
+}
+
+/* MOBILE */
+@media (max-width: 46.25em) {
+	.btn_container {
+		width: 100%;
+		justify-content: flex-end !important;
+		margin-top: 10px;
+	}
 }

@@ -1,137 +1,113 @@
 import {
-    getStore,
-    removeStore,
-    setStore,
+	getStore,
+	removeStore,
+	setStore,
 } from '../utils/localStore/localStore';
 import { setData } from '../app/reducer';
 import routers from '../routers/routers';
 import { authGet, authPost } from '../utils/Axios/axiosInstance';
 // REGISTER USER
 export const authRegisterSV = async (props = {}) => {
-    const { email, password, username, history, setIsProcess, setSnackbar } =
-        props;
-    const resPost = await authPost('register', {
-        email: email,
-        password: password,
-        username: username,
-    });
-    // console.log('authRegisterSV: ', resPost);
-    switch (resPost.code) {
-        case 0:
-            setIsProcess(false);
-            setSnackbar({
-                open: true,
-                type: 'success',
-                message: resPost?.message || 'Đăng ký thành công',
-            });
-            history(routers.login);
-            break;
-        case 1:
-        case 2:
-        case 304:
-        case 500:
-            setIsProcess(false);
-            setSnackbar({
-                open: true,
-                type: 'error',
-                message: resPost?.message || 'Đăng ký thất bại',
-            });
-            break;
-        default:
-            break;
-    }
+	const { email, password, username, history, setIsProcess, setSnackbar } =
+		props;
+	try {
+		const resPost = await authPost('register/admin', {
+			email: email,
+			password: password,
+			username: username,
+		});
+		console.log('authRegisterSV: ', resPost);
+		setIsProcess(false);
+		setSnackbar({
+			open: true,
+			type: 'success',
+			message: resPost?.message || 'Đăng ký thành công',
+		});
+		history(routers.login);
+	} catch (err) {
+		setIsProcess(false);
+		setSnackbar({
+			open: true,
+			type: 'error',
+			message: err?.response?.data?.message || 'Đăng ký thất bại',
+		});
+	}
 };
 // LOGIN AUTHEN
 export const authLoginSV = async (props = {}) => {
-    const { email, password, setSnackbar, dispatch, history, setIsProcess } =
-        props;
-    const resPost = await authPost('login', {
-        email: email,
-        password: password,
-    });
-    // console.log('authLoginSV: ', resPost);
-    switch (resPost.code) {
-        case 0:
-            if (
-                resPost?.data?.user?.payment.rule !== 'admin' &&
-                resPost?.data?.user?.payment.rule !== 'manager'
-            ) {
-                setSnackbar({
-                    open: true,
-                    type: 'error',
-                    message: 'Tài khoản của bạn không có quyền truy cập',
-                });
-                setIsProcess(false);
-                return;
-            }
-            await setStore({
-                token: resPost?.data?.accessToken,
-                username: resPost?.data?.user?.payment?.username,
-                email: resPost?.data?.user?.payment?.email,
-                rule: resPost?.data?.user?.payment.rule,
-                rank: resPost?.data?.user?.rank,
-                id: resPost?.data?.user?._id,
-                balance: resPost?.data?.user?.Wallet?.balance,
-            });
-            await dispatch(
-                setData({
-                    currentUser: getStore(),
-                })
-            );
-            setIsProcess(false);
-            setSnackbar({
-                open: true,
-                type: 'success',
-                message: resPost?.message || 'Đăng nhập thành công',
-            });
-            history(routers.dashboard);
-            break;
-        case 1:
-        case 2:
-        case 304:
-        case 500:
-            setIsProcess(false);
-            setSnackbar({
-                open: true,
-                type: 'error',
-                message: resPost?.message || 'Đăng nhập thất bại',
-            });
-            break;
-        default:
-            break;
-    }
+	const { email, password, setSnackbar, dispatch, history, setIsProcess } =
+		props;
+	try {
+		const resPost = await authPost('login', {
+			username: email,
+			password: password,
+		});
+		// console.log('authLoginSV: ', resPost);
+		if (
+			resPost?.metadata?.user?.payment.roles !== 'admin' &&
+			resPost?.metadata?.user?.payment.roles !== 'manager'
+		) {
+			setSnackbar({
+				open: true,
+				type: 'error',
+				message: 'Tài khoản của bạn không có quyền truy cập',
+			});
+			setIsProcess(false);
+			return;
+		}
+		await setStore({
+			token: resPost?.metadata?.token,
+			username: resPost?.metadata?.user?.payment?.username,
+			email: resPost?.metadata?.user?.payment?.email,
+			rule: resPost?.metadata?.user?.payment.roles,
+			rank: resPost?.metadata?.user?.rank,
+			id: resPost?.metadata?.user?._id,
+			balance: resPost?.metadata?.user?.Wallet?.balance,
+		});
+		await dispatch(
+			setData({
+				currentUser: getStore(),
+			}),
+		);
+		setIsProcess(false);
+		setSnackbar({
+			open: true,
+			type: 'success',
+			message: resPost?.message || 'Đăng nhập thành công',
+		});
+		history(routers.dashboard);
+	} catch (err) {
+		setIsProcess(false);
+		setSnackbar({
+			open: true,
+			type: 'error',
+			message: err?.response?.data?.message || 'Đăng nhập thất bại',
+		});
+	}
 };
 // LOGOUT AUTHEN
 export const authLogoutSV = async (props = {}) => {
-    const { id_user, history, setSnackbar, dispatch } = props;
-    const resGet = await authGet(`logout/${id_user}`, {});
-    // console.log('authLogoutSV: ', resGet);
-    switch (resGet.code) {
-        case 0:
-            await removeStore();
-            await dispatch(
-                setData({
-                    currentUser: getStore(),
-                })
-            );
-            setSnackbar({
-                open: true,
-                type: 'success',
-                message: resGet?.message || 'Đăng xuất thành công',
-            });
-            history(routers.login);
-            break;
-        case 1:
-        case 2:
-        case 304:
-        case 500:
-            setSnackbar({
-                open: true,
-                type: 'error',
-                message: resGet?.message || 'Đăng xuất thất bại',
-            });
-            break;
-        default:
-            break;
-    }
+	const { id_user, history, setSnackbar, dispatch } = props;
+	try {
+		const resGet = await authGet(`logout/${id_user}`, {});
+		console.log('authLogoutSV: ', resGet);
+		await removeStore();
+		await dispatch(
+			setData({
+				currentUser: getStore(),
+			}),
+		);
+		setSnackbar({
+			open: true,
+			type: 'success',
+			message: resGet?.message || 'Đăng xuất thành công',
+		});
+		history(routers.login);
+	} catch (err) {
+		setSnackbar({
+			open: true,
+			type: 'error',
+			message: err?.response?.data?.message || 'Đăng xuất thất bại',
+		});
+	}
 };

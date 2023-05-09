@@ -12,120 +12,120 @@ import { Icons, ProgressLine } from './components';
 import axios from 'axios';
 
 function App() {
-    const { state, dispatch } = useAppContext();
-    const { currentUser } = state.set;
-    // const { del, cre, upd, error, success } = state.set.message;
-    const [scrollToTop, setScrollToTop] = React.useState(false);
-    const [getApp, setGetApp] = React.useState(false);
-    const [isLoading, setIsLoading] = React.useState(false);
-    const [valueProgress, setValueProgress] = React.useState(0);
-    const Routers = privateRouter;
-    const history = useNavigate();
-    const toogleGetApp = (e) => {
-        e.stopPropagation();
-        setGetApp(!getApp);
-    };
-    const getAppTrue = (e) => {
-        e.stopPropagation();
-        setGetApp(true);
-    };
-    useEffect(() => {
-        const handleScrollToTop = () => {
-            const heightY = window.scrollY;
-            if (heightY > 100) {
-                setScrollToTop(true);
-            } else {
-                setScrollToTop(false);
-            }
-        };
-        window.addEventListener('scroll', handleScrollToTop);
-        if (currentUser && currentUser?.rule) {
-            dispatch(
-                actions.setData({
-                    ...state.set,
-                    currentUser: currentUser,
-                })
-            );
-        } else {
-            if (
-                !currentUser &&
-                !!publicRouter.includes(window.location.pathname)
-            ) {
-                history(routers.login);
-            } else {
-                publicRouter.includes(window.location.pathname);
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-    const downloadFile = async (url, name) => {
-        setIsLoading(true);
-        setGetApp(true);
-        await axios({
-            url: url,
-            method: 'GET',
-            responseType: 'blob',
-            onDownloadProgress: (progressEvent) => {
-                let percentCompleted = Math.round(
-                    (progressEvent.loaded * 100) / progressEvent.total
-                );
-                setValueProgress(percentCompleted);
-                if (percentCompleted >= 100) {
-                    setTimeout(() => {
-                        setIsLoading(false);
-                        setGetApp(false);
-                        setValueProgress(0);
-                    }, 2000);
-                }
-            },
-        })
-            .then((res) => {
-                const url = window.URL.createObjectURL(res.data);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = name;
-                a.click();
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-    return (
-        <>
-            <div className='app'>
-                <Routes>
-                    {Routers.map((route, index) => {
-                        const Layout = route.layout
-                            ? route.layout
-                            : route.layout === null
-                            ? Fragment
-                            : DefaultLayout;
-                        const Page = route.component;
-                        return (
-                            <Route
-                                key={index}
-                                path={route.path}
-                                element={
-                                    <Layout>
-                                        <Page />
-                                    </Layout>
-                                }
-                            />
-                        );
-                    })}
-                </Routes>
-                {scrollToTop && (
-                    <div
-                        className='scroll-to-top-container'
-                        onClick={() => {
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }}
-                    >
-                        <i className='fa-solid fa-arrow-up'></i>
-                    </div>
-                )}
-            </div>
-            <div
+	const { state, dispatch } = useAppContext();
+	const { currentUser } = state.set;
+	// const { del, cre, upd, error, success } = state.set.message;
+	const [scrollToTop, setScrollToTop] = React.useState(false);
+	const [getApp, setGetApp] = React.useState(false);
+	const [isLoading, setIsLoading] = React.useState(false);
+	const [valueProgress, setValueProgress] = React.useState(0);
+	const Routers = privateRouter;
+	const history = useNavigate();
+	const toogleGetApp = (e) => {
+		e.stopPropagation();
+		setGetApp(!getApp);
+	};
+	const getAppTrue = (e) => {
+		e.stopPropagation();
+		setGetApp(true);
+	};
+	useEffect(() => {
+		const handleScrollToTop = () => {
+			const heightY = window.scrollY;
+			if (heightY > 100) {
+				setScrollToTop(true);
+			} else {
+				setScrollToTop(false);
+			}
+		};
+		window.addEventListener('scroll', handleScrollToTop);
+		if (currentUser && currentUser?.rule) {
+			dispatch(
+				actions.setData({
+					...state.set,
+					currentUser: currentUser,
+				}),
+			);
+		} else {
+			if (
+				!currentUser &&
+				!!publicRouter.includes(window.location.pathname)
+			) {
+				history(routers.login);
+			} else {
+				publicRouter.includes(window.location.pathname);
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+	const downloadFile = async (url, name) => {
+		setIsLoading(true);
+		setGetApp(true);
+		await axios({
+			url: url,
+			method: 'GET',
+			responseType: 'blob',
+			onDownloadProgress: (progressEvent) => {
+				let percentCompleted = Math.round(
+					(progressEvent.loaded * 100) / progressEvent.total,
+				);
+				setValueProgress(percentCompleted);
+				if (percentCompleted >= 100) {
+					setTimeout(() => {
+						setIsLoading(false);
+						setGetApp(false);
+						setValueProgress(0);
+					}, 2000);
+				}
+			},
+		})
+			.then((res) => {
+				const url = window.URL.createObjectURL(res.data);
+				const a = document.createElement('a');
+				a.href = url;
+				a.download = name;
+				a.click();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+	return (
+		<>
+			<div className="app">
+				<Routes>
+					{Routers.map((route, index) => {
+						const Layout = route.layout
+							? route.layout
+							: route.layout === null
+							? Fragment
+							: DefaultLayout;
+						const Page = route.component;
+						return (
+							<Route
+								key={index}
+								path={route.path}
+								element={
+									<Layout>
+										<Page />
+									</Layout>
+								}
+							/>
+						);
+					})}
+				</Routes>
+				{scrollToTop && (
+					<div
+						className="scroll-to-top-container"
+						onClick={() => {
+							window.scrollTo({ top: 0, behavior: 'smooth' });
+						}}
+					>
+						<i className="fa-solid fa-arrow-up"></i>
+					</div>
+				)}
+			</div>
+			{/* <div
                 className='noSupport'
                 style={{
                     backgroundImage: 'url(/images/bg-login.png)',
@@ -137,8 +137,8 @@ function App() {
                 >
                     Website chỉ hỗ trợ trên PC!
                 </Alert>
-            </div>
-            {/* <div
+            </div> */}
+			{/* <div
                 className='btn-down-app'
                 onClick={toogleGetApp}
                 style={{ right: scrollToTop ? '70px' : '20px' }}
@@ -192,8 +192,8 @@ function App() {
                     </div>
                 )}
             </div> */}
-        </>
-    );
+		</>
+	);
 }
 
 export default App;

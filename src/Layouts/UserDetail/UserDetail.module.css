@@ -1,57 +1,88 @@
 .buySellDetail-container {
-    --cols: 2;
-    --spacing: 8px;
-    display: flex;
-    flex-wrap: wrap;
+	--cols: 2;
+	--spacing: 8px;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .detail-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 32px;
-    width: calc((100% / var(--cols)) - (var(--spacing) * 2));
-    margin: var(--spacing);
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	border: 1px solid #eee;
+	border-radius: 8px;
+	padding: 32px;
+	width: calc((100% / var(--cols)) - (var(--spacing) * 2));
+	margin: var(--spacing);
 }
 
 .btn {
-    margin-bottom: 5px;
-    margin-left: 8px;
+	margin-bottom: 5px;
+	margin-left: 8px;
 }
 
 .detail-title {
-    color: #424242;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 22px;
+	color: #424242;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 22px;
+	word-break: break-all;
 }
 
 .document-user-item {
-    --cols: 2;
-    --spacing: 8px;
-    display: flex;
-    flex-wrap: nowrap;
-    width: 100%;
+	--cols: 2;
+	--spacing: 8px;
+	display: flex;
+	flex-wrap: nowrap;
+	width: 100%;
+	min-height: 170px;
 }
 
 .document-user-item-image-view {
-    /* width: 100%; */
-    display: flex;
-    width: 50%;
-    max-height: 200px;
-    margin: var(--spacing);
-    object-fit: fill;
-    image-rendering: auto;
-    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
-    border-radius: 8px;
-    cursor: pointer;
+	/* width: 100%; */
+	display: flex;
+	width: 50%;
+	max-height: 200px;
+	margin: var(--spacing);
+	object-fit: fill;
+	image-rendering: auto;
+	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
+	border-radius: 8px;
+	cursor: pointer;
 }
 
 .document-user-title {
-    color: #424242;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 22px;
+	color: #424242;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 22px;
+}
+
+/* TABLET */
+@media (min-width: 46.25em) and (max-width: 63.9375em) {
+	.buySellDetail-container {
+		--cols: 1;
+	}
+	.detail-container {
+		padding: 8px;
+		margin: 0;
+		width: 100%;
+		margin-bottom: 8px;
+	}
+}
+/* MOBILE */
+@media (max-width: 46.25em) {
+	.buySellDetail-container {
+		--cols: 1;
+	}
+	.detail-container {
+		padding: 8px;
+		margin: 0;
+		width: 100%;
+		margin-bottom: 8px;
+	}
+	.button {
+		margin: 0 0 8px 0 !important;
+		width: 100%;
+	}
 }

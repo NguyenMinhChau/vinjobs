@@ -1,82 +1,96 @@
 .general-top {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
 }
 
 .general-button {
-    text-transform: capitalize;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	text-transform: capitalize;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .general-button-text {
-    padding-left: 6.31px;
-    padding-right: 6.9px;
-    font-size: 14px;
+	padding-left: 6.31px;
+	padding-right: 6.9px;
+	font-size: 14px;
 }
 
 .search {
-    width: 100%;
+	width: 100%;
 }
 
 .search-title {
-    font-size: 16px;
-    margin-bottom: 8px;
+	font-size: 16px;
+	margin-bottom: 8px;
 }
 
 .chart-container {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+	margin-top: 20px;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
 }
 
 .chart-item-container {
-    --cols: 4;
-    --spacing: 8px;
-    display: flex;
-    align-items: center;
+	--cols: 4;
+	--spacing: 8px;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
 }
 
 .item {
-    width: calc(100% / var(--cols) - var(--spacing));
-    margin: var(--spacing);
-    padding: 12px 8px;
-    border-radius: 12px;
-    border: 1px solid var(--color-primary);
-    background-color: var(--primary-hover);
-    text-align: center;
-    font-size: 18px;
+	width: calc(100% / var(--cols) - (var(--spacing) * 2));
+	margin: var(--spacing);
+	padding: 12px 8px;
+	border-radius: 12px;
+	border: 1px solid var(--color-primary);
+	background-color: var(--primary-hover);
+	text-align: center;
+	font-size: 18px;
 }
 
 .item .title {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .title-link {
-    color: inherit;
-    text-decoration: none;
-    font-weight: bold;
+	color: inherit;
+	text-decoration: none;
+	font-weight: bold;
 }
 
 .title-link:hover {
-    color: inherit;
-    text-decoration: none;
+	color: inherit;
+	text-decoration: none;
 }
 
 .general-table-container {
-    margin-top: 20px;
+	margin-top: 20px;
 }
 
 .search-coin {
-    margin-bottom: 8px;
+	margin-bottom: 8px;
 }
 
 .title-header {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 8px;
-    text-transform: uppercase;
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 8px;
+	text-transform: uppercase;
+}
+/* TABLET */
+@media (min-width: 46.25em) and (max-width: 63.9375em) {
+	.chart-item-container {
+		--cols: 2;
+	}
+}
+
+/* MOBILE */
+@media (max-width: 46.25em) {
+	.chart-item-container {
+		--cols: 1;
+	}
 }

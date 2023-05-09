@@ -11,79 +11,94 @@ import styles from './Sidebar.module.css';
 
 const cx = className.bind(styles);
 const LIST_SIDEBAR = [
-    {
-        name: 'Dashboard',
-        path: routers.dashboard,
-        icon: <Icons.DashboardIcon className={`${cx('custom-icon')}`} />,
-    },
-    {
-        name: 'Nạp tiền',
-        path: routers.deposits,
-        icon: <Icons.DepositsIcon className={`${cx('custom-icon')}`} />,
-    },
-    {
-        name: 'Rút tiền',
-        path: routers.withdraw,
-        icon: <Icons.WithdrawIcon className={`${cx('custom-icon')}`} />,
-    },
-    {
-        name: 'Hợp đồng USD',
-        path: routers.contractUsd,
-        icon: <Icons.ContratUsdIcon className={`${cx('custom-icon')}`} />,
-    },
-    {
-        name: 'Hợp đồng nông nghiệp',
-        path: routers.contractAgriculture,
-        icon: <Icons.ContratAgriIcon className={`${cx('custom-icon')}`} />,
-    },
-    {
-        name: 'Tài khoản',
-        path: routers.user,
-        icon: <Icons.UserIcon className={`${cx('custom-icon')}`} />,
-    },
+	{
+		name: 'Dashboard',
+		path: routers.dashboard,
+		icon: <Icons.DashboardIcon className={`${cx('custom-icon')}`} />,
+	},
+	{
+		name: 'Nạp tiền',
+		path: routers.deposits,
+		icon: <Icons.DepositsIcon className={`${cx('custom-icon')}`} />,
+	},
+	{
+		name: 'Rút tiền',
+		path: routers.withdraw,
+		icon: <Icons.WithdrawIcon className={`${cx('custom-icon')}`} />,
+	},
+	{
+		name: 'Hợp đồng USD',
+		path: routers.contractUsd,
+		icon: <Icons.ContratUsdIcon className={`${cx('custom-icon')}`} />,
+	},
+	{
+		name: 'Hợp đồng nông nghiệp',
+		path: routers.contractAgriculture,
+		icon: <Icons.ContratAgriIcon className={`${cx('custom-icon')}`} />,
+	},
+	{
+		name: 'Tài khoản',
+		path: routers.user,
+		icon: <Icons.UserIcon className={`${cx('custom-icon')}`} />,
+	},
+	{
+		name: 'Bài đăng',
+		path: routers.content,
+		icon: <Icons.ContentIcon className={`${cx('custom-icon')}`} />,
+	},
 ];
 const LIST_SIDEBAR_USER = [];
 
 function Sidebar({ className }) {
-    const { state, dispatch } = useAppContext();
-    const { currentUser } = state.set;
-    const classed = cx('sidebar-container', className);
-    const handleBlacklistUser = () => {
-        dispatch(
-            actions.setData({
-                ...state.set,
-                datas: {
-                    ...state.set.datas,
-                    dataBlacklistUser: [],
-                },
-                pagination: {
-                    page: 1,
-                    show: 10,
-                },
-            })
-        );
-    };
-    return (
-        <div className={classed}>
-            {LIST_SIDEBAR.map((item, index) => (
-                <NavLink
-                    onClick={handleBlacklistUser}
-                    to={item.path}
-                    className={(nav) =>
-                        cx('menu-item', {
-                            active: nav.isActive,
-                        })
-                    }
-                    key={index}
-                >
-                    {item.icon}
-                    <span className={cx('title')}>{item.name}</span>
-                </NavLink>
-            ))}
-        </div>
-    );
+	const { state, dispatch } = useAppContext();
+	const { currentUser } = state.set;
+	const { openMenuMobile } = state.toggle;
+	const classed = cx(
+		'sidebar-container',
+		openMenuMobile ? 'open' : 'close',
+		className,
+	);
+	const handleBlacklistUser = () => {
+		dispatch(
+			actions.setData({
+				...state.set,
+				datas: {
+					...state.set.datas,
+					dataBlacklistUser: [],
+				},
+				pagination: {
+					page: 1,
+					show: 10,
+				},
+			}),
+		);
+		dispatch(
+			actions.toggleModal({
+				openMenuMobile: false,
+			}),
+		);
+	};
+	return (
+		<div className={classed}>
+			{LIST_SIDEBAR.map((item, index) => (
+				<NavLink
+					onClick={handleBlacklistUser}
+					to={item.path}
+					className={(nav) =>
+						cx('menu-item', {
+							active: nav.isActive,
+						})
+					}
+					key={index}
+				>
+					{item.icon}
+					<span className={cx('title')}>{item.name}</span>
+				</NavLink>
+			))}
+		</div>
+	);
 }
 Sidebar.propTypes = {
-    className: PropTypes.string,
+	className: PropTypes.string,
 };
 export default Sidebar;

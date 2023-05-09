@@ -1,15 +1,14 @@
 .login-forgotpwd-link {
-    color: var(--color-primary);
-    font-weight: 600;
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 18px;
-    text-align: right;
-    width: 100%;
-    margin: 14px 0;
+	color: var(--color-primary);
+	font-weight: 700;
+	font-size: 14px;
+	line-height: 18px;
+	text-align: right;
+	width: 100%;
+	margin: 14px 0;
 }
 
 .login-forgotpwd-link:hover {
-    color: var(--color-primary);
-    text-decoration: none;
+	color: var(--color-primary);
+	text-decoration: none;
 }

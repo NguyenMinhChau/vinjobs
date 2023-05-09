@@ -1,32 +1,50 @@
 .header-container {
-    background-color: var(--color-white);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
+	background-color: var(--color-white);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px;
 }
 
 .header-logo {
-    width: 139px;
-    height: 39px;
+	width: 139px;
+	height: 39px;
 }
 
 .header-infouser-container {
-    display: flex;
-    align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 .iconsBell {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .ml10 {
-    margin-left: 10px;
+	margin-left: 10px;
 }
 
 .text-wallet {
-    margin-right: 12px;
-    font-size: 18px;
-    color: var(--color-gray);
-    font-weight: bold;
+	/* margin-right: 12px; */
+	font-size: 18px;
+	color: var(--color-gray);
+	font-weight: bold;
+}
+.icon_menu_container {
+	display: none;
+	font-size: 20px;
+}
+
+/* MOBILE */
+@media (max-width: 46.25em) {
+	.header-logo {
+		width: 50px;
+	}
+	.icon_menu_container {
+		display: inline-block;
+	}
+	.logo_container {
+		flex: 1;
+		margin-left: 20px;
+	}
 }

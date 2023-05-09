@@ -1,31 +1,32 @@
 .button {
-    background: var(--color-primary);
-    border-radius: 8px;
-    height: 46px;
-    justify-content: center;
-    min-width: 138px;
-    padding: 12px 24px;
-    border: none !important;
-    outline: none !important;
-    font-size: 16px;
-    font-weight: bold;
-    transition: all 0.2s ease-in-out;
+	background: var(--color-primary);
+	border-radius: 8px;
+	height: 46px;
+	justify-content: center;
+	min-width: 138px;
+	padding: 12px 24px;
+	border: none !important;
+	outline: none !important;
+	font-size: 16px;
+	font-weight: bold;
+	transition: all 0.2s ease-in-out;
 }
 
-.button+.button {
-    margin-left: 16px;
+.button + .button {
+	margin-left: 16px;
 }
 
 .button.disabled {
-    pointer-events: none;
-    user-select: none;
-    cursor: default !important;
-    opacity: 0.5 !important;
+	pointer-events: none;
+	user-select: none;
+	-webkit-user-select: none;
+	cursor: default !important;
+	opacity: 0.5 !important;
 }
 
 .button:hover {
-    background: var(--primary-hover);
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
+	background: var(--primary-hover);
+	cursor: pointer;
+	text-decoration: none;
+	color: inherit;
 }
