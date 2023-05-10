@@ -1,41 +1,10 @@
-export const validateCase0 = (res, typeMsg, props) => {
-    props.dispatch(
-        props.actions.setData({
-            ...props.state.set,
-            message: {
-                [typeMsg]: res.message,
-            },
-        })
-    );
-    props.dispatch(
-        props.actions.toggleModal({
-            ...props.state.toggle,
-            modalDelete: false,
-            modalStatus: false,
-            alertModal: true,
-        })
-    );
-};
+const passwordRegex =
+	/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+const emailRegrex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
 
-export const validateCase1_2 = (res, props) => {
-    props.dispatch(
-        props.actions.setData({
-            ...props.state.set,
-            message: {
-                error: res.message,
-            },
-        })
-    );
-    props.dispatch(
-        props.actions.toggleModal({
-            ...props.state.toggle,
-            modalDelete: false,
-            modalStatus: false,
-            alertModal: true,
-        })
-    );
-    window.screenTop({
-        top: 0,
-        behavior: 'smooth',
-    });
+export const checkPwd = (password) => {
+	return passwordRegex.test(password);
+};
+export const checkEmail = (email) => {
+	return emailRegrex.test(email);
 };
