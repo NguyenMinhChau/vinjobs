@@ -32,7 +32,9 @@ export default function Register() {
 			open: false,
 		});
 	};
-	const handleRegister = async () => {};
+	const handleRegister = async () => {
+		/* TODO document why this async arrow function is empty */
+	};
 	const onEnter = (e) => {
 		handleRegister();
 	};

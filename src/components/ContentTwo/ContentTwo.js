@@ -27,12 +27,12 @@ export default function ContentTwo({
 					{titleHeader}
 				</div>
 				<div className={`${cx('content-left')}`}>
-					<div
+					{/* <div
 						className={`${cx('left')}`}
 						style={{ left: left, top: top }}
 					>
 						{textVerticle}
-					</div>
+					</div> */}
 					<div className={`${cx('middle')}`}>
 						<div className={`${cx('middle_title')} mb12`}>
 							{title1}
@@ -65,13 +65,13 @@ export default function ContentTwo({
 				<div className={`${cx('form')}`}>
 					<div className={`${cx('top')}`}>
 						<FormInput
-							placeholder="Your name"
+							placeholder="Họ và tên"
 							type="text"
 							name="username"
 							classNameField={`${cx('input-cus')}`}
 						/>
 						<FormInput
-							placeholder="Your phone"
+							placeholder="Số điện thoại"
 							type="text"
 							name="phone"
 							classNameField={`${cx('input-cus')}`}
@@ -81,11 +81,11 @@ export default function ContentTwo({
 						<textarea
 							rows="6"
 							className={`${cx('textarea')}`}
-							placeholder="Say something..."
+							placeholder="Bạn đang nghĩ gì?"
 						></textarea>
 					</div>
 					<ButtonCus
-						btnText="Sumbit"
+						btnText="Gửi"
 						className={`${cx('btn-cus')} mt12`}
 					/>
 				</div>

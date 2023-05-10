@@ -1,70 +1,70 @@
 .btn {
-    position: relative;
-    display: inline-block;
-    padding: 12px 50px;
-    background-color: var(--color-white);
-    color: var(--color-primary);
-    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-    font-weight: bold;
-    font-family: 'Grind Demolished', sans-serif;
+	position: relative;
+	display: inline-block;
+	padding: 12px 50px;
+	background-color: var(--color-white);
+	color: var(--color-primary);
+	transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+	font-weight: bold;
+	/* font-family: 'Grind Demolished', sans-serif; */
 }
 
 .btn::after {
-    content: '';
-    position: absolute;
-    background-image: none;
-    bottom: 0;
-    border-radius: 0;
-    top: 0;
-    width: 0;
-    height: 0;
-    border-top: 43px solid var(--color-white);
-    left: -20px;
-    border-left: 20px solid transparent;
-    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+	content: '';
+	position: absolute;
+	background-image: none;
+	bottom: 0;
+	border-radius: 0;
+	top: 0;
+	width: 0;
+	height: 0;
+	border-top: 43px solid var(--color-white);
+	left: -20px;
+	border-left: 20px solid transparent;
+	transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .btn::before {
-    content: '';
-    position: absolute;
-    background-image: none;
-    bottom: 0;
-    border-radius: 0;
-    top: 0;
-    width: 0;
-    height: 0;
-    border-top: 43px solid var(--color-white);
-    right: -20px;
-    border-right: 20px solid transparent;
-    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+	content: '';
+	position: absolute;
+	background-image: none;
+	bottom: 0;
+	border-radius: 0;
+	top: 0;
+	width: 0;
+	height: 0;
+	border-top: 43px solid var(--color-white);
+	right: -20px;
+	border-right: 20px solid transparent;
+	transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .btn:hover {
-    background-color: var(--color-primary);
-    color: var(--color-white);
+	background-color: var(--color-primary);
+	color: var(--color-white);
 }
 
 .btn:hover::after,
 .btn:hover::before {
-    border-top-color: var(--color-primary);
+	border-top-color: var(--color-primary);
 }
 
 /* MOBILE */
 @media (max-width: 46.25em) {
-    .btn {
-        font-size: 12px;
-        padding: 10px 30px;
-    }
+	.btn {
+		font-size: 12px;
+		padding: 10px 30px;
+	}
 
-    .btn::after {
-        border-top: 36px solid var(--color-white);
-        left: -10px;
-        border-left: 10px solid transparent;
-    }
+	.btn::after {
+		border-top: 36px solid var(--color-white);
+		left: -10px;
+		border-left: 10px solid transparent;
+	}
 
-    .btn::before {
-        border-top: 36px solid var(--color-white);
-        right: -10px;
-        border-right: 10px solid transparent;
-    }
+	.btn::before {
+		border-top: 36px solid var(--color-white);
+		right: -10px;
+		border-right: 10px solid transparent;
+	}
 }

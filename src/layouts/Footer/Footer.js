@@ -12,9 +12,9 @@ export default function Footer() {
 		<div className={`${cx('container')}`}>
 			<div className={`${cx('top')} mb8`}>
 				<div className={`${cx('top-text')}`}>
-					© 2020 - {new Date().getFullYear()}{' '}
+					© 2023 - {new Date().getFullYear()}{' '}
 					<Link to="/" className={`${cx('link')}`}>
-						VIN JOBS
+						VINJOB
 					</Link>{' '}
 					All Rights Reserved.
 				</div>
@@ -28,10 +28,15 @@ export default function Footer() {
 			</div>
 			<div className={`${cx('bottom')}`}>
 				<div className={`${cx('bottom-text')}`}>
-					Web Development by:{' '}
-					<Link to="/" className={`${cx('link')}`}>
+					Phát triển bởi:{' '}
+					<a
+						href="https://fiam.vn"
+						target="_blank"
+						rel="noreferrer"
+						className={`${cx('link')}`}
+					>
 						AIKING GROUP
-					</Link>
+					</a>
 				</div>
 			</div>
 		</div>

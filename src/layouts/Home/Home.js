@@ -13,6 +13,7 @@ import {
 } from '../../components';
 import { routers } from '../../routers';
 import { Link } from 'react-router-dom';
+import LOGO_COMPANY from '../../assets/images/logo-company.png';
 
 const cx = className.bind(styles);
 
@@ -24,7 +25,7 @@ export default function Home() {
 		<div className={`${cx('container')}`}>
 			<SliderHome
 				urlImage="https://images.unsplash.com/photo-1502945015378-0e284ca1a5be?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8am9ic3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=2000&q=2000"
-				title1="VIN JOBS © "
+				title1="VINJOB © "
 				title2="AIKING GROUP"
 				desc="Block A, Tòa nhà RiverGate, 151-155 Bến Vân Đồn, Phường
                         6, Quận 4,TP.HCM"
@@ -33,8 +34,8 @@ export default function Home() {
 			/>
 			<div className={`${cx('wrapper-content')}`}>
 				<ContentOne
-					textVerticle="Who we are"
-					title1="AIKING"
+					// textVerticle="Chúng tôi là ai?"
+					title1="VINJOB "
 					title2="MASKS"
 					desc={[
 						'Immortal Masks is the leader in Silicone Masks and Custom Creatures created by REAL Hollywood FX Artists! Our Hyper Realistic Silicone Masks are created with our amazing FLEX FUSION SYSTEM to ensure the most durable silicone masks in the industry.',
@@ -42,17 +43,17 @@ export default function Home() {
 					]}
 					btnText="Về chúng tôi"
 					urlBtn={routers.home}
-					urlImage="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fGNvbXBhbnl8ZW58MHx8MHx8&auto=format&fit=crop&w=2000&q=2000"
+					urlImage={LOGO_COMPANY}
 				/>
 				<ContentTwo
 					titleHeader="NOW LAUNCHED!"
-					textVerticle="NEW THREADS"
-					title1="AIKING"
+					// textVerticle="NEW THREADS"
+					title1="VINJOB"
 					title2="THREADS"
 					desc={[
 						'Our new Immortal Threads product line has launched! The highest possible quality costumes to go along with your Immortal Mask!',
 					]}
-					urlImage="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fGNvbXBhbnl8ZW58MHx8MHx8&auto=format&fit=crop&w=2000&q=2000"
+					urlImage={LOGO_COMPANY}
 				>
 					<Link to="/" className={`${cx('link')}`}>
 						Take a look!
@@ -63,25 +64,25 @@ export default function Home() {
 					data-aos="flip-right"
 				>
 					<div className={`${cx('title-header')}`}>
-						MEET{' '}
-						<span className={`${cx('text-primary')}`}>OUR</span>{' '}
-						OWNERS
+						GẶP GỠ{' '}
+						<span className={`${cx('text-primary')}`}>CEO</span> CỦA
+						CHÚNG TÔI
 					</div>
 					<div className={`${cx('list-container')}`}>
 						<OwnerItem
-							urlImage="https://images.unsplash.com/photo-1554232456-8727aae0cfa4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGNvbXBhbnl8ZW58MHx8MHx8&auto=format&fit=crop&w=2000&q=2000"
+							urlImage={LOGO_COMPANY}
 							urlBtn="/"
 							nameOwner="ANDREW FREEMAN"
 							positionOwner="CO-OWNER/FOUNDER"
 						/>
 						<OwnerItem
-							urlImage="https://images.unsplash.com/photo-1554232456-8727aae0cfa4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGNvbXBhbnl8ZW58MHx8MHx8&auto=format&fit=crop&w=2000&q=2000"
+							urlImage={LOGO_COMPANY}
 							urlBtn="/"
 							nameOwner="ANDREW FREEMAN"
 							positionOwner="CO-OWNER/FOUNDER"
 						/>
 						<OwnerItem
-							urlImage="https://images.unsplash.com/photo-1554232456-8727aae0cfa4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGNvbXBhbnl8ZW58MHx8MHx8&auto=format&fit=crop&w=2000&q=2000"
+							urlImage={LOGO_COMPANY}
 							urlBtn="/"
 							nameOwner="ANDREW FREEMAN"
 							positionOwner="CO-OWNER/FOUNDER"
@@ -93,8 +94,8 @@ export default function Home() {
 					data-aos="flip-down"
 				>
 					<div className={`${cx('title-header')}`}>
-						<span className={`${cx('text-primary')}`}>AIKING</span>{' '}
-						GETS AROUND
+						ĐỒNG HÀNH CÙNG{' '}
+						<span className={`${cx('text-primary')}`}>VINJOB</span>
 					</div>
 					<div className={`${cx('list-get-around-container')}`}>
 						<Swiper
@@ -117,7 +118,7 @@ export default function Home() {
 									<div
 										className={`${cx('image-get-around')}`}
 										style={{
-											backgroundImage: `url('https://images.unsplash.com/photo-1554232456-8727aae0cfa4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGNvbXBhbnl8ZW58MHx8MHx8&auto=format&fit=crop&w=2000&q=2000')`,
+											backgroundImage: `url(${LOGO_COMPANY})`,
 										}}
 									></div>
 								</div>
@@ -127,7 +128,7 @@ export default function Home() {
 									<div
 										className={`${cx('image-get-around')}`}
 										style={{
-											backgroundImage: `url('https://images.unsplash.com/photo-1554232456-8727aae0cfa4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGNvbXBhbnl8ZW58MHx8MHx8&auto=format&fit=crop&w=2000&q=2000')`,
+											backgroundImage: `url(${LOGO_COMPANY})`,
 										}}
 									></div>
 								</div>
@@ -137,7 +138,7 @@ export default function Home() {
 									<div
 										className={`${cx('image-get-around')}`}
 										style={{
-											backgroundImage: `url('https://images.unsplash.com/photo-1554232456-8727aae0cfa4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGNvbXBhbnl8ZW58MHx8MHx8&auto=format&fit=crop&w=2000&q=2000')`,
+											backgroundImage: `url(${LOGO_COMPANY})`,
 										}}
 									></div>
 								</div>
@@ -147,7 +148,7 @@ export default function Home() {
 									<div
 										className={`${cx('image-get-around')}`}
 										style={{
-											backgroundImage: `url('https://images.unsplash.com/photo-1554232456-8727aae0cfa4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGNvbXBhbnl8ZW58MHx8MHx8&auto=format&fit=crop&w=2000&q=2000')`,
+											backgroundImage: `url(${LOGO_COMPANY})`,
 										}}
 									></div>
 								</div>
@@ -157,7 +158,7 @@ export default function Home() {
 									<div
 										className={`${cx('image-get-around')}`}
 										style={{
-											backgroundImage: `url('https://images.unsplash.com/photo-1554232456-8727aae0cfa4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGNvbXBhbnl8ZW58MHx8MHx8&auto=format&fit=crop&w=2000&q=2000')`,
+											backgroundImage: `url(${LOGO_COMPANY})`,
 										}}
 									></div>
 								</div>
@@ -167,7 +168,7 @@ export default function Home() {
 									<div
 										className={`${cx('image-get-around')}`}
 										style={{
-											backgroundImage: `url('https://images.unsplash.com/photo-1554232456-8727aae0cfa4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGNvbXBhbnl8ZW58MHx8MHx8&auto=format&fit=crop&w=2000&q=2000')`,
+											backgroundImage: `url(${LOGO_COMPANY})`,
 										}}
 									></div>
 								</div>
@@ -177,38 +178,31 @@ export default function Home() {
 				</div>
 				<ContentTwo
 					titleHeader="NOW LAUNCHED!"
-					textVerticle="AIKING"
-					title1="AIKING"
+					// textVerticle="VINJOB"
+					title1="VINJOB"
 					title2="THREADS"
 					left="-30px"
 					top="30px"
 				>
 					<div className={`${cx('line')}`}>
-						<span className="fwb fz14 font-Grind-Demolished">
-							Physical:
-						</span>{' '}
-						BLOCK A, TÒA NHÀ RIVERGATE, 151-155 BẾN VÂN ĐỒN, PHƯỜNG
-						6, QUẬN 4,TP.HCM *Company open 9-5 Mon thru Friday. No
-						Drop ins, Appointment only.
+						<span className="fwb fz16">Địa chỉ:</span> BLOCK A, TÒA
+						NHÀ RIVERGATE, 151-155 BẾN VÂN ĐỒN, PHƯỜNG 6, QUẬN
+						4,TP.HCM.
 					</div>
 					<div className={`${cx('line')}`}>
-						<span className="fwb fz14 font-Grind-Demolished">
-							Phone:
-						</span>{' '}
+						<span className="fwb fz16">Số điện thoại:</span>{' '}
 						<a href="tel:0345335422">0345 335 422</a>
 					</div>
 					<div className={`${cx('line')}`}>
-						<span className="fwb fz14 font-Grind-Demolished">
-							Email:
-						</span>{' '}
-						<a href="mailto:aikinginvestment@gmail.com">
-							aikinginvesment@gmail.com
+						<span className="fwb fz16">Email:</span>{' '}
+						<a href="mailto:support@vinjob.com.vn">
+							support@vinjob.com.vn
 						</a>
 					</div>
 					<div className="flex-center mt30">
 						<ButtonCus
-							urlBtn="mailto:aikinginvestment@gmail.com"
-							btnText="Email us"
+							urlBtn="mailto:support@vinjob.com.vn"
+							btnText="Gửi mail cho chúng tôi"
 							className={`${cx('btn-cus')}`}
 						/>
 					</div>

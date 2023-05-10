@@ -33,7 +33,9 @@ export default function Login() {
 			open: false,
 		});
 	};
-	const handleLogin = async () => {};
+	const handleLogin = async () => {
+		/* TODO document why this async arrow function is empty */
+	};
 	const onEnter = (e) => {
 		handleLogin();
 	};

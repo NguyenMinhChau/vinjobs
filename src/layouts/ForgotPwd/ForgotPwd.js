@@ -32,7 +32,9 @@ export default function ForgotPwd() {
 			open: false,
 		});
 	};
-	const handleForgot = async () => {};
+	const handleForgot = async () => {
+		/* TODO document why this async arrow function is empty */
+	};
 	const onEnter = (e) => {
 		handleForgot();
 	};

@@ -1,0 +1,16 @@
+.skeleton_container {
+	--cols: 2;
+	--spacing: 8px;
+	display: flex;
+	flex-wrap: wrap;
+}
+.skeleton_item {
+	width: calc((100% / var(--cols)) - (var(--spacing) * 2));
+	margin: var(--spacing);
+}
+/* MOBILE */
+@media (max-width: 46.25em) {
+	.skeleton_container {
+		--cols: 1;
+	}
+}

@@ -32,7 +32,9 @@ export default function ResetPwd() {
 			open: false,
 		});
 	};
-	const handleSendOTP = async () => {};
+	const handleSendOTP = async () => {
+		/* TODO document why this async arrow function is empty */
+	};
 	const onEnter = (e) => {
 		handleSendOTP();
 	};

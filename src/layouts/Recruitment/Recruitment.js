@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import className from 'classnames/bind';
 import styles from './Recruitment.module.css';
-import { SliderHeader } from '../../components';
+import { SkeletonCP, SliderHeader } from '../../components';
 
 const cx = className.bind(styles);
 
@@ -17,6 +17,7 @@ export default function Recruitment() {
 				title2="DỤNG"
 				animateName="animate__fadeInBottomLeft"
 			/>
+			<SkeletonCP />
 		</div>
 	);
 }

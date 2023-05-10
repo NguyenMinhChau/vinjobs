@@ -27,8 +27,11 @@
 	transform: translate(-50%, -50%);
 	color: var(--color-white);
 	text-align: center;
-	font-family: 'Grind Demolished', sans-serif;
-	padding: 0 50px;
+	/* font-family: 'Grind Demolished', sans-serif; */
+	padding: 12px 40px;
+	background-color: #ffffff05;
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(25px);
 }
 
 .slider-title,
@@ -36,7 +39,7 @@
 	font-size: 3.5rem;
 	font-weight: bold;
 	text-transform: uppercase;
-	text-shadow: 0 0 10px black;
+	text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
 	line-height: 1.5;
 	letter-spacing: 2px;
 }
@@ -44,6 +47,17 @@
 .slider-desc {
 	font-size: 2rem;
 	margin-bottom: 12px;
+}
+
+/* TABLET */
+@media (min-width: 46.25em) and (max-width: 63.9375em) {
+	.slider-title {
+		font-size: 2.5rem;
+	}
+
+	.slider-desc {
+		font-size: 2rem;
+	}
 }
 
 /* MOBILE */
