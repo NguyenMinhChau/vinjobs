@@ -31,19 +31,23 @@
 	padding: 12px 40px;
 	border-radius: 12px;
 	background-color: #ffffff05;
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
 }
 
 .slider-title {
 	font-size: 4rem;
 	text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
 }
-
+@media (min-width: 46.25em) and (max-width: 63.9375em) {
+	.slider-header {
+		padding-bottom: 40%;
+	}
+}
 /* MOBILE */
 @media (max-width: 46.25em) {
 	.slider-header {
-		padding-bottom: 40%;
+		padding-bottom: 80%;
 	}
 
 	.slider-title {

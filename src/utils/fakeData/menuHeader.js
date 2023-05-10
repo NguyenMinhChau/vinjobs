@@ -3,13 +3,13 @@ import { routers } from '../../routers';
 const HeaderMenu = [
 	{
 		id: 1,
-		name: 'Trang chủ',
+		name: 'Chúng tôi',
 		link: routers.home,
 	},
 	{
 		id: 2,
-		name: 'Đào tạo',
-		link: routers.training,
+		name: 'Việc làm',
+		link: routers.jobs,
 	},
 	{
 		id: 3,
@@ -18,12 +18,12 @@ const HeaderMenu = [
 	},
 	{
 		id: 4,
-		name: 'Tuyển dụng',
-		link: routers.recruitment,
+		name: 'Diễn đàn',
+		link: routers.forum,
 	},
 	{
 		id: 5,
-		name: 'Liên hệ',
+		name: 'Liên hệ hợp tác',
 		link: routers.contact,
 	},
 	// {

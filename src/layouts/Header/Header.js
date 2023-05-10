@@ -76,7 +76,7 @@ export default function Header() {
 					</div>
 				</div>
 				<div className={`${cx('header_top_item')} flex-end`}>
-					{!getStore(dispatch) ? (
+					{!currentUser ? (
 						<div className="flex-end w100">
 							<Link
 								to={`${routers.login}`}

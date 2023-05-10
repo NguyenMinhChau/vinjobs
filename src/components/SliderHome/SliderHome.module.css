@@ -30,8 +30,8 @@
 	/* font-family: 'Grind Demolished', sans-serif; */
 	padding: 12px 40px;
 	background-color: #ffffff05;
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
 }
 
 .slider-title,
@@ -63,7 +63,7 @@
 /* MOBILE */
 @media (max-width: 46.25em) {
 	.slider-home {
-		padding-bottom: 70%;
+		padding-bottom: 90%;
 	}
 
 	.slider-text-container {

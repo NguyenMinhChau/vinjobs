@@ -1,12 +1,12 @@
 import {
 	Home,
-	Training,
+	Jobs,
 	Login,
 	Contact,
 	Register,
 	ForgotPwd,
 	ResetPwd,
-	Recruitment,
+	Forum,
 	PageNotFound,
 } from '../layouts';
 import routers from './routers';
@@ -24,10 +24,10 @@ export const privateRouter = [
 	{ path: routers.forgotPwd, component: ForgotPwd, layout: null },
 	{ path: routers.resetPwd, component: ResetPwd, layout: null },
 	{ path: routers.home, component: Home },
-	{ path: routers.training, component: Training },
+	{ path: routers.jobs, component: Jobs },
 	{
-		path: routers.recruitment,
-		component: Recruitment,
+		path: routers.forum,
+		component: Forum,
 	},
 	{
 		path: routers.contact,

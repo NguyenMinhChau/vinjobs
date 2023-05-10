@@ -19,7 +19,7 @@ const cx = className.bind(styles);
 
 export default function Home() {
 	useEffect(() => {
-		document.title = `Trang chủ | ${process.env.REACT_APP_TITLE_WEB}`;
+		document.title = `Chúng tôi | ${process.env.REACT_APP_TITLE_WEB}`;
 	}, []);
 	return (
 		<div className={`${cx('container')}`}>

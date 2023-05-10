@@ -5,8 +5,8 @@ const routers = {
 	forgotPwd: '/forgot-password',
 	resetPwd: '/reset-password',
 	introduce: '/introduce',
-	training: '/training',
-	recruitment: '/recruitment',
+	jobs: '/jobs',
+	forum: '/forum',
 	contact: '/contact',
 	pageNotFound: '*',
 };

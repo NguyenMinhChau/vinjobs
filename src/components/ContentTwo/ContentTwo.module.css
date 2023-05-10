@@ -4,7 +4,9 @@
 	justify-content: space-between;
 	padding: 24px;
 }
-
+.content-left-container {
+	margin-right: 8px;
+}
 .content-left {
 	position: relative;
 }

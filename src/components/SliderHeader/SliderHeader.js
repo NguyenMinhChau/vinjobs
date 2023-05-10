@@ -8,6 +8,8 @@ export default function SliderHeader({
 	urlImage,
 	title1,
 	title2,
+	title3,
+	title4,
 	animateName,
 }) {
 	return (
@@ -26,6 +28,14 @@ export default function SliderHeader({
 				>
 					{title1}{' '}
 					<span className={`${cx('text-primary')}`}>{title2}</span>
+				</div>
+				<div
+					className={`${cx(
+						'slider-title',
+					)} mb8 animate__animated ${animateName}`}
+				>
+					{title3}{' '}
+					<span className={`${cx('text-primary')}`}>{title4}</span>
 				</div>
 			</div>
 		</div>

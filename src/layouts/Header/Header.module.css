@@ -38,14 +38,21 @@
 .btn_login:hover {
 	background-color: #ecf0f1;
 }
-.btn_register,
-.btn_logout {
+.btn_register {
 	background-color: var(--color-primary);
 	color: var(--color-white);
 }
-.btn_register:hover,
-.btn_logout:hover {
+.btn_logout {
+	background-color: var(--color-cancel);
+	color: var(--color-white);
+}
+
+.btn_register:hover {
 	background-color: var(--primary-hover);
+}
+
+.btn_logout:hover {
+	background-color: #e84118;
 }
 
 /* DIVEDER */
