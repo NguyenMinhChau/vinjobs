@@ -67,7 +67,7 @@ function App() {
 					})}
 				</Routes>
 				<MessengerCustomerChat
-					pageId="104145032476041"
+					pageId="100086107495471"
 					appId="468033418602915"
 				/>
 				{scrollToTop && (
