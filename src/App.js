@@ -67,7 +67,9 @@ function App() {
 					})}
 				</Routes>
 				<MessengerCustomerChat
-					pageId="100086107495471"
+					// https://business.facebook.com/
+					pageId="104145032476041"
+					// https://developers.facebook.com/
 					appId="468033418602915"
 				/>
 				{scrollToTop && (
