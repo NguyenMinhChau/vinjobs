@@ -11,8 +11,6 @@ import {
 	OwnerItem,
 	SliderHome,
 } from '../../components';
-import { routers } from '../../routers';
-import { Link } from 'react-router-dom';
 import LOGO_COMPANY from '../../assets/images/logo-company.png';
 
 const cx = className.bind(styles);
@@ -34,30 +32,26 @@ export default function Home() {
 			/>
 			<div className={`${cx('wrapper-content')}`}>
 				<ContentOne
-					// textVerticle="Chúng tôi là ai?"
-					title1="VINJOB "
-					title2="MASKS"
+					title1="Giới thiệu "
+					title2="VINJOB"
 					desc={[
-						'Immortal Masks is the leader in Silicone Masks and Custom Creatures created by REAL Hollywood FX Artists! Our Hyper Realistic Silicone Masks are created with our amazing FLEX FUSION SYSTEM to ensure the most durable silicone masks in the industry.',
-						'From Silicone Masks, Custom Props, Full Character Creations, Creature Suits, Full Hair Punching or a completely Custom Project, Immortal is your only choice for quality & professional products!',
+						`Vinjob là công ty tuyển dụng nhân sự chuyên nghiệp thuộc tập đoàn <b><a href='https://fiam.vn/' target="_blank">AIKING GROUP</a></b> - một trong những tập mới được thành lập đầy trẻ trung và nhiệt huyết tại Việt Nam. Với sứ mệnh giúp đỡ các doanh nghiệp và cá nhân tìm kiếm và sử dụng nguồn nhân lực chất lượng, Vinjob tự hào là đối tác tin cậy của nhiều công ty lớn trên toàn quốc.`,
+						`Đội ngũ các nhà tuyển dụng trẻ trung đầy nhiệt huyết của chúng tôi luôn tận tâm cung cấp các giải pháp tuyển dụng tùy chỉnh phù hợp với nhu cầu cụ thể. Chúng tôi hiểu rằng mọi doanh nghiệp đều khác nhau và đó là lý do tại sao chúng tôi dành thời gian để tìm hiểu về công ty, văn hóa và yêu cầu tuyển của từng công ty.`,
 					]}
-					btnText="Về chúng tôi"
-					urlBtn={routers.home}
 					urlImage={LOGO_COMPANY}
 				/>
 				<ContentTwo
-					titleHeader="NOW LAUNCHED!"
-					// textVerticle="NEW THREADS"
-					title1="VINJOB"
-					title2="THREADS"
+					title1="CAM KẾT CỦA "
+					title2="VINJOB"
 					desc={[
-						'Our new Immortal Threads product line has launched! The highest possible quality costumes to go along with your Immortal Mask!',
+						`Vinjob cam kết đem đến các giải pháp tuyển dụng toàn diện và đáp ứng được nhu cầu của khách hàng. Chúng tôi cung cấp dịch vụ tuyển dụng cho nhiều lĩnh vực khác nhau, từ các công ty mới thành lập đến các doanh nghiệp lớn, từ các lĩnh vực công nghệ đến các lĩnh vực tài chính,quản lý dự án, đến lĩnh vực như kỹ thuật, công nghệ, y tế, giáo dục và nghệ thuật.`,
+						`Chúng tôi hiểu rõ rằng tuyển dụng nhân sự là một phần quan trọng của thành công kinh doanh. Do đó, chúng tôi luôn sẵn sàng lắng nghe và hiểu rõ nhu cầu tuyển dụng của khách hàng và cung cấp các giải pháp tuyển dụng phù hợp nhất. Vinjob không chỉ đưa ra những giải pháp tuyển dụng tối ưu nhất, mà còn hỗ trợ các ứng viên với tư vấn nghề nghiệp và phát triển kỹ năng chuyên môn để họ có thể trở thành những nhân tài đáng giá. Với tinh thần nhiệt huyết và sự sáng tạo, Vinjob sẽ không ngừng nỗ lực để đem đến sự hài lòng và tin tưởng từ khách hàng.`,
 					]}
 					urlImage={LOGO_COMPANY}
 				>
-					<Link to="/" className={`${cx('link')}`}>
+					{/* <Link to="/" className={`${cx('link')}`}>
 						Take a look!
-					</Link>
+					</Link> */}
 				</ContentTwo>
 				<div
 					className={`${cx('list-owner-container')} mt50`}
@@ -69,6 +63,12 @@ export default function Home() {
 						CHÚNG TÔI
 					</div>
 					<div className={`${cx('list-container')}`}>
+						<p className={`${cx('text_desc')}`}>
+							Nếu bạn đang tìm kiếm một đối tác tuyển dụng nhân sự
+							đáng tin cậy, hãy liên hệ với chúng tôi. Chúng tôi
+							sẵn sàng hỗ trợ bạn trong mọi nhu cầu tuyển dụng của
+							bạn.
+						</p>
 						<OwnerItem
 							urlImage={LOGO_COMPANY}
 							urlBtn="/"
@@ -101,7 +101,6 @@ export default function Home() {
 						<Swiper
 							slidesPerView={3}
 							spaceBetween={10}
-							// centeredSlides={true}
 							autoplay={{
 								delay: 2500,
 								disableOnInteraction: false,
@@ -109,7 +108,6 @@ export default function Home() {
 							pagination={{
 								clickable: true,
 							}}
-							// navigation={true}
 							modules={[Autoplay]}
 							className={`${cx('mySwiper')}`}
 						>
@@ -176,14 +174,7 @@ export default function Home() {
 						</Swiper>
 					</div>
 				</div>
-				<ContentTwo
-					titleHeader="NOW LAUNCHED!"
-					// textVerticle="VINJOB"
-					title1="VINJOB"
-					title2="THREADS"
-					left="-30px"
-					top="30px"
-				>
+				<ContentTwo title1="LIÊN HỆ VỚI " title2="VINJOB">
 					<div className={`${cx('line')}`}>
 						<span className="fwb fz16">Địa chỉ:</span> BLOCK A, TÒA
 						NHÀ RIVERGATE, 151-155 BẾN VÂN ĐỒN, PHƯỜNG 6, QUẬN

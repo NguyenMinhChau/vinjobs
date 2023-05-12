@@ -16,7 +16,7 @@ export default function Contact() {
 				title1="HOTLINE:"
 				title2="0345.335.422"
 				title3="EMAIL:"
-				title4="vinjob@aiking.vn"
+				title4="support@vinjob.com.vn"
 				animateName="animate__fadeInBottomRight"
 			/>
 			<SkeletonCP />

@@ -18,10 +18,7 @@ export default function ContentTwo({
 	top,
 }) {
 	return (
-		<div
-			className={`${cx('content-container')} mt50`}
-			data-aos="fade-right"
-		>
+		<div className={`${cx('content-container')}`} data-aos="fade-right">
 			<div className={`${cx('content-left-container')}`}>
 				<div className={`${cx('title-header')} mb12`}>
 					{titleHeader}
@@ -40,12 +37,11 @@ export default function ContentTwo({
 						</div>
 						<div className={`${cx('middle_desc')}`}>
 							{desc.map((item, index) => (
-								<p
+								<div
 									className={`${cx('middle_desc_text')}`}
 									key={index}
-								>
-									{item}
-								</p>
+									dangerouslySetInnerHTML={{ __html: item }}
+								></div>
 							))}
 							{children}
 						</div>

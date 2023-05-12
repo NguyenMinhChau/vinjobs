@@ -43,6 +43,9 @@
 	.slider-header {
 		padding-bottom: 40%;
 	}
+	.slider-title {
+		font-size: 3rem;
+	}
 }
 /* MOBILE */
 @media (max-width: 46.25em) {
@@ -51,6 +54,6 @@
 	}
 
 	.slider-title {
-		font-size: 2rem;
+		font-size: 1.5rem;
 	}
 }

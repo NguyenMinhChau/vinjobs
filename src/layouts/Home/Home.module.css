@@ -85,6 +85,13 @@
 	border-top-color: var(--primary-hover);
 }
 
+.text_desc {
+	padding: 0 24px;
+	font-size: 18px;
+	line-height: 1.5;
+	text-align: justify;
+}
+
 /* MOBILE */
 @media (max-width: 46.25em) {
 	.list-container {

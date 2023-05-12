@@ -33,21 +33,22 @@ export default function ContentOne({
 					</div>
 					<div className={`${cx('middle_desc')}`}>
 						{desc.map((item, index) => (
-							<p
+							<div
 								className={`${cx('middle_desc_text')}`}
 								key={index}
-							>
-								{item}
-							</p>
+								dangerouslySetInnerHTML={{ __html: item }}
+							></div>
 						))}
 						{children}
 					</div>
-					<ButtonCus
-						urlBtn={urlBtn}
-						btnText={btnText}
-						className={`${cx('btn-cus')}`}
-						classNameWrapper="flex-center mt30"
-					/>
+					{btnText && (
+						<ButtonCus
+							urlBtn={urlBtn}
+							btnText={btnText}
+							className={`${cx('btn-cus')}`}
+							classNameWrapper="flex-center mt30"
+						/>
+					)}
 				</div>
 			</div>
 			<div className={`${cx('content-right')}`}>
