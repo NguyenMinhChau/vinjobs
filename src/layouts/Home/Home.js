@@ -130,6 +130,7 @@ export default function Home() {
 					</div>
 				</div>
 				<ContentTwo
+					classContainer={'flex-row-reverse mb-flex-column-reverse'}
 					fontSizeTitle="18px"
 					title={`<b>Còn chần chờ gì nữa mà không nhấc máy lên liên hệ ngay với <span class='text-primary'>VINJOB</span> để doanh nghiệp của bạn có một đối tác tuyệt vời…</b>`}
 				>

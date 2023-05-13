@@ -10,7 +10,7 @@
 }
 .content-right {
 	position: relative;
-	margin-bottom: 8px;
+	margin: 8px;
 }
 
 .right {
@@ -71,6 +71,7 @@
 }
 
 .form {
+	margin: 8px;
 	flex: 2;
 	width: 100%;
 	display: flex;
@@ -162,6 +163,7 @@
 
 .title {
 	line-height: 1.5;
+	text-align: justify;
 }
 
 /* MOBILE */

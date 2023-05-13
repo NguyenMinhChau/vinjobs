@@ -13,9 +13,13 @@ export default function ContentTwo({
 	urlImage,
 	children,
 	fontSizeTitle,
+	classContainer,
 }) {
 	return (
-		<div className={`${cx('content-container')}`} data-aos="fade-right">
+		<div
+			className={`${cx('content-container')} ${classContainer}`}
+			data-aos="fade-right"
+		>
 			{urlImage ? (
 				<div className={`${cx('content-left')}`}>
 					<div
