@@ -29,7 +29,7 @@ export default function Home() {
 				<ContentOne
 					title={`<b><span class='text-primary'>VINJOB</span> là nơi...</b>`}
 					desc={[
-						`- VINJOB cung cấp dịch vụ tuyển dụng <b>MỌI VỊ TRÍ</b> nhanh chóng, hiệu quả.`,
+						`- VINJOB cung cấp dịch vụ tuyển dụng và việc làm cho <b>MỌI VỊ TRÍ</b> nhanh chóng, hiệu quả.`,
 						`- Hỗ trợ doanh nghiệp/ công ty/ nhà máy tuyển dụng mọi lúc mọi nơi...`,
 						`- Nơi kết nối doanh nghiệp với ứng viên <b>TOÀN QUỐC</b>. `,
 						`- Nơi nào thiếu ứng viên nơi đó có <b>VINJOB</b>.`,
@@ -37,7 +37,7 @@ export default function Home() {
 					urlImage={LOGO_COMPANY}
 				/>
 				<ContentTwo
-					title={`<b>VÌ SAO <span class='text-primary'>VINJOB</span> MANG ĐẾN HIỆU QUẢ CHO DOANH NGHIỆP CỦA BẠN?</b>`}
+					title={`<b><span class='text-primary'>VINJOB</span> MANG ĐẾN HIỆU QUẢ CHO DOANH NGHIỆP CỦA BẠN với...</b>`}
 					desc={[
 						`- Đội ngũ hơn 50 chuyên viên Nhân Sự với hơn 10 năm kinh nghiệm trong ngành, đội ngũ chuyên nghiệp năng động giúp cho công ty của bạn bổ sung <b>Ngay Và Liền</b> các vị trí cần tìm.`,
 						`- <span class='text-primary'>VINJOB</span> được điều hành bởi các chuyên gia hàng đầu trong lĩnh vực <b>NHÂN SỰ</b>.`,
@@ -46,7 +46,7 @@ export default function Home() {
 					urlImage={LOGO_COMPANY}
 				></ContentTwo>
 				<ContentOne
-					title={`<b>VÌ SAO <span class='text-primary'>VINJOB</span> LUÔN SÁT CÁNH CÙNG DOANH NGHIỆP CỦA BẠN NHỈ?</b>`}
+					title={`<b><span class='text-primary'>VINJOB</span> LUÔN SÁT CÁNH CÙNG DOANH NGHIỆP CỦA BẠN</b>`}
 					desc={[
 						`- <b>Sứ mệnh</b>: <span class='text-primary'>VINJOB</span> cam kết không ngừng nâng cao, chất lượng sản phẩm, dịch vụ để mang đến lợi ích tốt nhất cho khách hàng.`,
 						`- <b>Tầm nhìn</b>: Trở thành biểu tượng uy tín hàng đầu Việt Nam về cung cấp Dịch vụ tuyển dụng.`,
@@ -132,7 +132,7 @@ export default function Home() {
 				<ContentTwo
 					classContainer={'flex-row-reverse mb-flex-column-reverse'}
 					fontSizeTitle="18px"
-					title={`<b>Còn chần chờ gì nữa mà không nhấc máy lên liên hệ ngay với <span class='text-primary'>VINJOB</span> để doanh nghiệp của bạn có một đối tác tuyệt vời…</b>`}
+					title={`<b>Liên hệ ngay với <span class='text-primary'>VINJOB</span> để doanh nghiệp của bạn có một đối tác tuyệt vời…</b>`}
 				>
 					<div className={`${cx('line')}`}>
 						<span className="fwb fz16">
