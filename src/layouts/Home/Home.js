@@ -12,6 +12,9 @@ import {
 } from '../../components';
 import LOGO_COMPANY from '../../assets/images/logo-company.png';
 import LOGO_FAPV from '../../assets/images/fapv_logo.png';
+import LOGO_SLIDER_HOME from '../../assets/images/logo_home_bgc.jpg';
+import LOGO_SAT_CANH from '../../assets/images/sat_canh.png';
+import LOGO_HIEU_QUA from '../../assets/images/hieu_qua.png';
 
 const cx = className.bind(styles);
 
@@ -22,8 +25,8 @@ export default function Home() {
 	return (
 		<div className={`${cx('container')}`}>
 			<SliderHome
-				urlImage="https://images.unsplash.com/photo-1502945015378-0e284ca1a5be?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8am9ic3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=2000&q=2000"
-				title={`VINJOB © <a class='text-primary' href='https://fiam.vn/' target='_blank'>AIKING GROUP</a>`}
+				urlImage={LOGO_SLIDER_HOME}
+				title={`VINJOB © <a href='https://fiam.vn/' target='_blank'>AIKING GROUP <span style='top: -30%; position:absolute'><i class="fa-solid fa-arrow-up-right-from-square fz16"></i></span></a>`}
 			/>
 			<div className={`${cx('wrapper-content')}`}>
 				<ContentOne
@@ -43,7 +46,7 @@ export default function Home() {
 						`- <span class='text-primary'>VINJOB</span> được điều hành bởi các chuyên gia hàng đầu trong lĩnh vực <b>NHÂN SỰ</b>.`,
 						`- Đội ngũ <b>Chăm Sóc Khách Hàng</b> được đào tạo bài bản chuyên nghiệp. Hỗ trợ <b>24/7</b> tận tâm, ân cần, chu đáo.`,
 					]}
-					urlImage={LOGO_COMPANY}
+					urlImage={LOGO_HIEU_QUA}
 				></ContentTwo>
 				<ContentOne
 					title={`<b><span class='text-primary'>VINJOB</span> LUÔN SÁT CÁNH CÙNG DOANH NGHIỆP CỦA BẠN</b>`}
@@ -54,7 +57,7 @@ export default function Home() {
 						`+ <b>Uy tín</b>: Luôn đặt chữ tín lên hàng đầu không ngừng hoàn thiện để đáp ứng đúng và cao hơn những cam kết.`,
 						`+ <b>Trách nhiệm</b>: <span class='text-primary'>VINJOB</span> luôn đặt trách nhiệm lên hàng đầu với khách hàng, đối tác và toàn thể nhân viên.`,
 					]}
-					urlImage={LOGO_COMPANY}
+					urlImage={LOGO_SAT_CANH}
 				/>
 				{/* <div
 					className={`${cx('list-owner-container')} mt50`}
@@ -134,13 +137,6 @@ export default function Home() {
 					fontSizeTitle="18px"
 					title={`<b>Liên hệ ngay với <span class='text-primary'>VINJOB</span> để doanh nghiệp của bạn có một đối tác tuyệt vời…</b>`}
 				>
-					<div className={`${cx('line')}`}>
-						<span className="fwb fz16">
-							Địa chỉ đăng ký kinh doanh:
-						</span>{' '}
-						Block A, Tòa nhà Rivergate, 151-155 Bến Vân Đồn, Phường
-						6, Quận 4, Thành phố Hồ Chí Minh.
-					</div>
 					<div className={`${cx('line')}`}>
 						<span className="fwb fz16">Địa chỉ trụ sở chính:</span>{' '}
 						The River Thủ Thiêm, 23 Đ. Trần Bạch Đằng, An Khánh,

@@ -25,9 +25,9 @@
 	text-align: center;
 	/* font-family: 'Grind Demolished', sans-serif; */
 	padding: 12px 40px;
-	background-color: #ffffff05;
+	/* background-color: #ffffff05;
 	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px); */
 }
 
 .slider-title,
@@ -67,7 +67,7 @@
 	}
 
 	.slider-title {
-		font-size: 1.5rem;
+		font-size: 1.3rem;
 	}
 
 	.slider-desc {
