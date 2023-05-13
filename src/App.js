@@ -8,6 +8,7 @@ import { privateRouter, publicRouter } from './routers/routerRender';
 import { useAppContext } from './utils';
 import { setData } from './app/reducer';
 import { routers } from './routers';
+import { CallMe } from './components';
 
 function App() {
 	const { state, dispatch } = useAppContext();
@@ -60,6 +61,10 @@ function App() {
 								element={
 									<Layout>
 										<Page />
+										<CallMe
+											bottom={scrollToTop && '40px'}
+											left={scrollToTop && '-16px'}
+										/>
 									</Layout>
 								}
 							/>

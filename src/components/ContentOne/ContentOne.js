@@ -7,29 +7,23 @@ const cx = className.bind(styles);
 
 export default function ContentOne({
 	textVerticle,
-	title1,
-	title2,
+	title,
 	desc = [],
 	btnText,
 	urlBtn,
 	urlImage,
 	children,
-	left,
-	top,
 }) {
 	return (
 		<div className={`${cx('content-container')}`} data-aos="fade-up">
 			<div className={`${cx('content-left')}`}>
-				<div
-					className={`${cx('left')}`}
-					style={{ top: top, left: left }}
-				>
-					{textVerticle}
-				</div>
+				<div className={`${cx('left')}`}>{textVerticle}</div>
 				<div className={`${cx('middle')}`}>
 					<div className={`${cx('middle_title')} mb12`}>
-						{title1}
-						<span className={`${cx('title2')}`}>{title2}</span>
+						<div
+							className={`${cx('title')}`}
+							dangerouslySetInnerHTML={{ __html: title }}
+						></div>
 					</div>
 					<div className={`${cx('middle_desc')}`}>
 						{desc.map((item, index) => (

@@ -5,14 +5,7 @@ import ButtonCus from '../ButtonCus/ButtonCus';
 
 const cx = className.bind(styles);
 
-export default function SliderHome({
-	urlImage,
-	title1,
-	title2,
-	desc,
-	btnText,
-	urlBtn,
-}) {
+export default function SliderHome({ urlImage, title, desc, btnText, urlBtn }) {
 	return (
 		<div className={`${cx('slider-home')}`}>
 			<div
@@ -27,7 +20,10 @@ export default function SliderHome({
 						'slider-title',
 					)} mb8 animate__animated animate__backInDown`}
 				>
-					{title1} <span className={`${cx('title2')}`}>{title2}</span>
+					<div
+						className={`${cx('title')}`}
+						dangerouslySetInnerHTML={{ __html: title }}
+					></div>
 				</div>
 				<div
 					className={`${cx(
@@ -36,7 +32,7 @@ export default function SliderHome({
 				>
 					{desc}
 				</div>
-				<ButtonCus urlBtn={urlBtn} btnText={btnText} />
+				{btnText && <ButtonCus urlBtn={urlBtn} btnText={btnText} />}
 			</div>
 		</div>
 	);

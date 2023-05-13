@@ -19,26 +19,19 @@
 	left: -60px;
 	color: var(--color-primary);
 }
-
-.title2 {
-	color: var(--color-primary);
-}
-
 .left,
 .middle_title {
-	/* font-family: 'Grind Demolished', sans-serif; */
 	text-transform: uppercase;
 }
 
 .middle {
 	display: flex;
 	flex-direction: column;
-	/* padding: 0 24px; */
 }
 
 .middle_title {
 	letter-spacing: 0.5px;
-	font-size: 40px;
+	font-size: 30px;
 }
 
 .middle_desc .middle_desc_text {
@@ -96,6 +89,9 @@
 .btn-cus:hover::before {
 	border-top-color: var(--primary-hover);
 }
+.title {
+	line-height: 1.5;
+}
 
 /* MOBILE */
 @media (max-width: 46.25em) {
@@ -104,7 +100,7 @@
 	}
 
 	.middle_title {
-		font-size: 25px;
+		font-size: 20px;
 	}
 
 	.content-right {

@@ -8,50 +8,18 @@ const cx = className.bind(styles);
 
 export default function ContentTwo({
 	titleHeader,
-	textVerticle,
-	title1,
-	title2,
+	title,
 	desc = [],
 	urlImage,
 	children,
-	left,
-	top,
+	fontSizeTitle,
 }) {
 	return (
 		<div className={`${cx('content-container')}`} data-aos="fade-right">
-			<div className={`${cx('content-left-container')}`}>
-				<div className={`${cx('title-header')} mb12`}>
-					{titleHeader}
-				</div>
-				<div className={`${cx('content-left')}`}>
-					{/* <div
-						className={`${cx('left')}`}
-						style={{ left: left, top: top }}
-					>
-						{textVerticle}
-					</div> */}
-					<div className={`${cx('middle')}`}>
-						<div className={`${cx('middle_title')} mb12`}>
-							{title1}
-							<span className={`${cx('title2')}`}>{title2}</span>
-						</div>
-						<div className={`${cx('middle_desc')}`}>
-							{desc.map((item, index) => (
-								<div
-									className={`${cx('middle_desc_text')}`}
-									key={index}
-									dangerouslySetInnerHTML={{ __html: item }}
-								></div>
-							))}
-							{children}
-						</div>
-					</div>
-				</div>
-			</div>
 			{urlImage ? (
-				<div className={`${cx('content-right')}`}>
+				<div className={`${cx('content-left')}`}>
 					<div
-						className={`${cx('right_img')}`}
+						className={`${cx('left_img')}`}
 						style={{
 							backgroundImage: `url('${urlImage}')`,
 						}}
@@ -86,6 +54,34 @@ export default function ContentTwo({
 					/>
 				</div>
 			)}
+			<div className={`${cx('content-right-container')}`}>
+				{titleHeader && (
+					<div className={`${cx('title-header')} mb12`}>
+						{titleHeader}
+					</div>
+				)}
+				<div className={`${cx('content-right')}`}>
+					<div className={`${cx('middle')}`}>
+						<div className={`${cx('middle_title')} mb12`}>
+							<div
+								style={{ fontSize: fontSizeTitle }}
+								className={`${cx('title')}`}
+								dangerouslySetInnerHTML={{ __html: title }}
+							></div>
+						</div>
+						<div className={`${cx('middle_desc')}`}>
+							{desc.map((item, index) => (
+								<div
+									className={`${cx('middle_desc_text')}`}
+									key={index}
+									dangerouslySetInnerHTML={{ __html: item }}
+								></div>
+							))}
+							{children}
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	);
 }

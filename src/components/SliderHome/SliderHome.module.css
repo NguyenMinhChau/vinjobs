@@ -15,10 +15,6 @@
 	background-repeat: no-repeat;
 }
 
-.title2 {
-	color: var(--color-primary);
-}
-
 .slider-text-container {
 	position: absolute;
 	top: 50%;

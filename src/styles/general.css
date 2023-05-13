@@ -134,3 +134,7 @@
 	max-width: 200px !important;
 	word-wrap: break-word;
 }
+
+.text-primary {
+	color: var(--color-primary) !important;
+}

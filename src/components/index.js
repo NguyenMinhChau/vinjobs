@@ -21,6 +21,7 @@ export { default as MenuMobile } from './MenuMobile/MenuMobile';
 export { default as Loading } from './Loading/Loading';
 export { default as TableData } from './TableData/TableData';
 export { default as Search } from './Search/Search';
+export { default as CallMe } from './CallMe/CallMe';
 export { default as ProgressLine } from './ProgressLine/ProgressLine';
 export { default as SiderFund } from './SiderFund/SiderFund';
 export * as IconHeader from './Icons/Header';

@@ -8,10 +8,10 @@ import {
 	ButtonCus,
 	ContentOne,
 	ContentTwo,
-	OwnerItem,
 	SliderHome,
 } from '../../components';
 import LOGO_COMPANY from '../../assets/images/logo-company.png';
+import LOGO_FAPV from '../../assets/images/fapv_logo.png';
 
 const cx = className.bind(styles);
 
@@ -23,37 +23,40 @@ export default function Home() {
 		<div className={`${cx('container')}`}>
 			<SliderHome
 				urlImage="https://images.unsplash.com/photo-1502945015378-0e284ca1a5be?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8am9ic3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=2000&q=2000"
-				title1="VINJOB © "
-				title2="AIKING GROUP"
-				desc="Block A, Tòa nhà RiverGate, 151-155 Bến Vân Đồn, Phường
-                        6, Quận 4,TP.HCM"
-				btnText="Xem trên Map"
-				urlBtn="https://goo.gl/maps/AXDCkXAcn9nvQp226"
+				title={`VINJOB © <a class='text-primary' href='https://fiam.vn/' target='_blank'>AIKING GROUP</a>`}
 			/>
 			<div className={`${cx('wrapper-content')}`}>
 				<ContentOne
-					title1="Giới thiệu "
-					title2="VINJOB"
+					title={`<b><span class='text-primary'>VINJOB</span> là nơi...</b>`}
 					desc={[
-						`Vinjob là công ty tuyển dụng nhân sự chuyên nghiệp thuộc tập đoàn <b><a href='https://fiam.vn/' target="_blank">AIKING GROUP</a></b> - một trong những tập mới được thành lập đầy trẻ trung và nhiệt huyết tại Việt Nam. Với sứ mệnh giúp đỡ các doanh nghiệp và cá nhân tìm kiếm và sử dụng nguồn nhân lực chất lượng, Vinjob tự hào là đối tác tin cậy của nhiều công ty lớn trên toàn quốc.`,
-						`Đội ngũ các nhà tuyển dụng trẻ trung đầy nhiệt huyết của chúng tôi luôn tận tâm cung cấp các giải pháp tuyển dụng tùy chỉnh phù hợp với nhu cầu cụ thể. Chúng tôi hiểu rằng mọi doanh nghiệp đều khác nhau và đó là lý do tại sao chúng tôi dành thời gian để tìm hiểu về công ty, văn hóa và yêu cầu tuyển của từng công ty.`,
+						`- VINJOB cung cấp dịch vụ tuyển dụng <b>MỌI VỊ TRÍ</b> nhanh chóng, hiệu quả.`,
+						`- Hỗ trợ doanh nghiệp/ công ty/ nhà máy tuyển dụng mọi lúc mọi nơi...`,
+						`- Nơi kết nối doanh nghiệp với ứng viên <b>TOÀN QUỐC</b>. `,
+						`- Nơi nào thiếu ứng viên nơi đó có <b>VINJOB</b>.`,
 					]}
 					urlImage={LOGO_COMPANY}
 				/>
 				<ContentTwo
-					title1="CAM KẾT CỦA "
-					title2="VINJOB"
+					title={`<b>VÌ SAO <span class='text-primary'>VINJOB</span> MANG ĐẾN HIỆU QUẢ CHO DOANH NGHIỆP CỦA BẠN?</b>`}
 					desc={[
-						`Vinjob cam kết đem đến các giải pháp tuyển dụng toàn diện và đáp ứng được nhu cầu của khách hàng. Chúng tôi cung cấp dịch vụ tuyển dụng cho nhiều lĩnh vực khác nhau, từ các công ty mới thành lập đến các doanh nghiệp lớn, từ các lĩnh vực công nghệ đến các lĩnh vực tài chính,quản lý dự án, đến lĩnh vực như kỹ thuật, công nghệ, y tế, giáo dục và nghệ thuật.`,
-						`Chúng tôi hiểu rõ rằng tuyển dụng nhân sự là một phần quan trọng của thành công kinh doanh. Do đó, chúng tôi luôn sẵn sàng lắng nghe và hiểu rõ nhu cầu tuyển dụng của khách hàng và cung cấp các giải pháp tuyển dụng phù hợp nhất. Vinjob không chỉ đưa ra những giải pháp tuyển dụng tối ưu nhất, mà còn hỗ trợ các ứng viên với tư vấn nghề nghiệp và phát triển kỹ năng chuyên môn để họ có thể trở thành những nhân tài đáng giá. Với tinh thần nhiệt huyết và sự sáng tạo, Vinjob sẽ không ngừng nỗ lực để đem đến sự hài lòng và tin tưởng từ khách hàng.`,
+						`- Đội ngũ hơn 50 chuyên viên Nhân Sự với hơn 10 năm kinh nghiệm trong ngành, đội ngũ chuyên nghiệp năng động giúp cho công ty của bạn bổ sung <b>Ngay Và Liền</b> các vị trí cần tìm.`,
+						`- <span class='text-primary'>VINJOB</span> được điều hành bởi các chuyên gia hàng đầu trong lĩnh vực <b>NHÂN SỰ</b>.`,
+						`- Đội ngũ <b>Chăm Sóc Khách Hàng</b> được đào tạo bài bản chuyên nghiệp. Hỗ trợ <b>24/7</b> tận tâm, ân cần, chu đáo.`,
 					]}
 					urlImage={LOGO_COMPANY}
-				>
-					{/* <Link to="/" className={`${cx('link')}`}>
-						Take a look!
-					</Link> */}
-				</ContentTwo>
-				<div
+				></ContentTwo>
+				<ContentOne
+					title={`<b>VÌ SAO <span class='text-primary'>VINJOB</span> LUÔN SÁT CÁNH CÙNG DOANH NGHIỆP CỦA BẠN NHỈ?</b>`}
+					desc={[
+						`- <b>Sứ mệnh</b>: <span class='text-primary'>VINJOB</span> cam kết không ngừng nâng cao, chất lượng sản phẩm, dịch vụ để mang đến lợi ích tốt nhất cho khách hàng.`,
+						`- <b>Tầm nhìn</b>: Trở thành biểu tượng uy tín hàng đầu Việt Nam về cung cấp Dịch vụ tuyển dụng.`,
+						`- <b>Giá trị cốt lõi</b>: `,
+						`+ <b>Uy tín</b>: Luôn đặt chữ tín lên hàng đầu không ngừng hoàn thiện để đáp ứng đúng và cao hơn những cam kết.`,
+						`+ <b>Trách nhiệm</b>: <span class='text-primary'>VINJOB</span> luôn đặt trách nhiệm lên hàng đầu với khách hàng, đối tác và toàn thể nhân viên.`,
+					]}
+					urlImage={LOGO_COMPANY}
+				/>
+				{/* <div
 					className={`${cx('list-owner-container')} mt50`}
 					data-aos="flip-right"
 				>
@@ -63,24 +66,6 @@ export default function Home() {
 						CHÚNG TÔI
 					</div>
 					<div className={`${cx('list-container')}`}>
-						<p className={`${cx('text_desc')}`}>
-							Nếu bạn đang tìm kiếm một đối tác tuyển dụng nhân sự
-							đáng tin cậy, hãy liên hệ với chúng tôi. Chúng tôi
-							sẵn sàng hỗ trợ bạn trong mọi nhu cầu tuyển dụng của
-							bạn.
-						</p>
-						<OwnerItem
-							urlImage={LOGO_COMPANY}
-							urlBtn="/"
-							nameOwner="ANDREW FREEMAN"
-							positionOwner="CO-OWNER/FOUNDER"
-						/>
-						<OwnerItem
-							urlImage={LOGO_COMPANY}
-							urlBtn="/"
-							nameOwner="ANDREW FREEMAN"
-							positionOwner="CO-OWNER/FOUNDER"
-						/>
 						<OwnerItem
 							urlImage={LOGO_COMPANY}
 							urlBtn="/"
@@ -88,7 +73,7 @@ export default function Home() {
 							positionOwner="CO-OWNER/FOUNDER"
 						/>
 					</div>
-				</div>
+				</div> */}
 				<div
 					className={`${cx('get-around-container')} mt50`}
 					data-aos="flip-down"
@@ -126,37 +111,7 @@ export default function Home() {
 									<div
 										className={`${cx('image-get-around')}`}
 										style={{
-											backgroundImage: `url(${LOGO_COMPANY})`,
-										}}
-									></div>
-								</div>
-							</SwiperSlide>
-							<SwiperSlide>
-								<div className={`${cx('item-get-around')}`}>
-									<div
-										className={`${cx('image-get-around')}`}
-										style={{
-											backgroundImage: `url(${LOGO_COMPANY})`,
-										}}
-									></div>
-								</div>
-							</SwiperSlide>
-							<SwiperSlide>
-								<div className={`${cx('item-get-around')}`}>
-									<div
-										className={`${cx('image-get-around')}`}
-										style={{
-											backgroundImage: `url(${LOGO_COMPANY})`,
-										}}
-									></div>
-								</div>
-							</SwiperSlide>
-							<SwiperSlide>
-								<div className={`${cx('item-get-around')}`}>
-									<div
-										className={`${cx('image-get-around')}`}
-										style={{
-											backgroundImage: `url(${LOGO_COMPANY})`,
+											backgroundImage: `url(${LOGO_FAPV})`,
 										}}
 									></div>
 								</div>
@@ -174,15 +129,25 @@ export default function Home() {
 						</Swiper>
 					</div>
 				</div>
-				<ContentTwo title1="LIÊN HỆ VỚI " title2="VINJOB">
+				<ContentTwo
+					fontSizeTitle="18px"
+					title={`<b>Còn chần chờ gì nữa mà không nhấc máy lên liên hệ ngay với <span class='text-primary'>VINJOB</span> để doanh nghiệp của bạn có một đối tác tuyệt vời…</b>`}
+				>
 					<div className={`${cx('line')}`}>
-						<span className="fwb fz16">Địa chỉ:</span> BLOCK A, TÒA
-						NHÀ RIVERGATE, 151-155 BẾN VÂN ĐỒN, PHƯỜNG 6, QUẬN
-						4,TP.HCM.
+						<span className="fwb fz16">
+							Địa chỉ đăng ký kinh doanh:
+						</span>{' '}
+						Block A, Tòa nhà Rivergate, 151-155 Bến Vân Đồn, Phường
+						6, Quận 4, Thành phố Hồ Chí Minh.
+					</div>
+					<div className={`${cx('line')}`}>
+						<span className="fwb fz16">Địa chỉ trụ sở chính:</span>{' '}
+						The River Thủ Thiêm, 23 Đ. Trần Bạch Đằng, An Khánh,
+						Quận 2, Thành phố Hồ Chí Minh
 					</div>
 					<div className={`${cx('line')}`}>
 						<span className="fwb fz16">Số điện thoại:</span>{' '}
-						<a href="tel:0345335422">0345 335 422</a>
+						<a href="tel:0345335422">0345 335 422 (Ms.Thắm)</a>
 					</div>
 					<div className={`${cx('line')}`}>
 						<span className="fwb fz16">Email:</span>{' '}
