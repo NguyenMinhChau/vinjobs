@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
 import className from 'classnames/bind';
 import styles from './Forum.module.css';
@@ -13,7 +14,9 @@ export default function Forum() {
 	return (
 		<div className={`${cx('container')}`}>
 			<SliderHeader
-				urlImage={LOGO_SLIDER_HEADER}
+				urlImage={
+					'https://images.unsplash.com/photo-1468971050039-be99497410af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NjV8fHJlY3J1aXRtZW50fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=2000&q=2000'
+				}
 				title={`<b>DIỄN ĐÀN</b>`}
 				animateName="animate__fadeInBottomLeft"
 			/>

@@ -1,6 +1,6 @@
 import React from 'react';
 import className from 'classnames/bind';
-import Typed from 'react-typed';
+// import Typed from 'react-typed';
 import styles from './SliderHome.module.css';
 import ButtonCus from '../ButtonCus/ButtonCus';
 
@@ -21,18 +21,18 @@ export default function SliderHome({ urlImage, title, desc, btnText, urlBtn }) {
 						'slider-title',
 					)} mb8 animate__animated animate__backInDown`}
 				>
-					{/* <div
+					<div
 						className={`${cx('title')}`}
 						dangerouslySetInnerHTML={{
 							__html: title,
 						}}
-					></div> */}
-					<Typed
+					></div>
+					{/* <Typed
 						strings={title}
 						typeSpeed={50}
 						backSpeed={50}
 						showCursor={false}
-					/>
+					/> */}
 				</div>
 				<div
 					className={`${cx(

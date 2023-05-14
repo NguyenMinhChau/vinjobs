@@ -7,7 +7,7 @@ import styles from './Form.module.css';
 import { Link } from 'react-router-dom';
 import routers from '../../routers/routers';
 import { setData } from '../../app/reducer';
-import BACKGROUND_FORM from '../../assets/images/bg_form.gif';
+import BACKGROUND_FORM from '../../assets/images/bg_form.png';
 
 const cx = className.bind(styles);
 

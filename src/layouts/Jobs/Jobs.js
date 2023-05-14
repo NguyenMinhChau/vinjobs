@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
 import className from 'classnames/bind';
 import styles from './Jobs.module.css';
@@ -13,7 +14,9 @@ export default function Jobs() {
 	return (
 		<div className={`${cx('container')}`}>
 			<SliderHeader
-				urlImage={LOGO_SLIDER_HEADER}
+				urlImage={
+					'https://images.unsplash.com/photo-1598257006675-0aaec40301f9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTR8fHJlY3J1aXRtZW50fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=2000&q=2000'
+				}
 				title={`<b>VIỆC LÀM</b>`}
 				animateName="animate__bounceInUp"
 			/>

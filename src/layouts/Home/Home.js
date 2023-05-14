@@ -12,9 +12,9 @@ import {
 } from '../../components';
 import LOGO_COMPANY from '../../assets/images/logo-company.png';
 import LOGO_FAPV from '../../assets/images/fapv_logo.png';
-import LOGO_SLIDER_HOME from '../../assets/images/logo_home_bgc.gif';
-import LOGO_SAT_CANH from '../../assets/images/sat_canh_01.png';
-import LOGO_HIEU_QUA from '../../assets/images/hieu_qua.gif';
+import LOGO_SLIDER_HOME from '../../assets/images/logo_home_bgc.jpg';
+import LOGO_SAT_CANH from '../../assets/images/sat_canh.png';
+import LOGO_HIEU_QUA from '../../assets/images/hieu_qua.png';
 
 const cx = className.bind(styles);
 
@@ -26,9 +26,7 @@ export default function Home() {
 		<div className={`${cx('container')}`}>
 			<SliderHome
 				urlImage={LOGO_SLIDER_HOME}
-				title={[
-					`VINJOB © <a href='https://fiam.vn/' target='_blank'>AIKING GROUP <span style='top: -30%; position:absolute'><i class="fa-solid fa-arrow-up-right-from-square fz16"></i></span></a>`,
-				]}
+				title={`VINJOB © <a href='https://fiam.vn/' target='_blank'>AIKING GROUP <span style='top: -30%; position:absolute'><i class="fa-solid fa-arrow-up-right-from-square fz16"></i></span></a>`}
 			/>
 			<div className={`${cx('wrapper-content')}`}>
 				<ContentOne
