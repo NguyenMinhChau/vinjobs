@@ -75,7 +75,7 @@ export const authLoginSV = async (props = {}) => {
 			type: 'success',
 			message: resPost?.message || 'Đăng nhập thành công',
 		});
-		history(routers.dashboard);
+		history(routers.content);
 	} catch (err) {
 		setIsProcess(false);
 		setSnackbar({

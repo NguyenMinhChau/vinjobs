@@ -12,42 +12,16 @@ import styles from './Sidebar.module.css';
 const cx = className.bind(styles);
 const LIST_SIDEBAR = [
 	{
-		name: 'Dashboard',
-		path: routers.dashboard,
-		icon: <Icons.DashboardIcon className={`${cx('custom-icon')}`} />,
-	},
-	{
-		name: 'Nạp tiền',
-		path: routers.deposits,
-		icon: <Icons.DepositsIcon className={`${cx('custom-icon')}`} />,
-	},
-	{
-		name: 'Rút tiền',
-		path: routers.withdraw,
-		icon: <Icons.WithdrawIcon className={`${cx('custom-icon')}`} />,
-	},
-	{
-		name: 'Hợp đồng USD',
-		path: routers.contractUsd,
-		icon: <Icons.ContratUsdIcon className={`${cx('custom-icon')}`} />,
-	},
-	{
-		name: 'Hợp đồng nông nghiệp',
-		path: routers.contractAgriculture,
-		icon: <Icons.ContratAgriIcon className={`${cx('custom-icon')}`} />,
+		name: 'Bài đăng',
+		path: routers.content,
+		icon: <Icons.ContentIcon className={`${cx('custom-icon')}`} />,
 	},
 	{
 		name: 'Tài khoản',
 		path: routers.user,
 		icon: <Icons.UserIcon className={`${cx('custom-icon')}`} />,
 	},
-	{
-		name: 'Bài đăng',
-		path: routers.content,
-		icon: <Icons.ContentIcon className={`${cx('custom-icon')}`} />,
-	},
 ];
-const LIST_SIDEBAR_USER = [];
 
 function Sidebar({ className }) {
 	const { state, dispatch } = useAppContext();

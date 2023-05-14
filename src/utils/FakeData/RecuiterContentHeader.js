@@ -1,7 +1,7 @@
 const DataRecuiterContentHeader = (Icons) => {
 	return {
 		headers: {
-			name: process.env.REACT_APP_RECUITER_CONTENT_HEADER,
+			name: process.env.REACT_APP_FINANCE_REPORT_CONTENT_HEADER,
 			index: {
 				title: 'STT',
 			},

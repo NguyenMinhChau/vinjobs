@@ -1,26 +1,15 @@
 import routers from './routers';
 import {
-	Dashboard,
 	Home,
-	Deposits,
-	Withdraw,
 	User,
 	Content,
-	CreateHomeContent,
 	UserDetail,
 	Login,
-	DepositsWithdrawDetail,
 	Register,
 	ResetPwd,
-	FundUSD,
-	UsdAgricultureDetail,
-	FundAgriculture,
 	ForgotPwd,
-	CreateIntroduceContent,
-	CreateFinanceContent,
-	CreateTrainingContent,
-	CreateWebContent,
-	CreateServiceContent,
+	CreateHomeContent,
+	CreateJobsContent,
 	CreateRecuiterContent,
 	CreateContactContent,
 } from '../Layouts';
@@ -40,27 +29,6 @@ export const privateRouter = [
 	{ path: routers.forgotPwd, component: ForgotPwd, layout: null },
 	{ path: routers.resetPwd, component: ResetPwd, layout: null },
 	{ path: routers.home, component: Home },
-	{ path: routers.dashboard, component: Dashboard },
-	{ path: routers.deposits, component: Deposits },
-	{
-		path: `${routers.deposits}/:idDeposits`,
-		component: DepositsWithdrawDetail,
-	},
-	{ path: routers.withdraw, component: Withdraw },
-	{
-		path: `${routers.withdraw}/:idWithdraw`,
-		component: DepositsWithdrawDetail,
-	},
-	{ path: routers.contractUsd, component: FundUSD },
-	{
-		path: `${routers.contractUsd}/:idContractUsd`,
-		component: UsdAgricultureDetail,
-	},
-	{ path: routers.contractAgriculture, component: FundAgriculture },
-	{
-		path: `${routers.contractAgriculture}/:idContractAgri`,
-		component: UsdAgricultureDetail,
-	},
 	{ path: routers.user, component: User },
 	{ path: routers.content, component: Content },
 	{
@@ -72,44 +40,12 @@ export const privateRouter = [
 		component: CreateHomeContent,
 	},
 	{
-		path: `${routers.content}/${routers.createintroducecontent}`,
-		component: CreateIntroduceContent,
+		path: `${routers.content}/${routers.createjobscontent}`,
+		component: CreateJobsContent,
 	},
 	{
-		path: `${routers.content}/${routers.updateintroducecontent}/:idIntroduceContent`,
-		component: CreateIntroduceContent,
-	},
-	{
-		path: `${routers.content}/${routers.createfinancecontent}`,
-		component: CreateFinanceContent,
-	},
-	{
-		path: `${routers.content}/${routers.updatefinancecontent}/:idFinanceContent`,
-		component: CreateFinanceContent,
-	},
-	{
-		path: `${routers.content}/${routers.createtrainingcontent}`,
-		component: CreateTrainingContent,
-	},
-	{
-		path: `${routers.content}/${routers.updatetrainingcontent}/:idFinanceContent`,
-		component: CreateTrainingContent,
-	},
-	{
-		path: `${routers.content}/${routers.createwebcontent}`,
-		component: CreateWebContent,
-	},
-	{
-		path: `${routers.content}/${routers.updatewebcontent}/:idWebContent`,
-		component: CreateWebContent,
-	},
-	{
-		path: `${routers.content}/${routers.createsoftwarecontent}`,
-		component: CreateServiceContent,
-	},
-	{
-		path: `${routers.content}/${routers.updatesoftwarecontent}/:idServiceContent`,
-		component: CreateServiceContent,
+		path: `${routers.content}/${routers.updatejobscontent}/:idJobsContent`,
+		component: CreateJobsContent,
 	},
 	{
 		path: `${routers.content}/${routers.createrecuitercontent}`,

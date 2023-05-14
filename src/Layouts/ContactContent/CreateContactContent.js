@@ -7,21 +7,30 @@ import { useAppContext } from '../../utils';
 import {
 	Button,
 	EditorTiny,
+	FormInput,
 	MultipleUpload,
+	SelectValue,
 	SingleUpload,
 	SnackbarCp,
 } from '../../components';
 import routers from '../../routers/routers';
 import { actions } from '../../app/';
+import DataTopicContent from '../../utils/FakeData/TopicContent';
 
 const cx = className.bind(styles);
 
 function CreateContactContent() {
 	const { state, dispatch } = useAppContext();
-	const { multipleFile, singleFile } = state.set;
+	const {
+		multipleFile,
+		singleFile,
+		editor: { title, subTitle, topic },
+		searchValues: { topicSearch },
+	} = state.set;
 	const { idContactContent } = useParams();
-	const editorContentRef = useRef(null);
+	const editorContactRef = useRef(null);
 	const [isProcess, setIsProcess] = useState(false);
+	const [toggleSelectTopic, setToggleSelectTopic] = useState(false);
 	const [snackbar, setSnackbar] = useState({
 		open: false,
 		type: '',
@@ -36,22 +45,63 @@ function CreateContactContent() {
 			open: false,
 		});
 	};
+	const handleToogleSelectTopic = () => {
+		setToggleSelectTopic(!toggleSelectTopic);
+	};
 	useEffect(() => {
-		document.title = `Bài đăng liên hệ | ${process.env.REACT_APP_TITLE_WEB}`;
+		document.title = `Bài đăng liên hệ hợp tác | ${process.env.REACT_APP_TITLE_WEB}`;
 	}, []);
 	useEffect(() => {
 		dispatch(
 			actions.setData({
 				multipleFiles: [],
 				singleFile: [],
+				editor: { title: '', subTitle: '', topic: '' },
+				searchValues: { topicSearch: '' },
 			}),
 		);
 	}, [dispatch]);
+	const handleChangeInput = (e) => {
+		const { name, value } = e.target;
+		dispatch(
+			actions.setData({
+				editor: {
+					...state.set.editor,
+					[name]: value,
+				},
+			}),
+		);
+	};
+	const handleChangeSearchSelect = (e) => {
+		const { name, value } = e.target;
+		dispatch(
+			actions.setData({
+				searchValues: {
+					...state.set.searchValues,
+					[name]: value,
+				},
+			}),
+		);
+	};
+	const handleClickSelect = (item) => {
+		dispatch(
+			actions.setData({
+				editor: {
+					...state.set.editor,
+					topic: item,
+				},
+			}),
+		);
+		setToggleSelectTopic(false);
+	};
 	const handleCreateContent = () => {
 		console.log(
 			singleFile,
+			title,
+			subTitle,
+			topic,
 			multipleFile,
-			editorContentRef?.current?.getContent(),
+			editorContactRef?.current?.getContent(),
 		);
 	};
 	// <div dangerouslySetInnerHTML={{ __html: data.description }}></div>
@@ -64,9 +114,33 @@ function CreateContactContent() {
 				typeSnackbar={snackbar.type}
 			/>
 			<p className={`${cx('header_title')}`}>Nội dung</p>
+			<FormInput
+				type="text"
+				placeholder="Nhập tiêu đề..."
+				name="title"
+				onChange={handleChangeInput}
+			/>
+			<FormInput
+				type="text"
+				placeholder="Nhập tiêu đề phụ..."
+				name="subTitle"
+				onChange={handleChangeInput}
+			/>
+			<SelectValue
+				placeholder="Chọn chủ đề..."
+				nameSearch="topicSearch"
+				toggleModal={handleToogleSelectTopic}
+				stateModal={toggleSelectTopic}
+				valueSelect={topic?.name}
+				onChangeSearch={handleChangeSearchSelect}
+				dataFlag={DataTopicContent.filter((x) =>
+					x?.name?.includes(topicSearch),
+				)}
+				onClick={handleClickSelect}
+			/>
 			<EditorTiny
-				textInitial="Nội dung trang liên hệ..."
-				ref={editorContentRef}
+				textInitial="Nội dung trang liên hệ hợp tác..."
+				ref={editorContactRef}
 				value=""
 			/>
 			<p className={`${cx('header_title')}`}>Tải một hình ảnh</p>
@@ -90,7 +164,7 @@ function CreateContactContent() {
 					onClick={handleCreateContent}
 					disabled={
 						isProcess ||
-						!editorContentRef?.current?.getContent() ||
+						!editorContactRef?.current?.getContent() ||
 						singleFile.length === 0 ||
 						multipleFile.length === 0
 					}

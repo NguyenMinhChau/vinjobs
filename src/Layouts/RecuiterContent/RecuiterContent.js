@@ -3,17 +3,17 @@ import React, { useState } from 'react';
 import className from 'classnames/bind';
 import styles from './RecuiterContent.module.css';
 import { actions } from '../../app/';
-import { getStore } from '../../utils/localStore/localStore';
 import {
 	deleteUtils,
 	handleUtils,
 	localStoreUtils,
 	useAppContext,
 } from '../../utils';
-import routers from '../../routers/routers';
 import { ActionsTable, Icons, Modal, SnackbarCp } from '../../components';
-import DataRecuiterContentHeader from '../../utils/FakeData/RecuiterContentHeader';
+import routers from '../../routers/routers';
+import { getStore } from '../../utils/localStore/localStore';
 import General from '../General/General';
+import DataRecuiterContentHeader from '../../utils/FakeData/RecuiterContentHeader';
 
 const cx = className.bind(styles);
 
@@ -43,7 +43,7 @@ function RecuiterContent() {
 	let showPage = 10;
 	const start = (page - 1) * showPage + 1;
 	const end = start + showPage - 1;
-	const dataRecuiterContentFlag = [1, 2, 3, 4, 5, 6, 7];
+	const dataRecuiterContentFlag = [1, 2, 3];
 	const modalDeleteTrue = (e, id) => {
 		return deleteUtils.deleteTrue(e, id, dispatch, state, actions);
 	};

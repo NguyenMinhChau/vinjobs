@@ -3,11 +3,7 @@ import React, { useEffect, useState } from 'react';
 import className from 'classnames/bind';
 import styles from './Content.module.css';
 import HomeContent from '../HomeContent/HomeContent';
-import IntroduceContent from '../IntroduceContent/IntroduceContent';
-import FinanceReportContent from '../FinanceReportContent/FinanceReportContent';
-import TrainingContent from '../TrainingContent/TrainingContent';
-import WebContent from '../WebContent/WebContent';
-import ServiceSoftwareContent from '../ServiceSoftwareContent/ServiceSoftwareContent';
+import JobsContent from '../JobsContent/JobsContent';
 import RecuiterContent from '../RecuiterContent/RecuiterContent';
 import ContactContent from '../ContactContent/ContactContent';
 
@@ -15,42 +11,22 @@ const cx = className.bind(styles);
 const LIST_CONTENTS = [
 	{
 		id: 1,
-		name: 'Trang chủ',
+		name: 'Về chúng tôi',
 		component: <HomeContent />,
 	},
 	{
 		id: 2,
-		name: 'Giới thiệu',
-		component: <IntroduceContent />,
+		name: 'Việc làm',
+		component: <JobsContent />,
 	},
 	{
 		id: 3,
-		name: 'Báo cáo tài chính',
-		component: <FinanceReportContent />,
-	},
-	{
-		id: 4,
-		name: 'Đào tạo',
-		component: <TrainingContent />,
-	},
-	{
-		id: 5,
-		name: 'Web',
-		component: <WebContent />,
-	},
-	{
-		id: 6,
-		name: 'Dịch vụ phần mềm',
-		component: <ServiceSoftwareContent />,
-	},
-	{
-		id: 7,
 		name: 'Tuyển dụng',
 		component: <RecuiterContent />,
 	},
 	{
-		id: 8,
-		name: 'Liên hệ',
+		id: 4,
+		name: 'Liên hệ hợp tác',
 		component: <ContactContent />,
 	},
 ];

@@ -11,9 +11,10 @@ import {
 	useAppContext,
 } from '../../utils';
 import routers from '../../routers/routers';
-import { ActionsTable, Icons, Modal, SnackbarCp } from '../../components';
-import DataContactContentHeader from '../../utils/FakeData/ContactContentHeader';
+import { ActionsTable, Icons, SnackbarCp } from '../../components';
+import { Modal } from '@mui/material';
 import General from '../General/General';
+import DataContactContentHeader from '../../utils/FakeData/ContactContentHeader';
 
 const cx = className.bind(styles);
 
@@ -43,7 +44,7 @@ function ContactContent() {
 	let showPage = 10;
 	const start = (page - 1) * showPage + 1;
 	const end = start + showPage - 1;
-	const dataContactContentFlag = [1, 2, 3, 4, 5, 6, 7, 8];
+	const dataContactContentFlag = [1, 2, 3, 4];
 	const modalDeleteTrue = (e, id) => {
 		return deleteUtils.deleteTrue(e, id, dispatch, state, actions);
 	};
