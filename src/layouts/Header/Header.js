@@ -73,6 +73,9 @@ export default function Header() {
 						<LinkHref url="https://youtube.com/">
 							<IconHeader.YoutubeIcon />
 						</LinkHref>
+						<LinkHref url="##">
+							<IconHeader.TiktokIcon />
+						</LinkHref>
 					</div>
 				</div>
 				<div className={`${cx('header_top_item')} flex-end`}>

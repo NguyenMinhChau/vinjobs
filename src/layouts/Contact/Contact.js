@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import className from 'classnames/bind';
 import styles from './Contact.module.css';
 import { SkeletonCP, SliderHeader } from '../../components';
+import LOGO_SLIDER_HEADER from '../../assets/images/contact_page_bgc.gif';
 
 const cx = className.bind(styles);
 
@@ -12,11 +13,9 @@ export default function Contact() {
 	return (
 		<div className={`${cx('container')}`}>
 			<SliderHeader
-				urlImage="https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzF8fGNvbnRhY3R8ZW58MHx8MHx8&auto=format&fit=crop&w=2000&q=2000"
-				title1="HOTLINE:"
-				title2="0345.335.422"
-				title3="EMAIL:"
-				title4="support@vinjob.com.vn"
+				urlImage={LOGO_SLIDER_HEADER}
+				title={`<div>HOTLINE: <a href='tel:0345335422' class='text-primary'>0345.335.422</a></div>
+						<div>EMAIL: <a href='mailto:support@vinjob.com.vn' class='text-primary'>support@vinjob.com.vn</a></div>`}
 				animateName="animate__fadeInBottomRight"
 			/>
 			<SkeletonCP />

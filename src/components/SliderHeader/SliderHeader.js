@@ -4,14 +4,7 @@ import styles from './SliderHeader.module.css';
 
 const cx = className.bind(styles);
 
-export default function SliderHeader({
-	urlImage,
-	title1,
-	title2,
-	title3,
-	title4,
-	animateName,
-}) {
+export default function SliderHeader({ urlImage, title, animateName }) {
 	return (
 		<div className={`${cx('slider-header')}`}>
 			<div
@@ -25,18 +18,10 @@ export default function SliderHeader({
 					className={`${cx(
 						'slider-title',
 					)} mb8 animate__animated ${animateName}`}
-				>
-					{title1}{' '}
-					<span className={`${cx('text-primary')}`}>{title2}</span>
-				</div>
-				<div
-					className={`${cx(
-						'slider-title',
-					)} mb8 animate__animated ${animateName}`}
-				>
-					{title3}{' '}
-					<span className={`${cx('text-primary')}`}>{title4}</span>
-				</div>
+					dangerouslySetInnerHTML={{
+						__html: title,
+					}}
+				></div>
 			</div>
 		</div>
 	);
