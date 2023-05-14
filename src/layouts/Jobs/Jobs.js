@@ -14,7 +14,7 @@ export default function Jobs() {
 		<div className={`${cx('container')}`}>
 			<SliderHeader
 				urlImage={LOGO_SLIDER_HEADER}
-				title={`VIỆC LÀM`}
+				title={`<b>VIỆC LÀM</b>`}
 				animateName="animate__bounceInUp"
 			/>
 			<SkeletonCP />

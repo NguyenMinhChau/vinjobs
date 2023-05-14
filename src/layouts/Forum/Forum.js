@@ -14,7 +14,7 @@ export default function Forum() {
 		<div className={`${cx('container')}`}>
 			<SliderHeader
 				urlImage={LOGO_SLIDER_HEADER}
-				title={`DIỄN ĐÀN`}
+				title={`<b>DIỄN ĐÀN</b>`}
 				animateName="animate__fadeInBottomLeft"
 			/>
 			<SkeletonCP />

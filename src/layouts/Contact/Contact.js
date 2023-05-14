@@ -14,8 +14,8 @@ export default function Contact() {
 		<div className={`${cx('container')}`}>
 			<SliderHeader
 				urlImage={LOGO_SLIDER_HEADER}
-				title={`<div>HOTLINE: <a href='tel:0345335422' class='text-primary'>0345.335.422</a></div>
-						<div>EMAIL: <a href='mailto:support@vinjob.com.vn' class='text-primary'>support@vinjob.com.vn</a></div>`}
+				title={`<div><b>HOTLINE: <a href='tel:0345335422' class='text-primary'>0345.335.422</a></b></div>
+						<div><b>EMAIL: <a href='mailto:support@vinjob.com.vn' class='text-primary'>support@vinjob.com.vn</a></b></div>`}
 				animateName="animate__fadeInBottomRight"
 			/>
 			<SkeletonCP />
