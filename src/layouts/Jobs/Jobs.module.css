@@ -15,6 +15,7 @@
 	border: 1px solid var(--color-primary);
 	min-height: 120px;
 	display: flex;
+	flex-wrap: wrap;
 }
 .list_item_text {
 	flex: 2;
@@ -67,6 +68,17 @@
 }
 .pagination-countpage {
 	display: flex;
-	justify-content: space-around;
 	align-items: center;
+	justify-content: center;
+}
+
+/* TABLET */
+@media (min-width: 46.25em) and (max-width: 63.9375em) {
+}
+
+/* MOBILE */
+@media (max-width: 46.25em) {
+	.list_item {
+		flex-direction: column;
+	}
 }

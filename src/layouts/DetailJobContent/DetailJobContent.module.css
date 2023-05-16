@@ -1,0 +1,24 @@
+.detail_container {
+	padding: 12px;
+}
+.list_item {
+	width: 100%;
+	padding: 12px;
+	border-radius: 10px;
+	border: 1px solid var(--color-primary);
+	min-height: 120px;
+}
+.title_job {
+	font-weight: bold;
+	font-size: 22px;
+	line-height: 1.5;
+}
+.subtitle_job {
+	font-size: 16px;
+	color: #ccc;
+	line-height: 1.5;
+}
+.desc_job {
+	line-height: 1.5;
+	text-align: justify;
+}

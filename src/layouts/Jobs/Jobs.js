@@ -55,10 +55,10 @@ export default function Jobs() {
 				<div className={`${cx('list_jobs')}`}>
 					{DATA_JOBS_FLAG.map((item, index) => {
 						return (
-							<div className={`${cx('list_item')}`}>
+							<div className={`${cx('list_item')}`} key={index}>
 								<div className={`${cx('list_item_text')}`}>
 									<p className={`${cx('title_job')}`}>
-										Tiêu đề tuyển dụng
+										Tiêu đề tuyển dụng {item}
 									</p>
 									<p className={`${cx('subtitle_job')}`}>
 										{moment(new Date()).format(
@@ -70,32 +70,12 @@ export default function Jobs() {
 										HTML is the foundation of the web, and
 										it provides various tags and attributes
 										to enhance the performance and user
-										experience of a website. Among these,
-										two important attributes are prefetch
-										and preload. Although they may sound
-										similar, they have distinct purposes and
-										functionalities. In this article, we
-										will delve into the details of prefetch
-										and preload, understand their
-										differences, and explore examples to
-										grasp their practical applications.
-										Prefetching is a technique used to
-										reduce the perceived load time of a web
-										page by fetching resources in advance
-										before they are actually needed. It
-										enables browsers to download and cache
-										external resources, such as CSS files,
-										JavaScript files, images, or fonts,
-										ahead of time. When a user navigates to
-										a new page that requires these
-										resources, the browser can retrieve them
-										from the cache, resulting in a faster
-										page load.
+										experience of a website.
 									</p>
 									<div className={`${cx('link_container')}`}>
 										<Link
 											target="_blank"
-											to={`${routers.jobs}${routers.detail}/1`}
+											to={`${routers.jobs}${routers.detail}/${item}`}
 											className={`${cx('link')}`}
 										>
 											Xem chi tiết
@@ -114,19 +94,15 @@ export default function Jobs() {
 					})}
 				</div>
 				<div className={`${cx('pagination-countpage')}`}>
-					<div
-						className={`${cx('countpage-container')}`}
-						style={{ flex: 2, marginLeft: '8px' }}
-					>
+					{/* <div className={`${cx('countpage-container')}`}>
 						<span className={`${cx('countpage-text')}`}>
 							items per page | {start} -{' '}
 							{totalData < end ? totalData : end} of {totalData}
 						</span>
-					</div>
+					</div> */}
 					<Stack
 						spacing={2}
 						className={`${cx('pagination-container')}`}
-						style={{ flex: 1 }}
 					>
 						<Pagination
 							onChange={handleChangePage}
@@ -140,7 +116,6 @@ export default function Jobs() {
 							shape="rounded"
 						/>
 					</Stack>
-					<div style={{ flex: 2 }}></div>
 				</div>
 			</div>
 		</div>
