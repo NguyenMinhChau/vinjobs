@@ -91,7 +91,11 @@
 	line-height: 1.5;
 	text-align: justify;
 }
-
+@media (min-width: 46.25em) and (max-width: 63.9375em) {
+	.title-header {
+		font-size: 30px;
+	}
+}
 /* MOBILE */
 @media (max-width: 46.25em) {
 	.list-container {
