@@ -13,6 +13,7 @@ export const initialState = {
 		confirmPassword: '',
 		otpCode: '',
 		file: [],
+		pagination: { page: 1, show: 10 },
 	},
 	toogle: {},
 };

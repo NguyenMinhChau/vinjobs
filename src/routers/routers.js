@@ -8,6 +8,7 @@ const routers = {
 	jobs: '/jobs',
 	forum: '/forum',
 	contact: '/contact',
+	detail: '/detail',
 	pageNotFound: '*',
 };
 

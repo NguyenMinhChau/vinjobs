@@ -9,5 +9,6 @@ export { default as Jobs } from './Jobs/Jobs';
 export { default as Forum } from './Forum/Forum';
 export { default as General } from './General/General';
 export { default as Contact } from './Contact/Contact';
+export { default as DetailJobContent } from './DetailJobContent/DetailJobContent';
 export { default as Footer } from './Footer/Footer';
 export { default as PageNotFound } from './PageNotFound/PageNotFound';

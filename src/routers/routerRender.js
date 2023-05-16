@@ -7,6 +7,7 @@ import {
 	ForgotPwd,
 	ResetPwd,
 	Forum,
+	DetailJobContent,
 	PageNotFound,
 } from '../layouts';
 import routers from './routers';
@@ -32,6 +33,10 @@ export const privateRouter = [
 	{
 		path: routers.contact,
 		component: Contact,
+	},
+	{
+		path: `${routers.jobs}${routers.detail}/:idContent`,
+		component: DetailJobContent,
 	},
 	{ path: routers.pageNotFound, component: PageNotFound, layout: null },
 ];
