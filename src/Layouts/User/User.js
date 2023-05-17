@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
@@ -64,14 +65,14 @@ function User() {
 			open: false,
 		});
 	};
-	const { modalDelete, modalStatus } = state.toggle;
+	const { modalDelete } = state.toggle;
 	const [isProcess, setIsProcess] = useState(false);
 	const [modalChangeRule, setModalChangeRule] = useState(false);
 	const useDebounceUser = useDebounce(user, 1000);
-	useEffect(() => {
-		document.title = `Tài khoản | ${process.env.REACT_APP_TITLE_WEB}`;
+	const getUserSV = (dataToken) => {
 		getUsersSV({
 			state,
+			token: dataToken?.token,
 			dispatch,
 			actions,
 			setSnackbar,
@@ -79,17 +80,18 @@ function User() {
 			show,
 			search: useDebounceUser,
 		});
+	};
+	useEffect(() => {
+		document.title = `Tài khoản | ${process.env.REACT_APP_TITLE_WEB}`;
+		requestRefreshToken(currentUser, getUserSV, state, dispatch, actions);
 	}, [useDebounceUser, page, show]);
-	let dataUserFlag = dataUser?.users || [];
+	let dataUserFlag = dataUser || [];
 	if (user) {
 		dataUserFlag = dataUserFlag.filter((item) => {
 			return (
-				item.payment.username
-					.toLowerCase()
-					.includes(user.toLowerCase()) ||
-				item.payment.email.toLowerCase().includes(user.toLowerCase()) ||
-				item.payment.roles.toLowerCase().includes(user.toLowerCase()) ||
-				item.rank.toLowerCase().includes(user.toLowerCase()) ||
+				item.username.toLowerCase().includes(user.toLowerCase()) ||
+				item.email.toLowerCase().includes(user.toLowerCase()) ||
+				item.roles.toLowerCase().includes(user.toLowerCase()) ||
 				moment(item.createdAt)
 					.format('DD/MM/YYYY HH:mm:ss')
 					.toLowerCase()
@@ -97,12 +99,6 @@ function User() {
 			);
 		});
 	}
-	const toggleEditTrue = async (e, status, id) => {
-		deleteUtils.statusTrue(e, status, id, dispatch, state, actions);
-	};
-	const toggleEditFalse = (e) => {
-		return deleteUtils.statusFalse(e, dispatch, state, actions);
-	};
 	const modalDeleteTrue = (e, id) => {
 		return deleteUtils.deleteTrue(e, id, dispatch, state, actions);
 	};
@@ -168,34 +164,7 @@ function User() {
 			id,
 		);
 	};
-	const handleSendRank = (dataToken, id) => {
-		updateRankUserSV({
-			id_user: id,
-			dispatch,
-			state,
-			setSnackbar,
-			statusCurrent,
-			statusUpdate,
-			token: dataToken?.token,
-			setIsProcess,
-			page,
-			show,
-			search: useDebounceUser,
-		});
-	};
-	const editRank = async (id) => {
-		await 1;
-		setIsProcess(true);
-		requestRefreshToken(
-			currentUser,
-			handleSendRank,
-			state,
-			dispatch,
-			actions,
-			id,
-		);
-	};
-	const handleSendRule = async (dataToken, id) => {
+	const handleSendRule = (dataToken, id) => {
 		updateRuleUserSV({
 			id_user: id,
 			dispatch,
@@ -211,8 +180,7 @@ function User() {
 			search: useDebounceUser,
 		});
 	};
-	const editRuleUser = async (id) => {
-		await 1;
+	const editRuleUser = (id) => {
 		setIsProcess(true);
 		requestRefreshToken(
 			currentUser,
@@ -232,10 +200,10 @@ function User() {
 							{handleUtils.indexTable(page, show, index)}
 						</td>
 						<td className="item-w200">
-							{item.payment.username || <Skeleton width={50} />}
+							{item.username || <Skeleton width={50} />}
 						</td>
-						<td className="item-w200">
-							{item.payment.email || <Skeleton width={50} />}
+						<td className="item-w250">
+							{item.email || <Skeleton width={50} />}
 						</td>
 						<td className="item-w150">
 							{moment(item.createdAt).format(
@@ -245,15 +213,11 @@ function User() {
 						<td>
 							<TrStatus
 								item={
-									item.payment.roles.charAt(0).toUpperCase() +
-									item.payment.roles.slice(1).toLowerCase()
+									item.roles.charAt(0).toUpperCase() +
+									item.roles.slice(1).toLowerCase()
 								}
 								onClick={async (e) => {
-									toggleEditRuleTrue(
-										e,
-										item.payment.roles,
-										item._id,
-									);
+									toggleEditRuleTrue(e, item.roles, item._id);
 									await localStoreUtils.setStore({
 										...currentUser,
 										idUpdate: item?._id,
@@ -266,26 +230,7 @@ function User() {
 								}}
 							/>
 						</td>
-						<td>
-							<TrStatus
-								item={
-									item.rank.charAt(0).toUpperCase() +
-									item.rank.slice(1).toLowerCase()
-								}
-								onClick={async (e) => {
-									toggleEditTrue(e, item.rank, item._id);
-									await localStoreUtils.setStore({
-										...currentUser,
-										idUpdate: item?._id,
-									});
-									await dispatch(
-										actions.setData({
-											currentUser: getStore(),
-										}),
-									);
-								}}
-							/>
-						</td>
+
 						<td>
 							<ActionsTable
 								view
@@ -323,32 +268,20 @@ function User() {
 				valueSearch={user}
 				nameSearch="user"
 				dataHeaders={headers}
-				dataFlag={dataUserFlag}
-				totalData={dataUser?.total || dataUserFlag?.length}
-				PaginationCus={!dataUser?.total}
-				dataPagiCus={dataUserFlag}
+				totalData={dataUserFlag?.length}
+				PaginationCus
+				dataPagiCus={dataUserFlag?.filter((row, index) => {
+					if (index + 1 >= start && index + 1 <= end) return true;
+				})}
 				startPagiCus={start}
 				endPagiCus={end}
 			>
-				<RenderBodyTable data={dataUserFlag} />
+				<RenderBodyTable
+					data={dataUserFlag?.filter((row, index) => {
+						if (index + 1 >= start && index + 1 <= end) return true;
+					})}
+				/>
 			</General>
-			{modalStatus && (
-				<Modal
-					titleHeader="Thay đổi hạng"
-					actionButtonText="Gửi"
-					openModal={toggleEditTrue}
-					closeModal={toggleEditFalse}
-					classNameButton="vipbgc"
-					onClick={() => editRank(currentUser?.idUpdate)}
-					isProcess={isProcess}
-				>
-					<p className="modal-delete-desc">
-						Bạn có chắc thay đổi hạng tài khoản này [
-						{currentUser?.idUpdate}]?
-					</p>
-					<SelectStatus rank />
-				</Modal>
-			)}
 			{modalChangeRule && (
 				<Modal
 					titleHeader="Thay đổi quyền"

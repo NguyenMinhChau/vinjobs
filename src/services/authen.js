@@ -5,7 +5,7 @@ import {
 } from '../utils/localStore/localStore';
 import { setData } from '../app/reducer';
 import routers from '../routers/routers';
-import { authGet, authPost } from '../utils/Axios/axiosInstance';
+import { authPost } from '../utils/Axios/axiosInstance';
 // REGISTER USER
 export const authRegisterSV = async (props = {}) => {
 	const { email, password, username, history, setIsProcess, setSnackbar } =
@@ -16,7 +16,7 @@ export const authRegisterSV = async (props = {}) => {
 			password: password,
 			username: username,
 		});
-		console.log('authRegisterSV: ', resPost);
+		// console.log('authRegisterSV: ', resPost);
 		setIsProcess(false);
 		setSnackbar({
 			open: true,
@@ -44,8 +44,8 @@ export const authLoginSV = async (props = {}) => {
 		});
 		// console.log('authLoginSV: ', resPost);
 		if (
-			resPost?.metadata?.user?.payment.roles !== 'admin' &&
-			resPost?.metadata?.user?.payment.roles !== 'manager'
+			resPost?.metadata?.user.roles !== 'admin' &&
+			resPost?.metadata?.user.roles !== 'manager'
 		) {
 			setSnackbar({
 				open: true,
@@ -57,12 +57,10 @@ export const authLoginSV = async (props = {}) => {
 		}
 		await setStore({
 			token: resPost?.metadata?.token,
-			username: resPost?.metadata?.user?.payment?.username,
-			email: resPost?.metadata?.user?.payment?.email,
-			rule: resPost?.metadata?.user?.payment.roles,
-			rank: resPost?.metadata?.user?.rank,
+			username: resPost?.metadata?.user?.username,
+			email: resPost?.metadata?.user?.email,
+			rule: resPost?.metadata?.user?.roles,
 			id: resPost?.metadata?.user?._id,
-			balance: resPost?.metadata?.user?.Wallet?.balance,
 		});
 		await dispatch(
 			setData({
@@ -87,10 +85,10 @@ export const authLoginSV = async (props = {}) => {
 };
 // LOGOUT AUTHEN
 export const authLogoutSV = async (props = {}) => {
-	const { id_user, history, setSnackbar, dispatch } = props;
+	const { email_user, history, setSnackbar, dispatch } = props;
 	try {
-		const resGet = await authGet(`logout/${id_user}`, {});
-		console.log('authLogoutSV: ', resGet);
+		const resGet = await authPost(`logout/${email_user}`, {});
+		// console.log('authLogoutSV: ', resGet);
 		await removeStore();
 		await dispatch(
 			setData({

@@ -225,6 +225,16 @@ button {
 	min-width: 200px !important;
 	word-wrap: break-word !important;
 }
+.item-w250 {
+	max-width: 250px !important;
+	min-width: 250px !important;
+	word-wrap: break-word !important;
+}
+.item-w300 {
+	max-width: 300px !important;
+	min-width: 300px !important;
+	word-wrap: break-word !important;
+}
 
 .label {
 	font-size: 14px;

@@ -10,44 +10,44 @@ import { useAppContext } from '../../utils';
 const cx = className.bind(styles);
 
 function PageNotFound() {
-    const { state } = useAppContext();
-    const { currentUser } = state.set;
-    const history = useNavigate();
-    useEffect(() => {
-        if (!currentUser || !currentUser?.rule) {
-            history(routers.login);
-        }
-    }, []);
-    return (
-        <div className={`${cx('page-not-found-container')}`}>
-            {!currentUser || !currentUser?.rule ? (
-                <div className='fz16 fwb'>
-                    The login session has expired or the path is invalid. Please
-                    login again. Thanks
-                </div>
-            ) : (
-                <Image
-                    src='/svgs/404.svg'
-                    alt='pageNotFoundImage'
-                    className={`${cx('page-not-found-image')}`}
-                />
-            )}
-            <p className={`${cx('backToHome')}`}>
-                Back to{' '}
-                <Link
-                    to={
-                        !currentUser || !currentUser?.rule
-                            ? routers.login
-                            : routers.dashboard
-                    }
-                >
-                    {!currentUser || !currentUser?.rule
-                        ? 'Login Page'
-                        : 'Home Page'}
-                </Link>
-            </p>
-        </div>
-    );
+	const { state } = useAppContext();
+	const { currentUser } = state.set;
+	const history = useNavigate();
+	useEffect(() => {
+		if (!currentUser || !currentUser?.rule) {
+			history(routers.login);
+		}
+	}, []);
+	return (
+		<div className={`${cx('page-not-found-container')}`}>
+			{!currentUser || !currentUser?.rule ? (
+				<div className="fz16 fwb">
+					The login session has expired or the path is invalid. Please
+					login again. Thanks
+				</div>
+			) : (
+				<Image
+					src="/svgs/404.svg"
+					alt="pageNotFoundImage"
+					className={`${cx('page-not-found-image')}`}
+				/>
+			)}
+			<p className={`${cx('backToHome')}`}>
+				Back to{' '}
+				<Link
+					to={
+						!currentUser || !currentUser?.rule
+							? routers.login
+							: routers.content
+					}
+				>
+					{!currentUser || !currentUser?.rule
+						? 'Login Page'
+						: 'Home Page'}
+				</Link>
+			</p>
+		</div>
+	);
 }
 
 export default PageNotFound;

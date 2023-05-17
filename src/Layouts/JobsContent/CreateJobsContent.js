@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react';
 import className from 'classnames/bind';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styles from './JobsContent.module.css';
-import { useAppContext } from '../../utils';
+import { requestRefreshToken, useAppContext } from '../../utils';
 import {
 	Button,
 	EditorTiny,
@@ -17,26 +18,36 @@ import routers from '../../routers/routers';
 import { actions } from '../../app/';
 import DataTopicContent from '../../utils/FakeData/TopicContent';
 import LOGO_COMPANY from '../../assets/images/logo_company.png';
+import {
+	addJobContentSV,
+	getJobByIdSV,
+	updateJobContentSV,
+	updateThumbnailSV,
+} from '../../services/admin';
 
 const cx = className.bind(styles);
 
 function CreateJobsContent() {
 	const { state, dispatch } = useAppContext();
 	const {
+		currentUser,
 		multipleFile,
 		singleFile,
 		editor: { title, subTitle, topic, salary },
 		searchValues: { topicSearch },
+		edit: { itemData },
 	} = state.set;
 	const { idJobsContent } = useParams();
 	const editorJobsRef = useRef(null);
 	const [isProcess, setIsProcess] = useState(false);
+	const [isProcessThumbnail, setIsProcessThumbnail] = useState(false);
 	const [toggleSelectTopic, setToggleSelectTopic] = useState(false);
 	const [snackbar, setSnackbar] = useState({
 		open: false,
 		type: '',
 		message: '',
 	});
+	const history = useNavigate();
 	const handleCloseSnackbar = (event, reason) => {
 		if (reason === 'clickaway') {
 			return;
@@ -49,8 +60,26 @@ function CreateJobsContent() {
 	const handleToogleSelectTopic = () => {
 		setToggleSelectTopic(!toggleSelectTopic);
 	};
+	const getJobById = (dataToken) => {
+		getJobByIdSV({
+			id_post: idJobsContent,
+			setSnackbar,
+			dispatch,
+			state,
+			token: dataToken?.token,
+		});
+	};
 	useEffect(() => {
 		document.title = `Bài đăng việc làm | ${process.env.REACT_APP_TITLE_WEB}`;
+		if (idJobsContent) {
+			requestRefreshToken(
+				currentUser,
+				getJobById,
+				state,
+				dispatch,
+				actions,
+			);
+		}
 	}, []);
 	useEffect(() => {
 		dispatch(
@@ -95,23 +124,91 @@ function CreateJobsContent() {
 		);
 		setToggleSelectTopic(false);
 	};
-	const handleCreateContent = () => {
-		console.log(
-			singleFile,
+	const createContent = (dataToken) => {
+		addJobContentSV({
+			id_user: currentUser?.id,
+			setSnackbar,
+			dispatch,
+			state,
+			token: dataToken?.token,
 			title,
-			subTitle,
-			topic,
-			multipleFile,
-			editorJobsRef?.current?.getContent(),
+			desc: subTitle,
+			content: editorJobsRef?.current?.getContent(),
+			statements: multipleFile,
+			type: topic?.type,
+			history,
+			setIsProcess,
+			editorJobsRef,
+		});
+	};
+	const handleCreateContent = () => {
+		setIsProcess(true);
+		requestRefreshToken(
+			currentUser,
+			createContent,
+			state,
+			dispatch,
+			actions,
+		);
+	};
+	const updateThumbnail = (dataToken) => {
+		updateThumbnailSV({
+			id_post: idJobsContent,
+			setSnackbar,
+			dispatch,
+			state,
+			setIsProcessThumbnail,
+			thumbnail: singleFile[0],
+			token: dataToken?.token,
+			history,
+		});
+	};
+	const handleUpdateThumbnail = () => {
+		setIsProcessThumbnail(true);
+		requestRefreshToken(
+			currentUser,
+			updateThumbnail,
+			state,
+			dispatch,
+			actions,
+		);
+	};
+	const updateJobContent = (dataToken) => {
+		updateJobContentSV({
+			id_post: idJobsContent,
+			setSnackbar,
+			dispatch,
+			state,
+			setIsProcess,
+			title,
+			desc: subTitle,
+			content: editorJobsRef?.current?.getContent(),
+			statements: multipleFile,
+			type: topic?.type,
+			token: dataToken?.token,
+			history,
+		});
+	};
+	const handleUpdateJobContent = () => {
+		setIsProcess(true);
+		requestRefreshToken(
+			currentUser,
+			updateJobContent,
+			state,
+			dispatch,
+			actions,
 		);
 	};
 	// <div dangerouslySetInnerHTML={{ __html: data.description }}></div>
+	const URL = process.env.REACT_APP_URL_IMAGE;
 	const urlImageSingle =
-		singleFile.length > 0 ? URL.createObjectURL(singleFile[0]) : '';
-	let urlMultipleImages = [1, 2, 3, 4, 5];
+		singleFile.length > 0
+			? window.URL.createObjectURL(singleFile?.[0])
+			: '';
+	let urlMultipleImages = [];
 	if (multipleFile.length > 0) {
 		urlMultipleImages = multipleFile.map((item) => {
-			return URL.createObjectURL(item);
+			return window.URL.createObjectURL(item);
 		});
 	}
 	return (
@@ -122,26 +219,34 @@ function CreateJobsContent() {
 				messageSnackbar={snackbar.message}
 				typeSnackbar={snackbar.type}
 			/>
-			<p className={`${cx('header_title')}`}>Nội dung</p>
 			<FormInput
+				label="Tiêu đề tuyển dụng"
 				type="text"
 				placeholder="Nhập vị trí tuyển dụng..."
 				name="title"
 				onChange={handleChangeInput}
+				value={title}
+				labelClass="confirm"
 			/>
 			<FormInput
+				label="Tên công ty"
 				type="text"
 				placeholder="Nhập tên công ty..."
 				name="subTitle"
 				onChange={handleChangeInput}
+				value={subTitle}
+				labelClass="confirm"
 			/>
 			<FormInput
+				label="Mức lương"
 				type="text"
 				placeholder="Nhập mức lương (VD: 8.000.000 - 10.000.000 hoặc Thỏa thuận)"
 				name="salary"
 				onChange={handleChangeInput}
+				labelClass="confirm"
 			/>
 			<SelectValue
+				label="Lĩnh vực"
 				placeholder="Chọn lĩnh vực..."
 				nameSearch="topicSearch"
 				toggleModal={handleToogleSelectTopic}
@@ -151,42 +256,61 @@ function CreateJobsContent() {
 				dataFlag={DataTopicContent.filter(
 					(x) =>
 						x?.name?.includes(topicSearch) ||
-						x?.desc?.includes(topicSearch),
+						x?.desc?.includes(topicSearch) ||
+						x?.type?.includes(topicSearch),
 				)}
 				onClick={handleClickSelect}
+				labelClass="confirm"
 			/>
+			<label className={`${cx('label')}`}>Nội dung</label>
 			<EditorTiny
 				textInitial="Nội dung trang việc làm..."
 				ref={editorJobsRef}
-				value=""
+				value={itemData?.post?.content}
 			/>
-			<p className={`${cx('header_title')}`}>Hình ảnh (Single)</p>
-			<div className={`${cx('single_upload_container')}`}>
-				<SingleUpload width={'100%'} />
-				<img
-					src={urlImageSingle}
-					alt=""
-					className={`${cx('image_single')}`}
-					onError={(e) => (e.target.src = LOGO_COMPANY)}
-				/>
-			</div>
-			<p className={`${cx('header_title')}`}>Hình ảnh (Tối đa 5 ảnh)</p>
-			<div className={`${cx('multiple_upload_container')}`}>
-				<MultipleUpload width={'100%'} />
-				<div className={`${cx('image_multiple_container')}`}>
-					{urlMultipleImages.map((url, index) => {
-						return (
+			{idJobsContent && (
+				<>
+					<label className={`${cx('label')}`}>
+						Hình ảnh (Single)
+					</label>
+					<div className={`${cx('single_upload_container')}`}>
+						<SingleUpload width={'100%'} />
+						{(singleFile.length > 0 ||
+							itemData?.post?.thumbnail) && (
 							<img
-								key={index}
-								src={url}
+								src={
+									`${urlImageSingle}` ||
+									`${URL}${itemData?.post?.thumbnail}`
+								}
 								alt=""
-								className={`${cx('image_multiple_item')}`}
+								className={`${cx('image_single')}`}
 								onError={(e) => (e.target.src = LOGO_COMPANY)}
 							/>
-						);
-					})}
-				</div>
-			</div>
+						)}
+					</div>
+				</>
+			)}
+			{/* <label className={`${cx('label')}`}>Hình ảnh (Tối đa 5 ảnh)</label>
+			<div className={`${cx('multiple_upload_container')}`}>
+				<MultipleUpload width={'100%'} />
+				{urlMultipleImages.length > 0 && (
+					<div className={`${cx('image_multiple_container')}`}>
+						{urlMultipleImages.map((url, index) => {
+							return (
+								<img
+									key={index}
+									src={url}
+									alt=""
+									className={`${cx('image_multiple_item')}`}
+									onError={(e) =>
+										(e.target.src = LOGO_COMPANY)
+									}
+								/>
+							);
+						})}
+					</div>
+				)}
+			</div> */}
 			<div className={`${cx('button_container')}`}>
 				<Button
 					className="cancelbgc text-center"
@@ -197,16 +321,30 @@ function CreateJobsContent() {
 				<Button
 					className="probgc text-center"
 					isProcess={isProcess}
-					onClick={handleCreateContent}
+					onClick={
+						!idJobsContent
+							? handleCreateContent
+							: handleUpdateJobContent
+					}
 					disabled={
 						isProcess ||
-						!editorJobsRef?.current?.getContent() ||
-						singleFile.length === 0 ||
-						multipleFile.length === 0
+						!title ||
+						!subTitle ||
+						!editorJobsRef?.current?.getContent()
 					}
 				>
 					Gửi
 				</Button>
+				{idJobsContent && (
+					<Button
+						className="vipbgc text-center"
+						isProcess={isProcessThumbnail}
+						onClick={handleUpdateThumbnail}
+						disabled={isProcessThumbnail || singleFile.length === 0}
+					>
+						Cập nhật thumbnail
+					</Button>
+				)}
 			</div>
 		</div>
 	);

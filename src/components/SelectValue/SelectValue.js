@@ -16,10 +16,13 @@ export default function SelectValue({
 	onClick,
 	className,
 	placeholder,
+	labelClass,
 }) {
 	return (
 		<div className="detail-item flex-column p0">
-			{label && <label className="label mr-auto">{label}</label>}
+			{label && (
+				<label className={`label mr-auto ${labelClass}`}>{label}</label>
+			)}
 			<div className={`${cx('detail-list')}`}>
 				<div className={`${cx('list-container')}`}>
 					<div
@@ -49,7 +52,10 @@ export default function SelectValue({
 										key={index}
 										onClick={() => onClick(item)}
 									>
-										<b>{item.name}</b> • {item?.desc}
+										<b>
+											{item.name}_{item?.type}
+										</b>{' '}
+										• {item?.desc}
 									</div>
 								))
 							) : (

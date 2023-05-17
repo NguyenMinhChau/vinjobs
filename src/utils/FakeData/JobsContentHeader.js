@@ -7,10 +7,19 @@ const DataJobsContentHeader = (Icons) => {
 			},
 
 			h1: {
-				title: 'Nội dung',
+				title: 'Người tạo',
 			},
 			h2: {
+				title: 'Nội dung',
+			},
+			h3: {
 				title: 'Hình ảnh',
+			},
+			h4: {
+				title: 'Ngày tạo',
+			},
+			h5: {
+				title: 'Lĩnh vực',
 			},
 		},
 	};

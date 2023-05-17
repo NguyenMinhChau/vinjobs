@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import className from 'classnames/bind';
 import styles from './JobsContent.module.css';
 import { actions } from '../../app/';
@@ -7,6 +8,7 @@ import {
 	deleteUtils,
 	handleUtils,
 	localStoreUtils,
+	requestRefreshToken,
 	useAppContext,
 } from '../../utils';
 import { getStore } from '../../utils/localStore/localStore';
@@ -15,6 +17,8 @@ import { ActionsTable, Icons, Modal, SnackbarCp } from '../../components';
 import General from '../General/General';
 import DataJobsContentHeader from '../../utils/FakeData/JobsContentHeader';
 import LOGO_COMPANY from '../../assets/images/logo_company.png';
+import moment from 'moment';
+import { deleteJobContentSV, getAllJobContentSV } from '../../services/admin';
 
 const cx = className.bind(styles);
 
@@ -24,6 +28,7 @@ function JobsContent() {
 		currentUser,
 		searchValues: { jobsContent },
 		pagination: { page, show },
+		data: { dataJobContent, dataUser },
 	} = state.set;
 	const { modalDelete } = state.toggle;
 	const [isProcess, setIsProcess] = useState(false);
@@ -32,6 +37,18 @@ function JobsContent() {
 		type: '',
 		message: '',
 	});
+	const getAllJobSV = (dataToken) => {
+		getAllJobContentSV({
+			token: dataToken?.token,
+			setSnackbar,
+			dispatch,
+			state,
+		});
+	};
+	useEffect(() => {
+		requestRefreshToken(currentUser, getAllJobSV, state, dispatch, actions);
+	}, []);
+	// console.log(dataJobContent);
 	const handleCloseSnackbar = (event, reason) => {
 		if (reason === 'clickaway') {
 			return;
@@ -44,7 +61,7 @@ function JobsContent() {
 	let showPage = 10;
 	const start = (page - 1) * showPage + 1;
 	const end = start + showPage - 1;
-	const dataJobsContentFlag = [1, 2];
+	const dataJobsContentFlag = dataJobContent || [];
 	const modalDeleteTrue = (e, id) => {
 		return deleteUtils.deleteTrue(e, id, dispatch, state, actions);
 	};
@@ -62,24 +79,29 @@ function JobsContent() {
 			}),
 		);
 	};
+	const URL = process.env.REACT_APP_URL_IMAGE;
 	const RenderBodyTable = ({ data }) => {
 		return (
 			<>
 				{data.map((item, index) => {
+					const username = dataUser?.filter((x) => {
+						return item?.idUser === x?._id;
+					})[0]?.username;
 					return (
 						<tr key={index}>
 							<td>{handleUtils.indexTable(page, show, index)}</td>
+							<td>{username}</td>
 							<td className="item-w200">
 								<div
 									className={`${cx('content')}`}
 									dangerouslySetInnerHTML={{
-										__html: `❤️<b>The first test verifies that the Counter component renders with a count of 0 by default. In the second test, we pass in a value of 1 for the initialCount prop and test whether the rendered count value is also 1.</b>. Finally, the third test checks whether the Counter component updates the count correctly after the increment button is clicked.`,
+										__html: item?.content,
 									}}
 								></div>
 							</td>
 							<td className="item-w150">
 								<img
-									src=""
+									src={`${URL}${item?.thumbnail}`}
 									alt=""
 									onError={(e) =>
 										(e.target.src = LOGO_COMPANY)
@@ -88,14 +110,20 @@ function JobsContent() {
 								/>
 							</td>
 							<td>
+								{moment(item?.createdAt).format(
+									'DD/MM/YYYY HH:mm:ss',
+								)}
+							</td>
+							<td>{item?.type}</td>
+							<td>
 								<ActionsTable
 									view
-									linkView={`${routers.content}/${routers.updatejobscontent}/1`}
+									linkView={`${routers.content}/${routers.updatejobscontent}/${item?._id}`}
 									onClickDel={async (e) => {
-										modalDeleteTrue(e, item.id);
+										modalDeleteTrue(e, item?._id);
 										await localStoreUtils.setStore({
 											...currentUser,
-											idUpdate: item?.id,
+											idUpdate: item?._id,
 										});
 										await dispatch(
 											actions.setData({
@@ -114,12 +142,24 @@ function JobsContent() {
 			</>
 		);
 	};
-	const deleteJobsContent = async (id) => {
-		await 1;
-		dispatch(
-			actions.toggleModal({
-				modalDelete: false,
-			}),
+	const deleteJobContent = (dataToken, id) => {
+		deleteJobContentSV({
+			id_post: id,
+			setSnackbar,
+			dispatch,
+			state,
+			token: dataToken?.token,
+			setIsProcess,
+		});
+	};
+	const handleDelete = (id) => {
+		requestRefreshToken(
+			currentUser,
+			deleteJobContent,
+			state,
+			dispatch,
+			actions,
+			id,
 		);
 	};
 	return (
@@ -153,7 +193,7 @@ function JobsContent() {
 					openModal={modalDeleteTrue}
 					closeModal={modalDeleteFalse}
 					classNameButton="cancelbgc"
-					onClick={() => deleteJobsContent(currentUser?.idUpdate)}
+					onClick={() => handleDelete(currentUser?.idUpdate)}
 					isProcess={isProcess}
 				>
 					<p className="modal-delete-desc">

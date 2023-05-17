@@ -34,6 +34,7 @@ import {
 	getUserByIdSV,
 	refreshPwdUserSV,
 } from '../../services/admin';
+import { checkPwd } from '../../utils/Validate';
 
 const cx = className.bind(styles);
 
@@ -60,22 +61,18 @@ function UserDetail() {
 		});
 	};
 	const { modalDelete } = state.toggle;
-	const [isModalImage, setIsModalImage] = useState(false);
-	const [indexImage, setIndexImage] = useState(0);
 	const [userById, setUserById] = useState(null);
-	const [isProcessUpdateUsd, setIsProcessUpdateUsd] = useState(false);
 	const [isProcessChangePwd, setIsProcessChangePwd] = useState(false);
 	const [isProcessBlockUser, setIsProcessBlockUser] = useState(false);
 	const [isProcessRefreshPwd, setIsProcessRefreshPwd] = useState(false);
-	const [paymentUser, setPaymentUser] = useState(null);
 	const x = userById ? userById : edit?.itemData;
+	// console.log(x);
 	const handleSendUser = (dataToken) => {
 		getUserByIdSV({
 			id_user: idUser,
 			setSnackbar,
 			token: dataToken?.token,
 			setUserById,
-			setPaymentUser,
 		});
 	};
 	useEffect(() => {
@@ -105,24 +102,9 @@ function UserDetail() {
 		);
 		return deleteUtils.deleteFalse(e, dispatch, state, actions);
 	};
-	const DATA_IMAGE_MODAL = [
-		x?.uploadCCCDFont,
-		x?.uploadCCCDBeside,
-		x?.uploadLicenseFont,
-		x?.uploadLicenseBeside,
-	];
-	const modalImageTrue = (e, url) => {
-		e.stopPropagation();
-		setIsModalImage(true);
-	};
-	const modalImageFalse = (e) => {
-		e.stopPropagation();
-		setIsModalImage(false);
-		setIndexImage(0);
-	};
 	const handleSendChangePwd = (dataToken) => {
 		changePwdUserSV({
-			email_user: x?.payment?.email,
+			email_user: x?.email,
 			id_user: x?._id,
 			password: password,
 			setUserById,
@@ -132,19 +114,25 @@ function UserDetail() {
 			dispatch,
 		});
 	};
-	const changePwd = async (id) => {
-		setIsProcessChangePwd(true);
-		requestRefreshToken(
-			currentUser,
-			handleSendChangePwd,
-			state,
-			dispatch,
-			actions,
-		);
+	const changePwd = (id) => {
+		if (!checkPwd(password)) {
+			alert(
+				'Mật khẩu ít nhất 8 kí tự và bao gồm ít nhất một chữ cái viết hoa, một chữ cái viết thường, một số và một kí tự đặc biệt!',
+			);
+		} else {
+			setIsProcessChangePwd(true);
+			requestRefreshToken(
+				currentUser,
+				handleSendChangePwd,
+				state,
+				dispatch,
+				actions,
+			);
+		}
 	};
 	const handleSendRefresh = (dataToken) => {
 		refreshPwdUserSV({
-			email_user: x.payment.email,
+			email_user: x.email,
 			id_user: x._id,
 			setIsProcessRefreshPwd,
 			setUserById,
@@ -164,8 +152,9 @@ function UserDetail() {
 	};
 	const handleSendBlockUser = (dataToken) => {
 		blockUserByEmailSV({
-			email_user: x.payment.email,
+			email_user: x?.email,
 			id_user: x._id,
+			lock: !x?.lock,
 			setIsProcessBlockUser,
 			setUserById,
 			setSnackbar,
@@ -182,101 +171,16 @@ function UserDetail() {
 			actions,
 		);
 	};
-	function ItemRender({
-		title,
-		info,
-		bankInfo,
-		methodBank,
-		nameAccount,
-		numberAccount,
-	}) {
+	function ItemRender({ title, info, infoClass }) {
 		return (
 			<div className="detail-item">
 				<div className="detail-title">{title}</div>
 				<div className={`${cx('detail-status')}`}>
-					{bankInfo ? (
-						<div
-							style={{
-								display: 'flex',
-								flexDirection: 'column',
-								alignItems: 'flex-end',
-							}}
-						>
-							<span className="info">
-								{methodBank ? (
-									methodBank
-								) : (
-									<Skeleton width={30} />
-								)}
-							</span>
-							<span className="info">
-								{nameAccount ? (
-									nameAccount
-								) : (
-									<Skeleton width={30} />
-								)}
-							</span>
-							<span className="info">
-								{numberAccount ? (
-									numberAccount
-								) : (
-									<Skeleton width={30} />
-								)}
-							</span>
-						</div>
-					) : (
-						<span className="info">
-							{info || info === 0 ? (
-								info
-							) : (
-								<Skeleton width={30} />
-							)}
-						</span>
-					)}
+					<span className={`${infoClass} info`}>
+						{info ? info : <Skeleton width={30} />}
+					</span>
 				</div>
 			</div>
-		);
-	}
-	function ImageUploadRender({
-		label,
-		isCheck,
-		imageFrontUrl,
-		imageBesideUrl,
-	}) {
-		return (
-			<>
-				<div className={`${cx('document-user-title')}`}>{label}</div>
-				{isCheck ? (
-					<div className={`${cx('document-user-item')}`}>
-						<Image
-							src={`${process.env.REACT_APP_URL_SERVER}/${imageFrontUrl}`}
-							alt=""
-							className={`${cx('document-user-item-image-view')}`}
-							onClick={(e) => {
-								modalImageTrue(e, imageFrontUrl);
-								const index = DATA_IMAGE_MODAL.findIndex(
-									(item) => item === imageFrontUrl,
-								);
-								setIndexImage(index);
-							}}
-						/>
-						<Image
-							src={`${process.env.REACT_APP_URL_SERVER}/${imageBesideUrl}`}
-							alt=""
-							className={`${cx('document-user-item-image-view')}`}
-							onClick={(e) => {
-								modalImageTrue(e, imageBesideUrl);
-								const index = DATA_IMAGE_MODAL.findIndex(
-									(item) => item === imageBesideUrl,
-								);
-								setIndexImage(index);
-							}}
-						/>
-					</div>
-				) : (
-					<Skeleton width="100%" height="200px" />
-				)}
-			</>
 		);
 	}
 
@@ -290,50 +194,12 @@ function UserDetail() {
 			/>
 			<div className={`${cx('buySellDetail-container')}`}>
 				<div className={`${cx('detail-container')}`}>
-					<div className="detail-item">
-						<div className="detail-title">Hạng</div>
-						<div className={`${cx('detail-status')}`}>
-							{x ? (
-								<>
-									<span
-										className={`status fwb ${
-											x.rank
-												.toLowerCase()
-												.replace(' ', '') + 'bgc'
-										}`}
-									>
-										{textUtils.FirstUpc(x.rank)}
-									</span>
-								</>
-							) : (
-								<Skeleton width={50} />
-							)}
-						</div>
-					</div>
+					<ItemRender title="Họ và tên" info={x && x.username} />
+					<ItemRender title="Email" info={x && x.email} />
 					<ItemRender
-						title="Họ và tên"
-						info={x && x.payment.username}
-					/>
-					<ItemRender title="Email" info={x && x.payment.email} />
-					<ItemRender title="Quyền" info={x && x.payment.roles} />
-					<ItemRender
-						bankInfo
-						title="Phương thức thanh toán"
-						methodBank={paymentUser?.bank_name}
-						nameAccount={paymentUser?.account_name}
-						numberAccount={paymentUser?.account_number}
-					/>
-					<ItemRender
-						title="Tổng tiền nạp"
-						info={x && numberUtils.formatVND(x.Wallet.deposit)}
-					/>
-					<ItemRender
-						title="Tổng tiền rút"
-						info={x && numberUtils.formatVND(x.Wallet.withdraw)}
-					/>
-					<ItemRender
-						title="Tổng tài sản"
-						info={x && numberUtils.formatVND(x.Wallet.balance)}
+						title="Quyền"
+						info={x && x.roles}
+						infoClass="cancel"
 					/>
 					<ItemRender
 						title="Ngày tạo"
@@ -342,24 +208,6 @@ function UserDetail() {
 							moment(x.createdAt).format('DD/MM/YYYY HH:mm:ss')
 						}
 					/>
-				</div>
-				<div className={`${cx('detail-container')}`}>
-					<div className={`${cx('document-user-container')} w100`}>
-						<ImageUploadRender
-							label="1. Căn cước công dân"
-							isCheck={x?.uploadCCCDFont && x?.uploadCCCDBeside}
-							imageFrontUrl={x?.uploadCCCDFont}
-							imageBesideUrl={x?.uploadCCCDBeside}
-						/>
-						<ImageUploadRender
-							label="2. Giấy phép lái xe"
-							isCheck={
-								x?.uploadLicenseFont && x?.uploadLicenseBeside
-							}
-							imageFrontUrl={x?.uploadLicenseFont}
-							imageBesideUrl={x?.uploadLicenseBeside}
-						/>
-					</div>
 				</div>
 				<div>
 					<Button
@@ -414,13 +262,6 @@ function UserDetail() {
 					</Button>
 				</div>
 			</div>
-			<ModalViewImage
-				stateModal={isModalImage}
-				closeModal={modalImageFalse}
-				uniqueData={DATA_IMAGE_MODAL}
-				indexImage={indexImage}
-				setIndexImage={setIndexImage}
-			/>
 			{modalDelete && (
 				<Modal
 					titleHeader="Thay đổi mật khẩu"

@@ -6,6 +6,8 @@ import HomeContent from '../HomeContent/HomeContent';
 import JobsContent from '../JobsContent/JobsContent';
 import ForumContent from '../ForumContent/ForumContent';
 import ContactContent from '../ContactContent/ContactContent';
+import { useAppContext } from '../../utils';
+import { actions } from '../../app/';
 
 const cx = className.bind(styles);
 const LIST_CONTENTS = [
@@ -32,9 +34,14 @@ const LIST_CONTENTS = [
 ];
 
 function Content() {
-	const [tab, setTab] = useState(1);
+	const { state, dispatch } = useAppContext();
+	const { tab } = state.set;
 	const handleChangeInput = (id) => {
-		setTab(id);
+		dispatch(
+			actions.setData({
+				tab: id,
+			}),
+		);
 	};
 	useEffect(() => {
 		document.title = `Bài đăng | ${process.env.REACT_APP_TITLE_WEB}`;

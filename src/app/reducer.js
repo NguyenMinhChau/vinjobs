@@ -11,6 +11,7 @@ const initialState = {
 		statusUpdate: '',
 		tokenResetPwd: '',
 		sort: 'asc',
+		tab: 1,
 		singleFile: [],
 		multipleFile: [],
 		form: {
@@ -23,7 +24,13 @@ const initialState = {
 			page: 1,
 			show: 10, //10,20,30,50
 		},
-		data: {},
+		data: {
+			dataHomeContent: [],
+			dataJobContent: [],
+			dataForumContent: [],
+			dataContactContent: [],
+			dataUser: [],
+		},
 		searchValues: {
 			homeContent: '',
 			jobsContent: '',

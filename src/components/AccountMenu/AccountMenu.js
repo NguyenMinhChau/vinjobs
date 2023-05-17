@@ -61,7 +61,7 @@ function AccountMenu({ className }) {
     const handleLogout = async () => {
         await 1;
         authLogoutSV({
-            id_user: currentUser?.id,
+            email_user: currentUser?.email,
             dispatch,
             history,
             setSnackbar,
