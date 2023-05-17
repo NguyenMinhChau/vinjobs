@@ -18,6 +18,12 @@
 	color: #ccc;
 	line-height: 1.5;
 }
+.divider {
+	width: 100%;
+	background-color: transparent;
+	margin: 12px 0;
+	border: 1px dashed #ccc;
+}
 .desc_job {
 	line-height: 1.5;
 	text-align: justify;

@@ -1,6 +1,18 @@
 .container_jobs {
 	padding: 12px;
 }
+.count_text {
+	font-weight: bold;
+	font-size: 25px;
+	margin: 8px;
+	color: var(--color-primary);
+	line-height: 1.5;
+	display: flex;
+	align-items: center;
+}
+.count_text i {
+	margin-right: 10px;
+}
 .list_jobs {
 	--cols: 1;
 	--spacing: 8px;
@@ -45,6 +57,12 @@
 	color: #ccc;
 	line-height: 1.5;
 }
+.divider {
+	width: 100%;
+	background-color: transparent;
+	margin: 12px 0;
+	border: 1px dashed #ccc;
+}
 .desc_job {
 	line-height: 1.5;
 	text-align: justify;
@@ -71,14 +89,12 @@
 	align-items: center;
 	justify-content: center;
 }
-
-/* TABLET */
-@media (min-width: 46.25em) and (max-width: 63.9375em) {
-}
-
 /* MOBILE */
 @media (max-width: 46.25em) {
 	.list_item {
 		flex-direction: column;
+	}
+	.count_text {
+		font-size: 20px;
 	}
 }

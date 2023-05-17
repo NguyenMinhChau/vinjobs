@@ -5,7 +5,6 @@ export const initialState = {
 	set: {
 		currentUser: getStore(),
 		userById: null,
-		item: null,
 		username: '',
 		email: '',
 		password: '',
@@ -14,6 +13,10 @@ export const initialState = {
 		otpCode: '',
 		file: [],
 		pagination: { page: 1, show: 10 },
+		setItem: {
+			idItem: '',
+			dataItem: null,
+		},
 	},
 	toogle: {},
 };
