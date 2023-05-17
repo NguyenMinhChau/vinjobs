@@ -27,7 +27,7 @@ const initialState = {
 		searchValues: {
 			homeContent: '',
 			jobsContent: '',
-			recuiterContent: '',
+			forumContent: '',
 			contactContent: '',
 			topicSearch: '',
 		},
@@ -39,6 +39,8 @@ const initialState = {
 		editor: {
 			title: '',
 			subTitle: '',
+			salary: '',
+			unit: '',
 			topic: '',
 		},
 	},

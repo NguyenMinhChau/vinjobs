@@ -10,7 +10,7 @@ import {
 	ForgotPwd,
 	CreateHomeContent,
 	CreateJobsContent,
-	CreateRecuiterContent,
+	CreateForumContent,
 	CreateContactContent,
 } from '../Layouts';
 
@@ -48,12 +48,12 @@ export const privateRouter = [
 		component: CreateJobsContent,
 	},
 	{
-		path: `${routers.content}/${routers.createrecuitercontent}`,
-		component: CreateRecuiterContent,
+		path: `${routers.content}/${routers.createforumcontent}`,
+		component: CreateForumContent,
 	},
 	{
-		path: `${routers.content}/${routers.updaterecuitercontent}/:idRecuiterContent`,
-		component: CreateRecuiterContent,
+		path: `${routers.content}/${routers.updateforumcontent}/:idForumContent`,
+		component: CreateForumContent,
 	},
 	{
 		path: `${routers.content}/${routers.createcontactcontent}`,

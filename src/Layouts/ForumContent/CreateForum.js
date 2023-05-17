@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import className from 'classnames/bind';
 import { useParams } from 'react-router-dom';
-import styles from './RecuiterContent.module.css';
+import styles from './ForumContent.module.css';
 import { useAppContext } from '../../utils';
 import {
 	Button,
@@ -16,10 +16,11 @@ import {
 import routers from '../../routers/routers';
 import { actions } from '../../app/';
 import DataTopicContent from '../../utils/FakeData/TopicContent';
+import LOGO_COMPANY from '../../assets/images/logo_company.png';
 
 const cx = className.bind(styles);
 
-function CreateRecuiterContent() {
+function CreateForumContent() {
 	const { state, dispatch } = useAppContext();
 	const {
 		multipleFile,
@@ -27,8 +28,8 @@ function CreateRecuiterContent() {
 		editor: { title, subTitle, topic },
 		searchValues: { topicSearch },
 	} = state.set;
-	const { idRecuiterContent } = useParams();
-	const editorRecuiterRef = useRef(null);
+	const { idForumContent } = useParams();
+	const editorForumRef = useRef(null);
 	const [isProcess, setIsProcess] = useState(false);
 	const [toggleSelectTopic, setToggleSelectTopic] = useState(false);
 	const [snackbar, setSnackbar] = useState({
@@ -49,7 +50,7 @@ function CreateRecuiterContent() {
 		setToggleSelectTopic(!toggleSelectTopic);
 	};
 	useEffect(() => {
-		document.title = `Bài đăng tuyển dụng | ${process.env.REACT_APP_TITLE_WEB}`;
+		document.title = `Bài đăng diễn đàn | ${process.env.REACT_APP_TITLE_WEB}`;
 	}, []);
 	useEffect(() => {
 		dispatch(
@@ -101,10 +102,18 @@ function CreateRecuiterContent() {
 			subTitle,
 			topic,
 			multipleFile,
-			editorRecuiterRef?.current?.getContent(),
+			editorForumRef?.current?.getContent(),
 		);
 	};
 	// <div dangerouslySetInnerHTML={{ __html: data.description }}></div>
+	const urlImageSingle =
+		singleFile.length > 0 ? URL.createObjectURL(singleFile[0]) : '';
+	let urlMultipleImages = [1, 2, 3, 4, 5];
+	if (multipleFile.length > 0) {
+		urlMultipleImages = multipleFile.map((item) => {
+			return URL.createObjectURL(item);
+		});
+	}
 	return (
 		<div className={`${cx('container')}`}>
 			<SnackbarCp
@@ -133,23 +142,44 @@ function CreateRecuiterContent() {
 				stateModal={toggleSelectTopic}
 				valueSelect={topic?.name}
 				onChangeSearch={handleChangeSearchSelect}
-				dataFlag={DataTopicContent.filter((x) =>
-					x?.name?.includes(topicSearch),
+				dataFlag={DataTopicContent.filter(
+					(x) =>
+						x?.name?.includes(topicSearch) ||
+						x?.desc?.includes(topicSearch),
 				)}
 				onClick={handleClickSelect}
 			/>
 			<EditorTiny
-				textInitial="Nội dung trang tuyển dụng..."
-				ref={editorRecuiterRef}
+				textInitial="Nội dung trang diễn đàn..."
+				ref={editorForumRef}
 				value=""
 			/>
-			<p className={`${cx('header_title')}`}>Tải một hình ảnh</p>
+			<p className={`${cx('header_title')}`}>Hình ảnh (Single)</p>
 			<div className={`${cx('single_upload_container')}`}>
 				<SingleUpload width={'100%'} />
+				<img
+					src={urlImageSingle}
+					alt=""
+					className={`${cx('image_single')}`}
+					onError={(e) => (e.target.src = LOGO_COMPANY)}
+				/>
 			</div>
-			<p className={`${cx('header_title')}`}>Tải nhiều hình ảnh</p>
+			<p className={`${cx('header_title')}`}>Hình ảnh (Tối đa 5 ảnh)</p>
 			<div className={`${cx('multiple_upload_container')}`}>
 				<MultipleUpload width={'100%'} />
+				<div className={`${cx('image_multiple_container')}`}>
+					{urlMultipleImages.map((url, index) => {
+						return (
+							<img
+								key={index}
+								src={url}
+								alt=""
+								className={`${cx('image_multiple_item')}`}
+								onError={(e) => (e.target.src = LOGO_COMPANY)}
+							/>
+						);
+					})}
+				</div>
 			</div>
 			<div className={`${cx('button_container')}`}>
 				<Button
@@ -164,7 +194,7 @@ function CreateRecuiterContent() {
 					onClick={handleCreateContent}
 					disabled={
 						isProcess ||
-						!editorRecuiterRef?.current?.getContent() ||
+						!editorForumRef?.current?.getContent() ||
 						singleFile.length === 0 ||
 						multipleFile.length === 0
 					}
@@ -176,4 +206,4 @@ function CreateRecuiterContent() {
 	);
 }
 
-export default CreateRecuiterContent;
+export default CreateForumContent;

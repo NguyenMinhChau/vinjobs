@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import className from 'classnames/bind';
-import styles from './RecuiterContent.module.css';
+import styles from './ForumContent.module.css';
 import { actions } from '../../app/';
 import {
 	deleteUtils,
@@ -13,15 +13,16 @@ import { ActionsTable, Icons, Modal, SnackbarCp } from '../../components';
 import routers from '../../routers/routers';
 import { getStore } from '../../utils/localStore/localStore';
 import General from '../General/General';
-import DataRecuiterContentHeader from '../../utils/FakeData/RecuiterContentHeader';
+import DataForumContentHeader from '../../utils/FakeData/ForumContentHeader';
+import LOGO_COMPANY from '../../assets/images/logo_company.png';
 
 const cx = className.bind(styles);
 
-function RecuiterContent() {
+function ForumContent() {
 	const { state, dispatch } = useAppContext();
 	const {
 		currentUser,
-		searchValues: { recuiterContent },
+		searchValues: { forumContent },
 		pagination: { page, show },
 	} = state.set;
 	const { modalDelete } = state.toggle;
@@ -43,14 +44,14 @@ function RecuiterContent() {
 	let showPage = 10;
 	const start = (page - 1) * showPage + 1;
 	const end = start + showPage - 1;
-	const dataRecuiterContentFlag = [1, 2, 3];
+	const dataForumContentFlag = [1, 2, 3];
 	const modalDeleteTrue = (e, id) => {
 		return deleteUtils.deleteTrue(e, id, dispatch, state, actions);
 	};
 	const modalDeleteFalse = (e) => {
 		return deleteUtils.deleteFalse(e, dispatch, state, actions);
 	};
-	const handleViewRecuiterContent = (item) => {
+	const handleViewForumContent = (item) => {
 		dispatch(
 			actions.setData({
 				edit: {
@@ -68,12 +69,28 @@ function RecuiterContent() {
 					return (
 						<tr key={index}>
 							<td>{handleUtils.indexTable(page, show, index)}</td>
-							<td className="item-w200">Nội dung</td>
-							<td className="item-w150">Hình ảnh</td>
+							<td className="item-w200">
+								<div
+									className={`${cx('content')}`}
+									dangerouslySetInnerHTML={{
+										__html: `❤️<b>The first test verifies that the Counter component renders with a count of 0 by default. In the second test, we pass in a value of 1 for the initialCount prop and test whether the rendered count value is also 1.</b>. Finally, the third test checks whether the Counter component updates the count correctly after the increment button is clicked.`,
+									}}
+								></div>
+							</td>
+							<td className="item-w150">
+								<img
+									src=""
+									alt=""
+									onError={(e) =>
+										(e.target.src = LOGO_COMPANY)
+									}
+									className={`${cx('thumbnail')}`}
+								/>
+							</td>
 							<td>
 								<ActionsTable
 									view
-									linkView={`${routers.content}/${routers.updaterecuitercontent}/1`}
+									linkView={`${routers.content}/${routers.updateforumcontent}/1`}
 									onClickDel={async (e) => {
 										modalDeleteTrue(e, item.id);
 										await localStoreUtils.setStore({
@@ -87,7 +104,7 @@ function RecuiterContent() {
 										);
 									}}
 									onClickView={() =>
-										handleViewRecuiterContent(item)
+										handleViewForumContent(item)
 									}
 								></ActionsTable>
 							</td>
@@ -114,20 +131,20 @@ function RecuiterContent() {
 				typeSnackbar={snackbar.type}
 			/>
 			<General
-				className={cx('recuiterContent')}
-				valueSearch={recuiterContent}
-				nameSearch="recuiterContent"
+				className={cx('forumContent')}
+				valueSearch={forumContent}
+				nameSearch="forumContent"
 				textBtnNew="Tạo mới"
-				linkCreate={`${routers.content}/${routers.createrecuitercontent}`}
+				linkCreate={`${routers.content}/${routers.createforumcontent}`}
 				classNameButton={'probgc'}
-				dataHeaders={DataRecuiterContentHeader(Icons).headers}
-				totalData={dataRecuiterContentFlag?.length}
-				dataPagiCus={dataRecuiterContentFlag}
+				dataHeaders={DataForumContentHeader(Icons).headers}
+				totalData={dataForumContentFlag?.length}
+				dataPagiCus={dataForumContentFlag}
 				PaginationCus={true}
 				startPagiCus={start}
 				endPagiCus={end}
 			>
-				<RenderBodyTable data={dataRecuiterContentFlag} />
+				<RenderBodyTable data={dataForumContentFlag} />
 			</General>
 			{modalDelete && (
 				<Modal
@@ -149,4 +166,4 @@ function RecuiterContent() {
 	);
 }
 
-export default RecuiterContent;
+export default ForumContent;

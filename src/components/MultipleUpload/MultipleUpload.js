@@ -33,18 +33,17 @@ function MultipleUpload({ width }) {
 	const maxSizeInBytes = 50 * 1024 ** 2; // 50 MB
 	const [files, setFiles] = React.useState([]);
 	const [fileRejections, setFileRejections] = React.useState([]);
-	useEffect(() => {
-		dispatch(
-			actions.setData({
-				multipleFile: files,
-			}),
-		);
-	}, [files]);
 	const values = React.useMemo(() => {
-		return [
+		const data = [
 			...files,
 			...fileRejections.map((fileRejection) => fileRejection.file),
 		];
+		dispatch(
+			actions.setData({
+				multipleFile: data,
+			}),
+		);
+		return data;
 	}, [files, fileRejections]);
 	const handleRemove = React.useCallback(
 		(file) => {

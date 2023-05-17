@@ -14,6 +14,7 @@ import DataHomeContentHeader from '../../utils/FakeData/HomeContentHeader';
 import routers from '../../routers/routers';
 import { actions } from '../../app/';
 import { getStore } from '../../utils/localStore/localStore';
+import LOGO_COMPANY from '../../assets/images/logo_company.png';
 
 const cx = className.bind(styles);
 
@@ -68,8 +69,24 @@ function HomeContent() {
 					return (
 						<tr key={index}>
 							<td>{handleUtils.indexTable(page, show, index)}</td>
-							<td className="item-w200">Nội dung</td>
-							<td className="item-w150">Hình ảnh</td>
+							<td className="item-w200">
+								<div
+									className={`${cx('content')}`}
+									dangerouslySetInnerHTML={{
+										__html: `❤️<b>The first test verifies that the Counter component renders with a count of 0 by default. In the second test, we pass in a value of 1 for the initialCount prop and test whether the rendered count value is also 1.</b>. Finally, the third test checks whether the Counter component updates the count correctly after the increment button is clicked.`,
+									}}
+								></div>
+							</td>
+							<td className="item-w150">
+								<img
+									src=""
+									alt=""
+									onError={(e) =>
+										(e.target.src = LOGO_COMPANY)
+									}
+									className={`${cx('thumbnail')}`}
+								/>
+							</td>
 							<td>
 								<ActionsTable
 									view

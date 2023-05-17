@@ -4,7 +4,7 @@ import className from 'classnames/bind';
 import styles from './Content.module.css';
 import HomeContent from '../HomeContent/HomeContent';
 import JobsContent from '../JobsContent/JobsContent';
-import RecuiterContent from '../RecuiterContent/RecuiterContent';
+import ForumContent from '../ForumContent/ForumContent';
 import ContactContent from '../ContactContent/ContactContent';
 
 const cx = className.bind(styles);
@@ -21,8 +21,8 @@ const LIST_CONTENTS = [
 	},
 	{
 		id: 3,
-		name: 'Tuyển dụng',
-		component: <RecuiterContent />,
+		name: 'Diễn đàn',
+		component: <ForumContent />,
 	},
 	{
 		id: 4,

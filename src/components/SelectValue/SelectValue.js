@@ -49,7 +49,7 @@ export default function SelectValue({
 										key={index}
 										onClick={() => onClick(item)}
 									>
-										{item.name}
+										<b>{item.name}</b> • {item?.desc}
 									</div>
 								))
 							) : (

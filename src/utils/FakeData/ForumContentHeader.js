@@ -1,7 +1,7 @@
-const DataRecuiterContentHeader = (Icons) => {
+const DataForumContentHeader = (Icons) => {
 	return {
 		headers: {
-			name: process.env.REACT_APP_FINANCE_REPORT_CONTENT_HEADER,
+			name: process.env.REACT_APP_FORUM_CONTENT_HEADER,
 			index: {
 				title: 'STT',
 			},
@@ -16,4 +16,4 @@ const DataRecuiterContentHeader = (Icons) => {
 	};
 };
 
-export default DataRecuiterContentHeader;
+export default DataForumContentHeader;
