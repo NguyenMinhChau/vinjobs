@@ -6,7 +6,7 @@ import { SkeletonCP, SliderHeader } from '../../components';
 import LOGO_SLIDER_HEADER from '../../assets/images/forum_page_bgc.gif';
 
 const cx = className.bind(styles);
-
+// HELLO
 export default function Forum() {
 	useEffect(() => {
 		document.title = `Diễn đàn | ${process.env.REACT_APP_TITLE_WEB}`;
