@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { Form } from '../../components';
 import { setData } from '../../app/reducer';
 import { authRegisterSV } from '../../services/authen';
+import { checkPwd } from '../../utils/validate';
 
 const cx = className.bind(styles);
 
@@ -32,8 +33,25 @@ export default function Register() {
 			open: false,
 		});
 	};
-	const handleRegister = async () => {
-		/* TODO document why this async arrow function is empty */
+	const handleRegister = () => {
+		if (!checkPwd(password)) {
+			setSnackbar({
+				open: true,
+				type: 'error',
+				message:
+					'Mật khẩu ít nhất 8 kí tự và bao gồm ít nhất một chữ cái viết hoa, một chữ cái viết thường, một số và một kí tự đặc biệt!',
+			});
+		} else {
+			setIsProcess(true);
+			authRegisterSV({
+				email,
+				password,
+				username,
+				history,
+				setIsProcess,
+				setSnackbar,
+			});
+		}
 	};
 	const onEnter = (e) => {
 		handleRegister();

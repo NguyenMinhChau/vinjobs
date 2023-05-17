@@ -13,6 +13,12 @@ export const initialState = {
 		otpCode: '',
 		file: [],
 		pagination: { page: 1, show: 10 },
+		data: {
+			dataJobs: [],
+			dataForum: [],
+			dataContact: [],
+			dataUser: [],
+		},
 		setItem: {
 			idItem: '',
 			dataItem: null,

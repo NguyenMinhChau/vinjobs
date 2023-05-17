@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
@@ -6,28 +7,62 @@ import { Link } from 'react-router-dom';
 import styles from './Jobs.module.css';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import { SliderHeader } from '../../components';
+import { SliderHeader, SnackbarCp } from '../../components';
 import LOGO_SLIDER_HEADER from '../../assets/images/logo-company.png';
 import { routers } from '../../routers';
 import moment from 'moment';
 import { useAppContext } from '../../utils';
 import { actions } from '../../app/';
 import { autoFormatNumberInputChange } from '../../utils/format/NumberFormat';
+import { getAllJobContentSV } from '../../services/admin';
+import { useState } from 'react';
+import requestRefreshToken from '../../utils/axios/refreshToken';
 
 const cx = className.bind(styles);
 
 export default function Jobs() {
 	const { state, dispatch } = useAppContext();
 	const {
+		currentUser,
 		pagination: { page, show },
+		data: { dataJobs, dataUser },
 	} = state.set;
+	const [snackbar, setSnackbar] = useState({
+		open: false,
+		type: '',
+		message: '',
+	});
+	const handleCloseSnackbar = (event, reason) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+		setSnackbar({
+			...snackbar,
+			open: false,
+		});
+	};
+	const getAllJobsSV = (dataToken) => {
+		getAllJobContentSV({
+			token: dataToken?.token,
+			setSnackbar,
+			dispatch,
+			state,
+		});
+	};
 	useEffect(() => {
+		requestRefreshToken(
+			currentUser,
+			getAllJobsSV,
+			state,
+			dispatch,
+			actions,
+		);
 		document.title = `Việc làm | ${process.env.REACT_APP_TITLE_WEB}`;
 	}, []);
 	let showPage = 5;
 	const start = (page - 1) * showPage + 1;
 	const end = start + showPage - 1;
-	let DATA_JOB = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+	let DATA_JOB = dataJobs;
 	let DATA_JOBS_FLAG = DATA_JOB?.filter((row, index) => {
 		if (index + 1 >= start && index + 1 <= end) return true;
 	});
@@ -52,6 +87,7 @@ export default function Jobs() {
 			}),
 		);
 	};
+	const URL = process.env.REACT_APP_URL_IMAGE;
 	const RenderItemJob = ({ data }) => {
 		return (
 			<>
@@ -60,22 +96,25 @@ export default function Jobs() {
 						<div className={`${cx('list_item')}`} key={index}>
 							<div className={`${cx('list_item_text')}`}>
 								<p className={`${cx('title_job')}`}>
-									Tiêu đề tuyển dụng {item}
+									{item?.namePost}
 								</p>
 								<p className={`${cx('subtitle_job')}`}>
-									{moment(new Date()).format('DD/MM/YYYY')} -
-									Tên công ty - Lương bổng
+									{moment(item?.createdAt).format(
+										'DD/MM/YYYY',
+									)}{' '}
+									- {item?.description} - {item?.type}
 								</p>
 								<div className={`${cx('divider')}`}></div>
-								<p className={`${cx('desc_job')}`}>
-									HTML is the foundation of the web, and it
-									provides various tags and attributes to
-									enhance the performance and user experience
-									of a website.
-								</p>
+								<div
+									className={`${cx('desc_job')}`}
+									dangerouslySetInnerHTML={{
+										__html: item?.content,
+									}}
+								></div>
+
 								<div className={`${cx('link_container')}`}>
 									<Link
-										to={`${routers.jobs}${routers.detail}/${item}`}
+										to={`${routers.jobs}${routers.detail}/${item?._id}`}
 										className={`${cx('link')}`}
 										onClick={() => handleViewDetail(item)}
 									>
@@ -85,7 +124,7 @@ export default function Jobs() {
 							</div>
 							<div className={`${cx('list_item_image')}`}>
 								<img
-									src={LOGO_SLIDER_HEADER}
+									src={`${URL}${item?.thumbnail}`}
 									alt=""
 									className={`${cx('image_thumbnail')}`}
 								/>
@@ -104,6 +143,12 @@ export default function Jobs() {
 				}
 				title={`<b>VIỆC LÀM</b>`}
 				animateName="animate__bounceInUp"
+			/>
+			<SnackbarCp
+				openSnackbar={snackbar.open}
+				handleCloseSnackbar={handleCloseSnackbar}
+				messageSnackbar={snackbar.message}
+				typeSnackbar={snackbar.type}
 			/>
 			<div className={`${cx('container_jobs')}`}>
 				<p className={`${cx('count_text')}`}>

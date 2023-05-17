@@ -28,3 +28,19 @@
 	line-height: 1.5;
 	text-align: justify;
 }
+.slider_header_custom {
+	padding-bottom: 50%;
+}
+/* TABLET */
+@media (min-width: 46.25em) and (max-width: 63.9375em) {
+	.slider_header_custom {
+		padding-bottom: 80%;
+	}
+}
+
+/* MOBILE */
+@media (max-width: 46.25em) {
+	.slider_header_custom {
+		padding-bottom: 100%;
+	}
+}

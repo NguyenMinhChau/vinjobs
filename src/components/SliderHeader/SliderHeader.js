@@ -4,11 +4,19 @@ import styles from './SliderHeader.module.css';
 
 const cx = className.bind(styles);
 
-export default function SliderHeader({ urlImage, title, animateName }) {
+export default function SliderHeader({
+	urlImage,
+	title,
+	animateName,
+	bgiClassName,
+	classContainer,
+}) {
+	const classedBgi = cx('slider-image', bgiClassName);
+	const classed = cx('slider-header', classContainer);
 	return (
-		<div className={`${cx('slider-header')}`}>
+		<div className={classed}>
 			<div
-				className={`${cx('slider-image')}`}
+				className={classedBgi}
 				style={{
 					backgroundImage: `url('${urlImage}')`,
 				}}

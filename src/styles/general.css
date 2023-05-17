@@ -147,6 +147,10 @@
 	color: var(--color-primary) !important;
 }
 
+.bgi_custom_filter_brightness_80 {
+	filter: brightness(0.8);
+}
+
 /* TABLET */
 @media (min-width: 46.25em) and (max-width: 63.9375em) {
 	.tl-flex-row-reverse {

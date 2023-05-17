@@ -33,8 +33,16 @@ export default function Login() {
 			open: false,
 		});
 	};
-	const handleLogin = async () => {
-		/* TODO document why this async arrow function is empty */
+	const handleLogin = () => {
+		setIsProcess(true);
+		authLoginSV({
+			email,
+			password,
+			setSnackbar,
+			dispatch,
+			history,
+			setIsProcess,
+		});
 	};
 	const onEnter = (e) => {
 		handleLogin();

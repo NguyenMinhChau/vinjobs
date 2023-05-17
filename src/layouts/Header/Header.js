@@ -13,7 +13,7 @@ const cx = className.bind(styles);
 
 export default function Header() {
 	const { state, dispatch } = useAppContext();
-	const { currentUser } = state;
+	const { currentUser } = state.set;
 	const [isShowMenu, setIsShowMenu] = React.useState(false);
 	const [isShowMenuMobile, setIsShowMenuMobile] = React.useState(false);
 	const [id, setId] = React.useState();
@@ -43,10 +43,9 @@ export default function Header() {
 	// lấy ra mảng không chứa phần tử giữa
 	const firstHalf = HeaderMenu.slice(0, middle);
 	const secondHalf = HeaderMenu.slice(middle + 1, HeaderMenu.length);
-	const handleLogout = async () => {
-		await 1;
+	const handleLogout = () => {
 		authLogoutSV({
-			id_user: currentUser?.id,
+			email_user: currentUser?.email,
 			history,
 			setSnackbar,
 			dispatch,
