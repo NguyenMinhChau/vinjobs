@@ -15,7 +15,7 @@
 }
 .subtitle_job {
 	font-size: 16px;
-	color: #ccc;
+	color: var(--color-black);
 	line-height: 1.5;
 }
 .divider {
@@ -30,6 +30,22 @@
 }
 .slider_header_custom {
 	padding-bottom: 50%;
+}
+.subtitle_job_location {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+}
+.list_location {
+	display: flex;
+	flex-wrap: wrap;
+}
+.location_bage {
+	padding: 8px;
+	border-radius: 5px;
+	background-color: var(--color-primary);
+	margin: 5px;
+	color: var(--color-white);
 }
 /* TABLET */
 @media (min-width: 46.25em) and (max-width: 63.9375em) {

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import className from 'classnames/bind';
 import { useParams } from 'react-router-dom';
 import styles from './DetailJobContent.module.css';
@@ -8,7 +8,6 @@ import { SliderHeader, SnackbarCp } from '../../components';
 import moment from 'moment';
 import { useAppContext } from '../../utils';
 import { getJobByIdSV } from '../../services/admin';
-import { useState } from 'react';
 import requestRefreshToken from '../../utils/axios/refreshToken';
 import { actions } from '../../app/';
 
@@ -35,17 +34,16 @@ function DetailJobContent() {
 		});
 	};
 	const { idContent } = useParams();
-	const getJobById = (dataToken) => {
+	const getJobById = () => {
 		getJobByIdSV({
 			id_post: idContent,
 			setSnackbar,
 			dispatch,
 			state,
-			token: dataToken?.token,
 		});
 	};
 	useEffect(() => {
-		requestRefreshToken(currentUser, getJobById, state, dispatch, actions);
+		getJobById();
 		document.title = `Chi tiết việc làm | ${process.env.REACT_APP_TITLE_WEB}`;
 	}, []);
 	const URL = process.env.REACT_APP_URL_IMAGE;
@@ -71,15 +69,43 @@ function DetailJobContent() {
 				<div className={`${cx('list_item')}`}>
 					<div className={`${cx('list_item_text')}`}>
 						<p className={`${cx('title_job')}`}>
-							{dataItem?.post?.namePost}
+							Vị trí tuyển dụng: {dataItem?.post?.namePost}
 						</p>
-						<p className={`${cx('subtitle_job')}`}>
+						<p
+							className={`${cx('subtitle_job')}`}
+							style={{ marginBottom: '8px' }}
+						>
 							{moment(dataItem?.post?.createdAt).format(
 								'DD/MM/YYYY',
 							)}{' '}
 							- {dataItem?.post?.description} -{' '}
-							{dataItem?.post?.type}
+							{dataItem?.post?.wage}
 						</p>
+						<div
+							className={`${cx(
+								'subtitle_job',
+								'subtitle_job_location',
+							)}`}
+						>
+							<span>Khu vực:</span>{' '}
+							<div className={`${cx('list_location')}`}>
+								{dataItem?.post?.location?.map(
+									(location, index) => {
+										return (
+											<div
+												className={`${cx(
+													'location_bage',
+													'location_item',
+												)}`}
+												key={index}
+											>
+												{location}
+											</div>
+										);
+									},
+								)}
+							</div>
+						</div>
 						<div className={`${cx('divider')}`}></div>
 						<div
 							className={`${cx('desc_job')}`}

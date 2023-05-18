@@ -1,24 +1,15 @@
 import { adminGet } from '../utils/axios/axiosInstance';
 import { actions } from '../app/';
+// { headers: { Authorization: `Bearer ${token}` } },
 export const getAllJobContentSV = async (props = {}) => {
-	const { token, setSnackbar, dispatch, state } = props;
+	const { setSnackbar, dispatch, state } = props;
 	try {
-		const resGet = await adminGet(
-			'post',
-			{},
-			{ headers: { Authorization: `Bearer ${token}` } },
-		);
-		const resGetUser = await adminGet(
-			`user`,
-			{},
-			{ headers: { Authorization: `Bearer ${token}` } },
-		);
+		const resGet = await adminGet('post', {});
 		dispatch(
 			actions.setData({
 				data: {
 					...state.set.data,
 					dataJobs: resGet?.metadata,
-					dataUser: resGetUser?.metadata,
 				},
 			}),
 		);
@@ -31,13 +22,9 @@ export const getAllJobContentSV = async (props = {}) => {
 	}
 };
 export const getJobByIdSV = async (props = {}) => {
-	const { id_post, setSnackbar, dispatch, state, token } = props;
+	const { id_post, setSnackbar, dispatch, state } = props;
 	try {
-		const resGet = await adminGet(
-			`post/${id_post}`,
-			{},
-			{ headers: { Authorization: `Bearer ${token}` } },
-		);
+		const resGet = await adminGet(`post/${id_post}`);
 		dispatch(
 			actions.setData({
 				setItem: {

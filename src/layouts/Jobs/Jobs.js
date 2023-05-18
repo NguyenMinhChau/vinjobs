@@ -41,22 +41,15 @@ export default function Jobs() {
 			open: false,
 		});
 	};
-	const getAllJobsSV = (dataToken) => {
+	const getAllJobsSV = () => {
 		getAllJobContentSV({
-			token: dataToken?.token,
 			setSnackbar,
 			dispatch,
 			state,
 		});
 	};
 	useEffect(() => {
-		requestRefreshToken(
-			currentUser,
-			getAllJobsSV,
-			state,
-			dispatch,
-			actions,
-		);
+		getAllJobsSV();
 		document.title = `Việc làm | ${process.env.REACT_APP_TITLE_WEB}`;
 	}, []);
 	let showPage = 5;
@@ -96,14 +89,42 @@ export default function Jobs() {
 						<div className={`${cx('list_item')}`} key={index}>
 							<div className={`${cx('list_item_text')}`}>
 								<p className={`${cx('title_job')}`}>
-									{item?.namePost}
+									Vị trí tuyển dụng: {item?.namePost}
 								</p>
-								<p className={`${cx('subtitle_job')}`}>
+								<p
+									className={`${cx('subtitle_job')}`}
+									style={{ marginBottom: '8px' }}
+								>
 									{moment(item?.createdAt).format(
 										'DD/MM/YYYY',
 									)}{' '}
-									- {item?.description} - {item?.type}
+									- {item?.description} - Lương: {item?.wage}
 								</p>
+								<div
+									className={`${cx(
+										'subtitle_job',
+										'subtitle_job_location',
+									)}`}
+								>
+									<span>Khu vực:</span>{' '}
+									<div className={`${cx('list_location')}`}>
+										{item?.location?.map(
+											(location, index) => {
+												return (
+													<div
+														className={`${cx(
+															'location_bage',
+															'location_item',
+														)}`}
+														key={index}
+													>
+														{location}
+													</div>
+												);
+											},
+										)}
+									</div>
+								</div>
 								<div className={`${cx('divider')}`}></div>
 								<div
 									className={`${cx('desc_job')}`}
