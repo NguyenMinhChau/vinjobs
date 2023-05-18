@@ -47,7 +47,8 @@ function JobsContent() {
 		});
 	};
 	useEffect(() => {
-		requestRefreshToken(currentUser, getAllJobSV, state, dispatch, actions);
+		// requestRefreshToken(currentUser, getAllJobSV, state, dispatch, actions);
+		getAllJobSV();
 	}, []);
 	// console.log(dataJobContent);
 	const handleCloseSnackbar = (event, reason) => {
@@ -62,7 +63,12 @@ function JobsContent() {
 	let showPage = 10;
 	const start = (page - 1) * showPage + 1;
 	const end = start + showPage - 1;
-	const dataJobsContentFlag = dataJobContent || [];
+	let dataJobsContentFlag = dataJobContent || [];
+	if (jobsContent) {
+		dataJobsContentFlag = dataJobContent.filter((x) => {
+			return x?.type?.toLowerCase()?.includes(jobsContent?.toLowerCase());
+		});
+	}
 	const modalDeleteTrue = (e, id) => {
 		return deleteUtils.deleteTrue(e, id, dispatch, state, actions);
 	};

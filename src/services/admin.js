@@ -18,7 +18,7 @@ export const getUsersSV = async (props = {}) => {
 		const resGet = await adminGet(
 			`user`,
 			{},
-			{ headers: { Authorization: `Bearer ${token}` } },
+			// { headers: { Authorization: `Bearer ${token}` } },
 		);
 		dispatch(
 			actions.setData({
@@ -297,12 +297,12 @@ export const getAllJobContentSV = async (props = {}) => {
 		const resGet = await adminGet(
 			'post',
 			{},
-			{ headers: { Authorization: `Bearer ${token}` } },
+			// { headers: { Authorization: `Bearer ${token}` } },
 		);
 		const resGetUser = await adminGet(
 			`user`,
 			{},
-			{ headers: { Authorization: `Bearer ${token}` } },
+			// { headers: { Authorization: `Bearer ${token}` } },
 		);
 		dispatch(
 			actions.setData({
@@ -327,7 +327,7 @@ export const getJobByIdSV = async (props = {}) => {
 		const resGet = await adminGet(
 			`post/${id_post}`,
 			{},
-			{ headers: { Authorization: `Bearer ${token}` } },
+			// { headers: { Authorization: `Bearer ${token}` } },
 		);
 		dispatch(
 			actions.setData({
@@ -513,6 +513,8 @@ export const updateJobContentSV = async (props = {}) => {
 		title,
 		desc,
 		content,
+		wage,
+		location,
 		statements,
 		type,
 		history,
@@ -525,6 +527,8 @@ export const updateJobContentSV = async (props = {}) => {
 				namePost: title,
 				description: desc,
 				content: content,
+				wage: wage,
+				location: location,
 				type: 'TUYEN_DUNG',
 			},
 			{

@@ -111,8 +111,8 @@ const DataAreaContent = [
 	},
 	{
 		id: 23,
-		name: 'Việc làm Cần Tho',
-		desc: 'Cần Tho',
+		name: 'Việc làm Cần Thơ',
+		desc: 'Cần Thơ',
 	},
 	{
 		id: 24,

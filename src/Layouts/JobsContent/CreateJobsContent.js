@@ -74,13 +74,14 @@ function CreateJobsContent() {
 	useEffect(() => {
 		document.title = `Bài đăng việc làm | ${process.env.REACT_APP_TITLE_WEB}`;
 		if (idJobsContent) {
-			requestRefreshToken(
-				currentUser,
-				getJobById,
-				state,
-				dispatch,
-				actions,
-			);
+			// requestRefreshToken(
+			// 	currentUser,
+			// 	getJobById,
+			// 	state,
+			// 	dispatch,
+			// 	actions,
+			// );
+			getJobById();
 		}
 	}, []);
 	useEffect(() => {
@@ -190,6 +191,8 @@ function CreateJobsContent() {
 			desc: subTitle,
 			content: editorJobsRef?.current?.getContent(),
 			statements: multipleFile,
+			wage: salary,
+			location: area,
 			type: topic?.type,
 			token: dataToken?.token,
 			history,

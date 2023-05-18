@@ -83,7 +83,8 @@ function User() {
 	};
 	useEffect(() => {
 		document.title = `Tài khoản | ${process.env.REACT_APP_TITLE_WEB}`;
-		requestRefreshToken(currentUser, getUserSV, state, dispatch, actions);
+		// requestRefreshToken(currentUser, getUserSV, state, dispatch, actions);
+		getUserSV();
 	}, [useDebounceUser, page, show]);
 	let dataUserFlag = dataUser || [];
 	if (user) {
