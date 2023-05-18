@@ -15,6 +15,7 @@ export { default as Toggle } from './Toggle/Toggle';
 export { default as SelectStatus } from './SelectStatus/SelectStatus';
 export { default as ModalViewImage } from './ModalViewImage/ModalViewImage';
 export { default as SelectValue } from './SelectValue/SelectValue';
+export { default as SelectMultiple } from './SelectMultiple/SelectMultiple';
 export { default as AlertCp } from './Alert/Alert';
 export { default as SingleUpload } from './SingleUpload/SingleUpload';
 export { default as MultipleUpload } from './MultipleUpload/MultipleUpload';

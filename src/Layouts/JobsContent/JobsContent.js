@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
@@ -179,12 +180,18 @@ function JobsContent() {
 				classNameButton={'probgc'}
 				dataHeaders={DataJobsContentHeader(Icons).headers}
 				totalData={dataJobsContentFlag?.length}
-				dataPagiCus={dataJobsContentFlag}
+				dataPagiCus={dataJobsContentFlag?.filter((row, index) => {
+					if (index + 1 >= start && index + 1 <= end) return true;
+				})}
 				PaginationCus={true}
 				startPagiCus={start}
 				endPagiCus={end}
 			>
-				<RenderBodyTable data={dataJobsContentFlag} />
+				<RenderBodyTable
+					data={dataJobsContentFlag?.filter((row, index) => {
+						if (index + 1 >= start && index + 1 <= end) return true;
+					})}
+				/>
 			</General>
 			{modalDelete && (
 				<Modal

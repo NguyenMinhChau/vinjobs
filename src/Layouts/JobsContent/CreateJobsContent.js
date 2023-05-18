@@ -10,6 +10,7 @@ import {
 	EditorTiny,
 	FormInput,
 	MultipleUpload,
+	SelectMultiple,
 	SelectValue,
 	SingleUpload,
 	SnackbarCp,
@@ -24,6 +25,7 @@ import {
 	updateJobContentSV,
 	updateThumbnailSV,
 } from '../../services/admin';
+import DataAreaContent from '../../utils/FakeData/AreaContent';
 
 const cx = className.bind(styles);
 
@@ -33,8 +35,8 @@ function CreateJobsContent() {
 		currentUser,
 		multipleFile,
 		singleFile,
-		editor: { title, subTitle, topic, salary },
-		searchValues: { topicSearch },
+		editor: { title, subTitle, topic, salary, area },
+		searchValues: { topicSearch, areaSearch },
 		edit: { itemData },
 	} = state.set;
 	const { idJobsContent } = useParams();
@@ -113,7 +115,7 @@ function CreateJobsContent() {
 			}),
 		);
 	};
-	const handleClickSelect = (item) => {
+	const handleClickSelectTopic = (item) => {
 		dispatch(
 			actions.setData({
 				editor: {
@@ -135,6 +137,9 @@ function CreateJobsContent() {
 			desc: subTitle,
 			content: editorJobsRef?.current?.getContent(),
 			statements: multipleFile,
+			thumbnail: singleFile[0],
+			wage: salary,
+			location: area,
 			type: topic?.type,
 			history,
 			setIsProcess,
@@ -151,6 +156,7 @@ function CreateJobsContent() {
 			actions,
 		);
 	};
+	// console.log(area);
 	const updateThumbnail = (dataToken) => {
 		updateThumbnailSV({
 			id_post: idJobsContent,
@@ -242,7 +248,13 @@ function CreateJobsContent() {
 				type="text"
 				placeholder="Nhập mức lương (VD: 8.000.000 - 10.000.000 hoặc Thỏa thuận)"
 				name="salary"
+				value={salary}
 				onChange={handleChangeInput}
+				labelClass="confirm"
+			/>
+			<SelectMultiple
+				data={DataAreaContent}
+				placeholder="Chọn khu vực..."
 				labelClass="confirm"
 			/>
 			<SelectValue
@@ -259,7 +271,7 @@ function CreateJobsContent() {
 						x?.desc?.includes(topicSearch) ||
 						x?.type?.includes(topicSearch),
 				)}
-				onClick={handleClickSelect}
+				onClick={handleClickSelectTopic}
 				labelClass="confirm"
 			/>
 			<label className={`${cx('label')}`}>Nội dung</label>
@@ -268,28 +280,21 @@ function CreateJobsContent() {
 				ref={editorJobsRef}
 				value={itemData?.post?.content}
 			/>
-			{idJobsContent && (
-				<>
-					<label className={`${cx('label')}`}>
-						Hình ảnh (Single)
-					</label>
-					<div className={`${cx('single_upload_container')}`}>
-						<SingleUpload width={'100%'} />
-						{(singleFile.length > 0 ||
-							itemData?.post?.thumbnail) && (
-							<img
-								src={
-									`${urlImageSingle}` ||
-									`${URL}${itemData?.post?.thumbnail}`
-								}
-								alt=""
-								className={`${cx('image_single')}`}
-								onError={(e) => (e.target.src = LOGO_COMPANY)}
-							/>
-						)}
-					</div>
-				</>
-			)}
+			<label className={`${cx('label')}`}>Hình ảnh (Single)</label>
+			<div className={`${cx('single_upload_container')}`}>
+				<SingleUpload width={'100%'} />
+				{(singleFile.length > 0 || itemData?.post?.thumbnail) && (
+					<img
+						src={
+							`${urlImageSingle}` ||
+							`${URL}${itemData?.post?.thumbnail}`
+						}
+						alt=""
+						className={`${cx('image_single')}`}
+						onError={(e) => (e.target.src = LOGO_COMPANY)}
+					/>
+				)}
+			</div>
 			{/* <label className={`${cx('label')}`}>Hình ảnh (Tối đa 5 ảnh)</label>
 			<div className={`${cx('multiple_upload_container')}`}>
 				<MultipleUpload width={'100%'} />
@@ -326,12 +331,7 @@ function CreateJobsContent() {
 							? handleCreateContent
 							: handleUpdateJobContent
 					}
-					disabled={
-						isProcess ||
-						!title ||
-						!subTitle ||
-						!editorJobsRef?.current?.getContent()
-					}
+					disabled={isProcess}
 				>
 					Gửi
 				</Button>
@@ -342,7 +342,7 @@ function CreateJobsContent() {
 						onClick={handleUpdateThumbnail}
 						disabled={isProcessThumbnail || singleFile.length === 0}
 					>
-						Cập nhật thumbnail
+						Cập nhật ảnh
 					</Button>
 				)}
 			</div>

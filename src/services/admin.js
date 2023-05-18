@@ -335,6 +335,8 @@ export const getJobByIdSV = async (props = {}) => {
 					title: resGet?.metadata?.post?.namePost,
 					subTitle: resGet?.metadata?.post?.description,
 					topic: { name: resGet?.metadata?.post?.type },
+					salary: resGet?.metadata?.post?.wage,
+					area: [...resGet?.metadata?.post?.location],
 				},
 				edit: {
 					...state.set.edit,
@@ -360,8 +362,11 @@ export const addJobContentSV = async (props = {}) => {
 		title,
 		desc,
 		content,
+		thumbnail,
 		statements,
 		type,
+		wage,
+		location,
 		history,
 		setIsProcess,
 		editorJobsRef,
@@ -374,7 +379,10 @@ export const addJobContentSV = async (props = {}) => {
 				description: desc,
 				content: content,
 				statements: statements,
+				thumbnail: thumbnail,
 				type: 'TUYEN_DUNG',
+				wage: wage,
+				location: location,
 			},
 			{
 				headers: {

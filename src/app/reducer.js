@@ -37,6 +37,7 @@ const initialState = {
 			forumContent: '',
 			contactContent: '',
 			topicSearch: '',
+			areaSearch: '',
 		},
 		edit: {
 			id: '',
@@ -49,6 +50,7 @@ const initialState = {
 			salary: '',
 			unit: '',
 			topic: '',
+			area: [],
 		},
 	},
 	toggle: {

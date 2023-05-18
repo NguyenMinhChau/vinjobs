@@ -53,7 +53,7 @@ export default function SelectValue({
 										onClick={() => onClick(item)}
 									>
 										<b>
-											{item.name}_{item?.type}
+											{item?.name}_{item?.type}
 										</b>{' '}
 										• {item?.desc}
 									</div>
