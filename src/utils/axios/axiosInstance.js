@@ -15,7 +15,7 @@ export const authGet = async (path, options = {}, others = {}) => {
 };
 // REFRESH TOKEN
 export const refreshToken = async (path, options = {}, others = {}) => {
-	const res = await authInstance.get(path, options, others);
+	const res = await authInstance.post(path, options, others);
 	return res.data;
 };
 // ADMIN
