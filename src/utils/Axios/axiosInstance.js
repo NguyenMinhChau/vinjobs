@@ -3,7 +3,7 @@ import axios from 'axios';
 // AUTHENTICATION
 export const authInstance = axios.create({
 	baseURL: `${process.env.REACT_APP_URL_SERVER}auth/`,
-	withCredentials: true,
+	// withCredentials: true,
 });
 export const authPost = async (path, options = {}, others = {}) => {
 	const res = await authInstance.post(path, options, others);
@@ -21,7 +21,7 @@ export const refreshToken = async (path, options = {}, others = {}) => {
 // ADMIN
 export const adminInstance = axios.create({
 	baseURL: `${process.env.REACT_APP_URL_SERVER}admin/`,
-	withCredentials: true,
+	// withCredentials: true,
 });
 export const adminGet = async (path, options = {}, others = {}) => {
 	const res = await adminInstance.get(path, options, others);
@@ -46,7 +46,7 @@ export const adminDelete = async (path, options = {}, others = {}) => {
 // USERS
 export const userInstance = axios.create({
 	baseURL: `${process.env.REACT_APP_URL_SERVER}user/`,
-	withCredentials: true,
+	// withCredentials: true,
 });
 export const userGet = async (path, options = {}, others = {}) => {
 	const res = await userInstance.get(path, options, others);
