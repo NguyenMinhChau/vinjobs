@@ -98,7 +98,8 @@ function JobsContent() {
 					const username = dataUser?.filter((x) => {
 						return item?.idUser === x?._id;
 					})[0]?.username;
-					let count = (item?.content?.match(/<br>/g) || []).length;
+					let count = (item?.content?.match(/(\n|<br>)/g) || [])
+						.length;
 					let content = '';
 					if (count > 3) {
 						content = getFirstXLines(item?.content, 3) + '...';
