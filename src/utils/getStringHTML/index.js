@@ -1,7 +1,7 @@
 export function getFirstXLines(htmlString, number) {
 	const lines = htmlString
-		.split('<br>')
+		.split(/(\n|<br>)/)
 		.slice(0, number)
 		.map((line) => line.trim());
-	return lines.join('<br>');
+	return lines.join('');
 }

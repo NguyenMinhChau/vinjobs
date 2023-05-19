@@ -84,10 +84,11 @@ export default function Jobs() {
 		return (
 			<>
 				{data?.map((item, index) => {
-					let count = (item?.content?.match(/<br>/g) || []).length;
+					let count = (item?.content?.match(/(\n|<br>)/g) || [])
+						.length;
 					let content = '';
-					if (count > 6) {
-						content = getFirstXLines(item?.content, 6) + '...';
+					if (count > 10) {
+						content = getFirstXLines(item?.content, 10) + '...';
 					} else {
 						content = item?.content;
 					}
