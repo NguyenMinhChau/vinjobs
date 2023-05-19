@@ -70,26 +70,16 @@
 	align-items: center;
 	flex-wrap: wrap;
 }
-.list_location {
-	display: flex;
-	flex-wrap: wrap;
-}
-.location_bage {
-	padding: 8px;
-	border-radius: 5px;
+.bage {
+	padding: 4px;
+	border-radius: 4px;
 	background-color: var(--primary-hover);
-	margin: 5px;
 	color: var(--color-white);
+	margin-left: 5px;
 }
 .desc_job {
 	line-height: 1.5;
 	text-align: justify;
-	display: -webkit-box;
-	-webkit-line-clamp: 6;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	word-break: break-word;
 }
 
 .link_container {

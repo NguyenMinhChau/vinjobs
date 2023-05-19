@@ -36,16 +36,12 @@
 	align-items: center;
 	flex-wrap: wrap;
 }
-.list_location {
-	display: flex;
-	flex-wrap: wrap;
-}
-.location_bage {
-	padding: 8px;
-	border-radius: 5px;
-	background-color: var(--color-primary);
-	margin: 5px;
+.bage {
+	padding: 4px;
+	border-radius: 4px;
+	background-color: var(--primary-hover);
 	color: var(--color-white);
+	margin-left: 5px;
 }
 /* TABLET */
 @media (min-width: 46.25em) and (max-width: 63.9375em) {

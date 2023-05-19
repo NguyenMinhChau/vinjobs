@@ -17,6 +17,7 @@ import { autoFormatNumberInputChange } from '../../utils/format/NumberFormat';
 import { getAllJobContentSV } from '../../services/admin';
 import { useState } from 'react';
 import requestRefreshToken from '../../utils/axios/refreshToken';
+import { getFirstXLines } from '../../utils/getStringHTML';
 
 const cx = className.bind(styles);
 
@@ -85,6 +86,14 @@ export default function Jobs() {
 		return (
 			<>
 				{data?.map((item, index) => {
+					let count = (item?.content?.match(/<br>/g) || []).length;
+					let content = '';
+					if (count > 6) {
+						content = getFirstXLines(item?.content, 6) + '...';
+					} else {
+						content = item?.content;
+					}
+					const location = item?.location?.join(', ');
 					return (
 						<div className={`${cx('list_item')}`} key={index}>
 							<div className={`${cx('list_item_text')}`}>
@@ -95,10 +104,22 @@ export default function Jobs() {
 									className={`${cx('subtitle_job')}`}
 									style={{ marginBottom: '8px' }}
 								>
+									Ngày đăng bài:{' '}
 									{moment(item?.createdAt).format(
 										'DD/MM/YYYY',
-									)}{' '}
-									- {item?.description} - Lương: {item?.wage}
+									)}
+								</p>
+								<p
+									className={`${cx('subtitle_job')}`}
+									style={{ marginBottom: '8px' }}
+								>
+									Công ty: {item?.description}
+								</p>
+								<p
+									className={`${cx('subtitle_job')}`}
+									style={{ marginBottom: '8px' }}
+								>
+									Lương: {item?.wage}
 								</p>
 								<div
 									className={`${cx(
@@ -106,30 +127,16 @@ export default function Jobs() {
 										'subtitle_job_location',
 									)}`}
 								>
-									<span>Khu vực:</span>{' '}
-									<div className={`${cx('list_location')}`}>
-										{item?.location?.map(
-											(location, index) => {
-												return (
-													<div
-														className={`${cx(
-															'location_bage',
-															'location_item',
-														)}`}
-														key={index}
-													>
-														{location}
-													</div>
-												);
-											},
-										)}
-									</div>
+									Khu vực tuyển dụng:{' '}
+									<span className={`${cx('bage')}`}>
+										{location}
+									</span>
 								</div>
 								<div className={`${cx('divider')}`}></div>
 								<div
 									className={`${cx('desc_job')}`}
 									dangerouslySetInnerHTML={{
-										__html: item?.content,
+										__html: content,
 									}}
 								></div>
 
