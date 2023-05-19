@@ -11,26 +11,26 @@ import { actions } from '../../app/';
 
 const cx = className.bind(styles);
 const LIST_CONTENTS = [
+	// {
+	// 	id: 1,
+	// 	name: 'Về chúng tôi',
+	// 	component: <HomeContent />,
+	// },
 	{
 		id: 1,
-		name: 'Về chúng tôi',
-		component: <HomeContent />,
-	},
-	{
-		id: 2,
 		name: 'Việc làm',
 		component: <JobsContent />,
 	},
-	{
-		id: 3,
-		name: 'Diễn đàn',
-		component: <ForumContent />,
-	},
-	{
-		id: 4,
-		name: 'Liên hệ hợp tác',
-		component: <ContactContent />,
-	},
+	// {
+	// 	id: 3,
+	// 	name: 'Diễn đàn',
+	// 	component: <ForumContent />,
+	// },
+	// {
+	// 	id: 4,
+	// 	name: 'Liên hệ hợp tác',
+	// 	component: <ContactContent />,
+	// },
 ];
 
 function Content() {

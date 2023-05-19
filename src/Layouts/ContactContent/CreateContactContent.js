@@ -122,20 +122,26 @@ function CreateContactContent() {
 				messageSnackbar={snackbar.message}
 				typeSnackbar={snackbar.type}
 			/>
-			<p className={`${cx('header_title')}`}>Nội dung</p>
 			<FormInput
+				label="Tiêu đề bài viết"
 				type="text"
 				placeholder="Nhập tiêu đề..."
 				name="title"
 				onChange={handleChangeInput}
+				value={title}
+				labelClass="confirm"
 			/>
 			<FormInput
+				label="Tiêu đề phụ"
 				type="text"
 				placeholder="Nhập tiêu đề phụ..."
 				name="subTitle"
 				onChange={handleChangeInput}
+				value={subTitle}
+				labelClass="confirm"
 			/>
 			<SelectValue
+				label="Chủ đề"
 				placeholder="Chọn chủ đề..."
 				nameSearch="topicSearch"
 				toggleModal={handleToogleSelectTopic}
@@ -145,16 +151,19 @@ function CreateContactContent() {
 				dataFlag={DataTopicContent.filter(
 					(x) =>
 						x?.name?.includes(topicSearch) ||
-						x?.desc?.includes(topicSearch),
+						x?.desc?.includes(topicSearch) ||
+						x?.type?.includes(topicSearch),
 				)}
 				onClick={handleClickSelect}
+				labelClass="confirm"
 			/>
+			<label className={`${cx('label')}`}>Nội dung</label>
 			<EditorTiny
 				textInitial="Nội dung trang liên hệ hợp tác..."
 				ref={editorContactRef}
 				value=""
 			/>
-			<p className={`${cx('header_title')}`}>Hình ảnh (Single)</p>
+			<label className={`${cx('label')}`}>Hình ảnh</label>
 			<div className={`${cx('single_upload_container')}`}>
 				<SingleUpload width={'100%'} />
 				<img
@@ -164,7 +173,7 @@ function CreateContactContent() {
 					onError={(e) => (e.target.src = LOGO_COMPANY)}
 				/>
 			</div>
-			<p className={`${cx('header_title')}`}>Hình ảnh (Tối đa 5 ảnh)</p>
+			<label className={`${cx('label')}`}>Hình ảnh (Tối đa 5 ảnh)</label>
 			<div className={`${cx('multiple_upload_container')}`}>
 				<MultipleUpload width={'100%'} />
 				<div className={`${cx('image_multiple_container')}`}>

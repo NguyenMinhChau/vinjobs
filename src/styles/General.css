@@ -343,7 +343,28 @@ button {
 	color: black;
 	background-color: rgba(0, 0, 0, 0.05);
 }
-
+/* SELECT MULTIPLE */
+.MuiPaper-elevation::-webkit-scrollbar {
+	display: none;
+}
+.MuiChip-filled {
+	background-color: var(--color-primary) !important;
+}
+.MuiChip-label {
+	color: var(--color-white) !important;
+}
+.Mui-selected {
+	background-color: var(--color-primary) !important;
+	color: var(--color-white) !important;
+}
+.MuiMenuItem-root {
+	transition: all 0.2s linear;
+}
+.MuiMenuItem-root:hover {
+	background-color: var(--primary-hover) !important;
+	color: var(--color-black) !important;
+}
+/* END */
 .list-app-item-text {
 	font-size: 15px;
 	flex: 1;
@@ -357,15 +378,4 @@ button {
 	to {
 		opacity: 1;
 	}
-}
-
-/* TABLET AND MOBILE */
-@media (max-width: 63.9375em) {
-	/* .noSupport {
-		display: flex;
-	}
-
-	.app {
-		display: none;
-	} */
 }

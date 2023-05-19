@@ -89,10 +89,17 @@ function CreateJobsContent() {
 			actions.setData({
 				multipleFiles: [],
 				singleFile: [],
-				editor: { title: '', subTitle: '', topic: '' },
+				editor: {
+					title: '',
+					subTitle: '',
+					topic: '',
+					salary: '',
+					area: [],
+				},
 				searchValues: { topicSearch: '' },
 			}),
 		);
+		// editorJobsRef?.current?.setContent('');
 	}, [dispatch]);
 	const handleChangeInput = (e) => {
 		const { name, value } = e.target;
@@ -283,7 +290,7 @@ function CreateJobsContent() {
 				ref={editorJobsRef}
 				value={itemData?.post?.content}
 			/>
-			<label className={`${cx('label')}`}>Hình ảnh (Single)</label>
+			<label className={`${cx('label')}`}>Hình ảnh</label>
 			<div className={`${cx('single_upload_container')}`}>
 				<SingleUpload width={'100%'} />
 				{(singleFile.length > 0 || itemData?.post?.thumbnail) && (
@@ -334,7 +341,14 @@ function CreateJobsContent() {
 							? handleCreateContent
 							: handleUpdateJobContent
 					}
-					disabled={isProcess}
+					disabled={
+						isProcess ||
+						!title ||
+						!subTitle ||
+						!salary ||
+						area.length === 0 ||
+						!topic
+					}
 				>
 					Gửi
 				</Button>

@@ -5,7 +5,6 @@ const DataJobsContentHeader = (Icons) => {
 			index: {
 				title: 'STT',
 			},
-
 			h1: {
 				title: 'Người tạo',
 			},
@@ -20,6 +19,9 @@ const DataJobsContentHeader = (Icons) => {
 			},
 			h5: {
 				title: 'Lĩnh vực',
+			},
+			h6: {
+				title: 'Khu vực',
 			},
 		},
 	};

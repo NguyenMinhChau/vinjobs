@@ -20,6 +20,7 @@ import DataJobsContentHeader from '../../utils/FakeData/JobsContentHeader';
 import LOGO_COMPANY from '../../assets/images/logo_company.png';
 import moment from 'moment';
 import { deleteJobContentSV, getAllJobContentSV } from '../../services/admin';
+import { getFirstXLines } from '../../utils/getStringHTML';
 
 const cx = className.bind(styles);
 
@@ -66,7 +67,10 @@ function JobsContent() {
 	let dataJobsContentFlag = dataJobContent || [];
 	if (jobsContent) {
 		dataJobsContentFlag = dataJobContent.filter((x) => {
-			return x?.type?.toLowerCase()?.includes(jobsContent?.toLowerCase());
+			return (
+				x?.type?.toLowerCase()?.includes(jobsContent?.toLowerCase()) ||
+				x?.location?.includes(jobsContent)
+			);
 		});
 	}
 	const modalDeleteTrue = (e, id) => {
@@ -94,6 +98,14 @@ function JobsContent() {
 					const username = dataUser?.filter((x) => {
 						return item?.idUser === x?._id;
 					})[0]?.username;
+					let count = (item?.content?.match(/<br>/g) || []).length;
+					let content = '';
+					if (count > 3) {
+						content = getFirstXLines(item?.content, 3) + '...';
+					} else {
+						content = item?.content;
+					}
+					const location = item?.location?.join(', ');
 					return (
 						<tr key={index}>
 							<td>{handleUtils.indexTable(page, show, index)}</td>
@@ -102,7 +114,7 @@ function JobsContent() {
 								<div
 									className={`${cx('content')}`}
 									dangerouslySetInnerHTML={{
-										__html: item?.content,
+										__html: content,
 									}}
 								></div>
 							</td>
@@ -116,12 +128,13 @@ function JobsContent() {
 									className={`${cx('thumbnail')}`}
 								/>
 							</td>
-							<td>
+							<td className="item-w150">
 								{moment(item?.createdAt).format(
 									'DD/MM/YYYY HH:mm:ss',
 								)}
 							</td>
 							<td>{item?.type}</td>
+							<td className="item-w200">{location}</td>
 							<td>
 								<ActionsTable
 									view
