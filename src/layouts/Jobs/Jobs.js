@@ -1,22 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import className from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import styles from './Jobs.module.css';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { SliderHeader, SnackbarCp } from '../../components';
-import LOGO_SLIDER_HEADER from '../../assets/images/logo-company.png';
+import LOGO_COMPANY from '../../assets/images/logo-company.png';
 import { routers } from '../../routers';
 import moment from 'moment';
 import { useAppContext } from '../../utils';
 import { actions } from '../../app/';
 import { autoFormatNumberInputChange } from '../../utils/format/NumberFormat';
 import { getAllJobContentSV } from '../../services/admin';
-import { useState } from 'react';
-import requestRefreshToken from '../../utils/axios/refreshToken';
 import { getFirstXLines } from '../../utils/getStringHTML';
 
 const cx = className.bind(styles);
@@ -96,50 +94,63 @@ export default function Jobs() {
 					const location = item?.location?.join(', ');
 					return (
 						<div className={`${cx('list_item')}`} key={index}>
-							<div className={`${cx('list_item_text')}`}>
-								<p className={`${cx('title_job')}`}>
-									Vị trí tuyển dụng: {item?.namePost}
-								</p>
-								<p
-									className={`${cx('subtitle_job')}`}
-									style={{ marginBottom: '8px' }}
-								>
-									Ngày đăng bài:{' '}
-									{moment(item?.createdAt).format(
-										'DD/MM/YYYY',
-									)}
-								</p>
-								<p
-									className={`${cx('subtitle_job')}`}
-									style={{ marginBottom: '8px' }}
-								>
-									Công ty: {item?.description}
-								</p>
-								<p
-									className={`${cx('subtitle_job')}`}
-									style={{ marginBottom: '8px' }}
-								>
-									Lương: {item?.wage}
-								</p>
-								<div
+							<div className={`${cx('header')}`}>
+								<img
+									src={`${URL}${item?.thumbnail}`}
+									alt=""
+									onError={(e) =>
+										(e.target.src = `${LOGO_COMPANY}`)
+									}
 									className={`${cx(
-										'subtitle_job',
-										'subtitle_job_location',
+										'header_image_thumbnail',
 									)}`}
-								>
-									Khu vực tuyển dụng:{' '}
-									<span className={`${cx('bage')}`}>
-										{location}
-									</span>
+								/>
+								<div className={`${cx('header_right')}`}>
+									<p className={`${cx('title_job')}`}>
+										{item?.namePost}
+									</p>
+									<p
+										className={`${cx('subtitle_job')}`}
+										style={{ marginBottom: '8px' }}
+									>
+										Công ty: {item?.description}
+									</p>
 								</div>
-								<div className={`${cx('divider')}`}></div>
+							</div>
+
+							<p
+								className={`${cx('subtitle_job')}`}
+								style={{ marginBottom: '8px' }}
+							>
+								Ngày đăng bài:{' '}
+								{moment(item?.createdAt).format('DD/MM/YYYY')}
+							</p>
+
+							<p
+								className={`${cx('subtitle_job')}`}
+								style={{ marginBottom: '8px' }}
+							>
+								Lương: {item?.wage}
+							</p>
+							<div
+								className={`${cx(
+									'subtitle_job',
+									'subtitle_job_location',
+								)}`}
+							>
+								Khu vực tuyển dụng:{' '}
+								<span className={`${cx('bage')}`}>
+									{location}
+								</span>
+							</div>
+							<div className={`${cx('divider')}`}></div>
+							<div className={`${cx('content_container')}`}>
 								<div
 									className={`${cx('desc_job')}`}
 									dangerouslySetInnerHTML={{
 										__html: content,
 									}}
 								></div>
-
 								<div className={`${cx('link_container')}`}>
 									<Link
 										to={`${routers.jobs}${routers.detail}/${item?._id}`}
@@ -149,13 +160,6 @@ export default function Jobs() {
 										Xem chi tiết
 									</Link>
 								</div>
-							</div>
-							<div className={`${cx('list_item_image')}`}>
-								<img
-									src={`${URL}${item?.thumbnail}`}
-									alt=""
-									className={`${cx('image_thumbnail')}`}
-								/>
 							</div>
 						</div>
 					);

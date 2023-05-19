@@ -1,6 +1,22 @@
 .detail_container {
 	padding: 12px;
 }
+
+.header {
+	display: flex;
+	justify-items: flex-start;
+	margin-bottom: 10px;
+}
+.header .header_image_thumbnail {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	object-fit: fill;
+	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
+}
+.header .header_right {
+	margin-left: 8px;
+}
 .list_item {
 	width: 100%;
 	padding: 12px;
@@ -10,11 +26,11 @@
 }
 .title_job {
 	font-weight: bold;
-	font-size: 22px;
+	font-size: 20px;
 	line-height: 1.5;
 }
 .subtitle_job {
-	font-size: 16px;
+	font-size: 14px;
 	color: var(--color-black);
 	line-height: 1.5;
 }
@@ -54,5 +70,8 @@
 @media (max-width: 46.25em) {
 	.slider_header_custom {
 		padding-bottom: 100%;
+	}
+	.title_job {
+		font-size: 18px;
 	}
 }
