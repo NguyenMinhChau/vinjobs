@@ -328,13 +328,13 @@ function CreateJobsContent() {
 			</div> */}
 			<div className={`${cx('button_container')}`}>
 				<Button
-					className="cancelbgc text-center"
+					className={`${cx('btn')} cancelbgc text-center`}
 					to={`${routers.content}`}
 				>
 					Hủy bỏ
 				</Button>
 				<Button
-					className="probgc text-center"
+					className={`${cx('btn')} probgc text-center`}
 					isProcess={isProcess}
 					onClick={
 						!idJobsContent
@@ -354,7 +354,7 @@ function CreateJobsContent() {
 				</Button>
 				{idJobsContent && (
 					<Button
-						className="vipbgc text-center"
+						className={`${cx('btn')} vipbgc text-center`}
 						isProcess={isProcessThumbnail}
 						onClick={handleUpdateThumbnail}
 						disabled={isProcessThumbnail || singleFile.length === 0}

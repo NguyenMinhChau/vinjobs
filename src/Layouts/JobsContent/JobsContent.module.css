@@ -45,6 +45,11 @@
 }
 /* MOBILE */
 @media (max-width: 46.25em) {
+	.btn {
+		display: block;
+		width: 100%;
+		margin: 4px 0 !important;
+	}
 	.container {
 		padding: 0;
 	}
