@@ -9,6 +9,11 @@
 	line-height: 1.5;
 	display: flex;
 	align-items: center;
+	flex: 2;
+}
+.content_search {
+	flex: 1;
+	margin: 0 8px;
 }
 .count_text i {
 	margin-right: 10px;
@@ -104,6 +109,17 @@
 	align-items: center;
 	justify-content: center;
 }
+
+.content_header_container {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.noda_text {
+	font-size: 18px;
+	margin: 10px 0;
+	font-style: italic;
+}
 /* MOBILE */
 @media (max-width: 46.25em) {
 	.list_jobs {
@@ -117,5 +133,10 @@
 	}
 	.count_text {
 		font-size: 20px;
+	}
+	.content_header_container {
+		align-items: flex-start;
+		flex-direction: column-reverse;
+		margin-right: 15px;
 	}
 }

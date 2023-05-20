@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import styles from './Jobs.module.css';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import { SliderHeader, SnackbarCp } from '../../components';
+import { FormInput, SliderHeader, SnackbarCp } from '../../components';
 import LOGO_COMPANY from '../../assets/images/logo-company.png';
 import { routers } from '../../routers';
 import moment from 'moment';
@@ -16,6 +16,7 @@ import { actions } from '../../app/';
 import { autoFormatNumberInputChange } from '../../utils/format/NumberFormat';
 import { getAllJobContentSV } from '../../services/admin';
 import { getFirstXLines } from '../../utils/getStringHTML';
+import useDebounce from '../../utils/hooks/useDebounce';
 
 const cx = className.bind(styles);
 
@@ -25,6 +26,7 @@ export default function Jobs() {
 		currentUser,
 		pagination: { page, show },
 		data: { dataJobs, dataUser },
+		searchValue: { jobSearch },
 	} = state.set;
 	const [snackbar, setSnackbar] = useState({
 		open: false,
@@ -58,7 +60,30 @@ export default function Jobs() {
 	let DATA_JOBS_FLAG = DATA_JOB?.filter((row, index) => {
 		if (index + 1 >= start && index + 1 <= end) return true;
 	});
-	const totalData = DATA_JOB.length;
+	const jobSearchDebounce = useDebounce(jobSearch, 300);
+	if (jobSearchDebounce) {
+		DATA_JOBS_FLAG = DATA_JOB?.filter((row, index) => {
+			return (
+				row?.namePost
+					?.toLowerCase()
+					.includes(jobSearchDebounce.toLowerCase()) ||
+				row?.description
+					?.toLowerCase()
+					.includes(jobSearchDebounce.toLowerCase()) ||
+				row?.wage
+					?.toLowerCase()
+					.includes(jobSearchDebounce.toLowerCase()) ||
+				moment(row?.createdAt)
+					.format('DD/MM/YYYY')
+					?.toLowerCase()
+					.includes(jobSearchDebounce.toLowerCase()) ||
+				row?.location?.includes(jobSearchDebounce)
+			);
+		});
+	}
+	const totalData = jobSearchDebounce
+		? DATA_JOBS_FLAG.length
+		: DATA_JOB.length;
 	const handleChangePage = (e, value) => {
 		dispatch(
 			actions.setData({
@@ -75,6 +100,17 @@ export default function Jobs() {
 				setItem: {
 					idItem: item,
 					dataItem: item,
+				},
+			}),
+		);
+	};
+	const handleChangeSearch = (e) => {
+		const { name, value } = e.target;
+		dispatch(
+			actions.setData({
+				searchValue: {
+					...state.set.searchValue,
+					[name]: value,
 				},
 			}),
 		);
@@ -184,34 +220,60 @@ export default function Jobs() {
 				typeSnackbar={snackbar.type}
 			/>
 			<div className={`${cx('container_jobs')}`}>
-				<p className={`${cx('count_text')}`}>
-					<i
-						className="bx bxs-bell-ring bx-tada"
-						style={{ color: '#157bfb' }}
-					></i>{' '}
-					{autoFormatNumberInputChange(totalData)} việc làm đang chờ
-					bạn
-				</p>
+				<div className={`${cx('content_header_container')}`}>
+					<p className={`${cx('count_text')}`}>
+						<i
+							className="bx bxs-bell-ring bx-tada"
+							style={{ color: '#157bfb' }}
+						></i>{' '}
+						{autoFormatNumberInputChange(totalData)} việc làm đang
+						chờ bạn
+					</p>
+					<FormInput
+						placeholder="Tìm kiếm..."
+						name="jobSearch"
+						value={jobSearch}
+						classNameField={`${cx('content_search')}`}
+						onChange={handleChangeSearch}
+					/>
+				</div>
 				<div className={`${cx('list_jobs')}`}>
 					<RenderItemJob data={DATA_JOBS_FLAG} />
 				</div>
 				<div className={`${cx('pagination-countpage')}`}>
-					<Stack
-						spacing={2}
-						className={`${cx('pagination-container')}`}
-					>
-						<Pagination
-							onChange={handleChangePage}
-							page={page}
-							showFirstButton
-							showLastButton
-							count={
-								parseInt(Math.ceil(totalData / showPage)) || 0
-							}
-							variant="outlined"
-							shape="rounded"
-						/>
-					</Stack>
+					{DATA_JOBS_FLAG.length > 0 ? (
+						<Stack
+							spacing={2}
+							className={`${cx('pagination-container')}`}
+						>
+							<Pagination
+								onChange={handleChangePage}
+								page={page}
+								showFirstButton
+								showLastButton
+								count={
+									parseInt(Math.ceil(totalData / showPage)) ||
+									0
+								}
+								variant="outlined"
+								shape="rounded"
+							/>
+						</Stack>
+					) : (
+						<div className={`${cx('noda_text')}`}>
+							{jobSearchDebounce ? (
+								<span>
+									Không tìm thấy việc làm:{' '}
+									<b>{jobSearchDebounce}</b>
+								</span>
+							) : (
+								<span>
+									Hiện tại không có việc làm. Bạn vui lòng
+									quay lại sau nhé!
+								</span>
+							)}
+						</div>
+					)}
 				</div>
 			</div>
 		</div>

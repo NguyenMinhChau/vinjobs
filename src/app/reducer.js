@@ -13,6 +13,9 @@ export const initialState = {
 		otpCode: '',
 		file: [],
 		pagination: { page: 1, show: 10 },
+		searchValue: {
+			jobSearch: '',
+		},
 		data: {
 			dataJobs: [],
 			dataForum: [],
