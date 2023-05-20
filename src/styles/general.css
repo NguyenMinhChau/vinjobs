@@ -150,6 +150,9 @@
 .bgi_custom_filter_brightness_80 {
 	filter: brightness(0.8);
 }
+ul {
+	list-style-position: inside !important;
+}
 
 /* TABLET */
 @media (min-width: 46.25em) and (max-width: 63.9375em) {
