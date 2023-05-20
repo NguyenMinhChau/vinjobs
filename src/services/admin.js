@@ -100,10 +100,11 @@ export const blockUserByEmailSV = async (props = {}) => {
 		setIsProcessBlockUser,
 	} = props;
 	try {
-		const resPut = await adminPut(
-			`user/${id_user}`,
+		const resPut = await adminGet(
+			`user/lock/${id_user}`,
 			{
 				lock: lock,
+				headers: { Authorization: `Bearer ${token}` },
 			},
 			{ headers: { Authorization: `Bearer ${token}` } },
 		);
@@ -159,9 +160,9 @@ export const changePwdUserSV = async (props = {}) => {
 	} = props;
 	try {
 		const resPut = await adminPut(
-			`user/${id_user}`,
+			`user/password/${id_user}`,
 			{
-				password: password,
+				newPass: password,
 			},
 			{ headers: { Authorization: `Bearer ${token}` } },
 		);
@@ -208,8 +209,8 @@ export const refreshPwdUserSV = async (props = {}) => {
 	} = props;
 	try {
 		const resGet = await adminGet(
-			`user/password/refresh/${email_user}`,
-			{},
+			`user/password/refresh/${id_user}`,
+			{ headers: { Authorization: `Bearer ${token}` } },
 			{ headers: { Authorization: `Bearer ${token}` } },
 		);
 		console.log('refreshPwdUserSV', resGet);
