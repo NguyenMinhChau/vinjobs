@@ -198,6 +198,7 @@ function CreateJobsContent() {
 			desc: subTitle,
 			content: editorJobsRef?.current?.getContent(),
 			statements: multipleFile,
+			thumbnail: singleFile[0],
 			wage: salary,
 			location: area,
 			type: topic?.type,

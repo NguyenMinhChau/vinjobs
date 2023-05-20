@@ -517,10 +517,10 @@ export const updateJobContentSV = async (props = {}) => {
 		wage,
 		location,
 		statements,
+		thumbnail,
 		type,
 		history,
 	} = props;
-	console.log(props);
 	try {
 		const resPut = await adminPut(
 			`post/${id_post}`,
@@ -529,12 +529,15 @@ export const updateJobContentSV = async (props = {}) => {
 				description: desc,
 				content: content,
 				wage: wage,
+				thumbnail: thumbnail,
+				statements: statements,
 				location: location,
 				type: 'TUYEN_DUNG',
 			},
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
+					'Content-Type': 'multipart/form-data',
 				},
 			},
 		);
