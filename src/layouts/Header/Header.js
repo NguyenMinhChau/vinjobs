@@ -63,15 +63,15 @@ export default function Header() {
 						Hỗ trợ khách hàng
 					</div>
 					<div className={`${cx('header_top_btn_social')}`}>
-						<LinkHref url="##">
+						<LinkHref url="https://www.facebook.com/vinjob.timviecmoingay">
 							<IconHeader.FacebookIcon />
 						</LinkHref>
 						<LinkHref url="##">
 							<IconHeader.InstagramIcon />
 						</LinkHref>
-						<LinkHref url="https://youtube.com/">
+						{/* <LinkHref url="https://youtube.com/">
 							<IconHeader.YoutubeIcon />
-						</LinkHref>
+						</LinkHref> */}
 						<LinkHref url="##">
 							<IconHeader.TiktokIcon />
 						</LinkHref>
