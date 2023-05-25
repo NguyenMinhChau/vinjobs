@@ -22,6 +22,12 @@ import useDebounce from '../../utils/hooks/useDebounce';
 import { actions } from '../../app/';
 import { getFirstXLines } from '../../utils/getStringHTML';
 import Typed from 'react-typed';
+import {
+	ShareFB,
+	ShareLinkedln,
+	ShareTelegram,
+	LikeFB,
+} from '../../SocialPlugin';
 
 const cx = className.bind(styles);
 // HELLO
@@ -35,6 +41,8 @@ export default function Forum() {
 		setItem: { dataItem },
 	} = state.set;
 	const [modalDetail, setModalDetail] = useState(false);
+	const [openShare, setOpenShare] = useState(false);
+	const [idItem, setIdItem] = useState(null);
 	const [snackbar, setSnackbar] = useState({
 		open: false,
 		type: '',
@@ -62,6 +70,10 @@ export default function Forum() {
 				},
 			}),
 		);
+	};
+	const toggleShare = (id) => {
+		setIdItem(id);
+		setOpenShare(!openShare);
 	};
 	useEffect(() => {
 		document.title = `Diễn đàn | ${process.env.REACT_APP_TITLE_WEB}`;
@@ -179,16 +191,49 @@ export default function Forum() {
 							</div>
 							<div className={`${cx('bottom_container')}`}>
 								<div className={`${cx('actions_item')}`}>
-									<i class="bx bx-like bx-tada"></i>{' '}
-									<span>Thích</span>
+									{/* <i class="bx bx-like bx-tada"></i>{' '}
+									<span>Thích</span> */}
+									<LikeFB slug={item?._id} page="forum" />
 								</div>
 								<div className={`${cx('actions_item')}`}>
 									<i class="bx bx-chat bx-tada"></i>{' '}
 									<span>Bình luận</span>
 								</div>
-								<div className={`${cx('actions_item')}`}>
+								<div
+									className={`${cx(
+										'actions_item',
+										'actions_item_relative',
+									)}`}
+									onClick={() => toggleShare(item?._id)}
+								>
 									<i class="bx bx-share bx-tada"></i>{' '}
 									<span>Chia sẻ</span>
+									{openShare && item?._id === idItem && (
+										<div
+											className={`${cx(
+												'actions_item_absolute',
+											)}`}
+										>
+											<ShareFB
+												slug={item?._id}
+												name={item?.namePost}
+												desc={item?.description}
+												page="forum"
+											/>
+											<ShareLinkedln
+												slug={item?._id}
+												name={item?.namePost}
+												desc={item?.description}
+												page="forum"
+											/>
+											<ShareTelegram
+												slug={item?._id}
+												name={item?.namePost}
+												desc={item?.description}
+												page="forum"
+											/>
+										</div>
+									)}
 								</div>
 							</div>
 						</div>

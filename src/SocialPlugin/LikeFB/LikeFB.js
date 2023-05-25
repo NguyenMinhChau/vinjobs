@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-function LikeFB({ slug }) {
+function LikeFB({ slug, page }) {
 	useEffect(() => {
 		if (window.FB) {
 			window.FB.XFBML.parse();
@@ -9,7 +9,7 @@ function LikeFB({ slug }) {
 	return (
 		<div
 			className="fb-like"
-			data-href={`${process.env.REACT_APP_URL_SERVER}/forum/detail/${slug}`}
+			data-href={`${process.env.REACT_APP_URL_SERVER}/${page}/detail/${slug}`}
 			data-width=""
 			data-layout="button"
 			data-action="like"
