@@ -341,7 +341,11 @@ export default function Forum() {
 		setTimeout(() => {
 			setModalComment(false);
 			setIsProcessComment(false);
-			console.log(comment);
+			setSnackbar({
+				open: true,
+				message: `Bạn đã bình luận: ${comment}. Chức năng đang phát triển!`,
+				type: 'success',
+			});
 		}, 3000);
 	};
 	return (
