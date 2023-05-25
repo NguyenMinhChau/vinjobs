@@ -9,6 +9,7 @@ import {
 	SkeletonCP,
 	SliderHeader,
 	SnackbarCp,
+	Button,
 } from '../../components';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -28,6 +29,7 @@ import {
 	ShareTelegram,
 	LikeFB,
 } from '../../SocialPlugin';
+import Tooltip from '@mui/material/Tooltip';
 
 const cx = className.bind(styles);
 // HELLO
@@ -41,6 +43,7 @@ export default function Forum() {
 		setItem: { dataItem },
 	} = state.set;
 	const [modalDetail, setModalDetail] = useState(false);
+	const [modalComment, setModalComment] = useState(false);
 	const [openShare, setOpenShare] = useState(false);
 	const [idItem, setIdItem] = useState(null);
 	const [snackbar, setSnackbar] = useState({
@@ -57,11 +60,29 @@ export default function Forum() {
 			open: false,
 		});
 	};
-	const closeModalDetail = () => {
+	const closeModalDetail = (e) => {
+		e.stopPropagation();
 		setModalDetail(false);
 	};
-	const openModalDetail = (item) => {
+	const openModalDetail = (e, item) => {
+		e.stopPropagation();
 		setModalDetail(true);
+		dispatch(
+			actions.setData({
+				setItem: {
+					idItem: item,
+					dataItem: item,
+				},
+			}),
+		);
+	};
+	const closeModalComment = (e) => {
+		e.stopPropagation();
+		setModalComment(false);
+	};
+	const openModalComment = (e, item) => {
+		e.stopPropagation();
+		setModalComment(true);
 		dispatch(
 			actions.setData({
 				setItem: {
@@ -85,6 +106,13 @@ export default function Forum() {
 	let DATA_FORUMS_FLAG = DATA_JOB?.filter((row, index) => {
 		if (index + 1 >= start && index + 1 <= end) return true;
 	});
+	const DATA_COMMENT = [
+		{ id: 1, children: [{}, {}, {}] },
+		{ id: 2, children: [{}, {}] },
+		{ id: 3, children: [{}, {}, {}, {}] },
+		{ id: 4, children: [{}] },
+		{ id: 5, children: [] },
+	];
 	const forumSearchDebounce = useDebounce(forumSearch, 300);
 	if (forumSearchDebounce) {
 		DATA_FORUMS_FLAG = DATA_JOB?.filter((row, index) => {
@@ -187,14 +215,27 @@ export default function Forum() {
 								</div>
 							</div>
 							<div className={`${cx('bottom_container')}`}>
-								<div className={`${cx('actions_item')}`}>
-									<i class="bx bx-like bx-tada"></i>{' '}
-									<span>Thích</span>
-								</div>
-								<div className={`${cx('actions_item')}`}>
-									<i class="bx bx-chat bx-tada"></i>{' '}
-									<span>Bình luận</span>
-								</div>
+								<Tooltip
+									title={autoFormatNumberInputChange(1762882)}
+								>
+									<div className={`${cx('actions_item')}`}>
+										<i class="bx bx-like bx-tada"></i>{' '}
+										<span>Thích</span>
+									</div>
+								</Tooltip>
+								<Tooltip
+									title={autoFormatNumberInputChange(982)}
+								>
+									<div
+										className={`${cx('actions_item')}`}
+										onClick={(e) =>
+											openModalComment(e, item)
+										}
+									>
+										<i class="bx bx-chat bx-tada"></i>{' '}
+										<span>Bình luận</span>
+									</div>
+								</Tooltip>
 								<div
 									className={`${cx(
 										'actions_item',
@@ -246,6 +287,38 @@ export default function Forum() {
 					__html: item?.content,
 				}}
 			></div>
+		);
+	};
+	const RenderCommentItem = ({ item }) => {
+		return (
+			<div className={`${cx('comment')}`}>
+				<div className={`${cx('comment_image_container')}`}>
+					<img
+						src={LOGO_COMPANY}
+						alt=""
+						className={`${cx('avatar_comment')}`}
+					/>
+				</div>
+				<div className={`${cx('comment_infomation')}`}>
+					<div className={`${cx('name_timer_container')}`}>
+						<p className={`${cx('name')}`}>Vinjob</p>
+						<p className={`${cx('timer')}`}>
+							{moment(new Date()).format('DD/MM/YYYY HH:mm:ss')}
+						</p>
+					</div>
+					<div
+						className={`${cx('content_comment_container')}`}
+						dangerouslySetInnerHTML={{
+							__html: `Bình luận đầu tiên`,
+						}}
+					></div>
+					<div className={`${cx('actions_comment_container')}`}>
+						<div className={`${cx('actions_comment_item')}`}>
+							Trả lời
+						</div>
+					</div>
+				</div>
+			</div>
 		);
 	};
 	return (
@@ -392,6 +465,47 @@ export default function Forum() {
 					closeModal={closeModalDetail}
 				>
 					<RenderForumDetail item={dataItem} />
+				</Modal>
+			)}
+			{modalComment && (
+				<Modal
+					titleHeader={'Bình luận'}
+					openModal={openModalComment}
+					closeModal={closeModalComment}
+				>
+					<textarea
+						className={`${cx('textarea')}`}
+						rows={3}
+						placeholder="Bạn đang nghĩ gì?"
+					></textarea>
+					<Button className={`${cx('btn_custom')}`}>Bình luận</Button>
+					<div className={`${cx('divider')}`}></div>
+					<div className={`${cx('list_comment_container')}`}>
+						{DATA_COMMENT.map((item, index) => {
+							return (
+								<div
+									className={`${cx('comment_item')}`}
+									key={index}
+								>
+									<RenderCommentItem />
+									{item?.children?.map(
+										(itemChild, indexChild) => {
+											return (
+												<div
+													key={indexChild}
+													className={`${cx(
+														'content_item_child',
+													)}`}
+												>
+													<RenderCommentItem />
+												</div>
+											);
+										},
+									)}
+								</div>
+							);
+						})}
+					</div>
 				</Modal>
 			)}
 		</div>
