@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import className from 'classnames/bind';
 import styles from './Forum.module.css';
 import {
@@ -30,6 +30,7 @@ import {
 	LikeFB,
 } from '../../SocialPlugin';
 import Tooltip from '@mui/material/Tooltip';
+import Picker from 'emoji-picker-react';
 
 const cx = className.bind(styles);
 // HELLO
@@ -37,6 +38,7 @@ export default function Forum() {
 	const { state, dispatch } = useAppContext();
 	const {
 		currentUser,
+		comment,
 		pagination: { page, show },
 		data: { dataJobs, dataForum, dataUser },
 		searchValue: { forumSearch },
@@ -45,12 +47,15 @@ export default function Forum() {
 	const [modalDetail, setModalDetail] = useState(false);
 	const [modalComment, setModalComment] = useState(false);
 	const [openShare, setOpenShare] = useState(false);
+	const [openEmoji, setOpenEmoji] = useState(false);
+	const [isProcessComment, setIsProcessComment] = useState(false);
 	const [idItem, setIdItem] = useState(null);
 	const [snackbar, setSnackbar] = useState({
 		open: false,
 		type: '',
 		message: '',
 	});
+	const textAreaRef = useRef();
 	const handleCloseSnackbar = (event, reason) => {
 		if (reason === 'clickaway') {
 			return;
@@ -95,6 +100,9 @@ export default function Forum() {
 	const toggleShare = (id) => {
 		setIdItem(id);
 		setOpenShare(!openShare);
+	};
+	const toggleEmoji = () => {
+		setOpenEmoji(!openEmoji);
 	};
 	useEffect(() => {
 		document.title = `Diễn đàn | ${process.env.REACT_APP_TITLE_WEB}`;
@@ -314,7 +322,12 @@ export default function Forum() {
 					></div>
 					{!noReply && (
 						<div className={`${cx('actions_comment_container')}`}>
-							<div className={`${cx('actions_comment_item')}`}>
+							<div
+								className={`${cx('actions_comment_item')}`}
+								onClick={() => {
+									textAreaRef.current.focus();
+								}}
+							>
 								Trả lời
 							</div>
 						</div>
@@ -322,6 +335,14 @@ export default function Forum() {
 				</div>
 			</div>
 		);
+	};
+	const handleSendComment = () => {
+		setIsProcessComment(true);
+		setTimeout(() => {
+			setModalComment(false);
+			setIsProcessComment(false);
+			console.log(comment);
+		}, 3000);
 	};
 	return (
 		<div className={`${cx('container')}`}>
@@ -475,12 +496,54 @@ export default function Forum() {
 					openModal={openModalComment}
 					closeModal={closeModalComment}
 				>
-					<textarea
-						className={`${cx('textarea')}`}
-						rows={3}
-						placeholder="Bạn đang nghĩ gì?"
-					></textarea>
-					<Button className={`${cx('btn_custom')}`}>Bình luận</Button>
+					<div className={`${cx('content_emoji_container')}`}>
+						<textarea
+							className={`${cx('textarea')}`}
+							rows={3}
+							placeholder="Bạn đang nghĩ gì?"
+							onChange={(e) => {
+								dispatch(
+									actions.setData({
+										comment: e.target.value,
+									}),
+								);
+							}}
+							ref={textAreaRef}
+							value={comment}
+						></textarea>
+						<div
+							className={`${cx('icon_emoji_toggle')}`}
+							onClick={toggleEmoji}
+						>
+							<i
+								class="bx bx-smile bx-tada"
+								style={{ color: '#157bfb' }}
+							></i>
+						</div>
+						{openEmoji && (
+							<div className={`${cx('comment_emoji_container')}`}>
+								<Picker
+									onEmojiClick={(emojiObject, e) => {
+										dispatch(
+											actions.setData({
+												comment:
+													comment + emojiObject.emoji,
+											}),
+										);
+									}}
+								/>
+							</div>
+						)}
+					</div>
+
+					<Button
+						className={`${cx('btn_custom')}`}
+						onClick={handleSendComment}
+						disabled={isProcessComment || !comment}
+						isProcess={isProcessComment}
+					>
+						Bình luận
+					</Button>
 					<div className={`${cx('divider')}`}></div>
 					<div className={`${cx('list_comment_container')}`}>
 						{DATA_COMMENT.map((item, index) => {

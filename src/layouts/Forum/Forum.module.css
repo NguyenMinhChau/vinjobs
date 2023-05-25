@@ -188,6 +188,7 @@
 	resize: none;
 	font-size: 16px;
 	font-family: 'Times New Roman', Times, serif;
+	padding-right: 30px;
 }
 .btn_custom {
 	width: 100%;
@@ -255,6 +256,18 @@
 }
 .content_item_child {
 	margin-left: 20px;
+}
+.content_emoji_container {
+	position: relative;
+}
+.icon_emoji_toggle {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+.icon_emoji_toggle i {
+	font-size: 20px;
+	cursor: pointer;
 }
 @keyframes fadeIn {
 	from {

@@ -13,6 +13,7 @@ export const initialState = {
 		otpCode: '',
 		file: [],
 		pagination: { page: 1, show: 10 },
+		comment: '',
 		searchValue: {
 			jobSearch: '',
 			forumSearch: '',
