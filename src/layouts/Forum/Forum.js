@@ -289,7 +289,7 @@ export default function Forum() {
 			></div>
 		);
 	};
-	const RenderCommentItem = ({ item }) => {
+	const RenderCommentItem = ({ item, noReply }) => {
 		return (
 			<div className={`${cx('comment')}`}>
 				<div className={`${cx('comment_image_container')}`}>
@@ -312,11 +312,13 @@ export default function Forum() {
 							__html: `Bình luận đầu tiên`,
 						}}
 					></div>
-					<div className={`${cx('actions_comment_container')}`}>
-						<div className={`${cx('actions_comment_item')}`}>
-							Trả lời
+					{!noReply && (
+						<div className={`${cx('actions_comment_container')}`}>
+							<div className={`${cx('actions_comment_item')}`}>
+								Trả lời
+							</div>
 						</div>
-					</div>
+					)}
 				</div>
 			</div>
 		);
@@ -497,7 +499,9 @@ export default function Forum() {
 														'content_item_child',
 													)}`}
 												>
-													<RenderCommentItem />
+													<RenderCommentItem
+														noReply
+													/>
 												</div>
 											);
 										},
