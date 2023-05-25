@@ -59,14 +59,14 @@ function DetailForumContent() {
 	const openModalComment = (e, item) => {
 		e.stopPropagation();
 		setModalComment(true);
-		dispatch(
-			actions.setData({
-				setItem: {
-					idItem: item,
-					dataItem: item,
-				},
-			}),
-		);
+		// dispatch(
+		// 	actions.setData({
+		// 		setItem: {
+		// 			idItem: item,
+		// 			dataItem: item,
+		// 		},
+		// 	}),
+		// );
 	};
 	const toggleEmoji = () => {
 		setOpenEmoji(!openEmoji);
