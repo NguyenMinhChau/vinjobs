@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useRef } from 'react';
@@ -31,6 +32,7 @@ import {
 } from '../../SocialPlugin';
 import Tooltip from '@mui/material/Tooltip';
 import Picker from 'emoji-picker-react';
+import { getAllJobContentSV } from '../../services/admin';
 
 const cx = className.bind(styles);
 // HELLO
@@ -104,14 +106,22 @@ export default function Forum() {
 	const toggleEmoji = () => {
 		setOpenEmoji(!openEmoji);
 	};
+	const getAllJobsSV = () => {
+		getAllJobContentSV({
+			setSnackbar,
+			dispatch,
+			state,
+		});
+	};
 	useEffect(() => {
+		getAllJobsSV();
 		document.title = `Diễn đàn | ${process.env.REACT_APP_TITLE_WEB}`;
 	}, []);
 	let showPage = 5;
 	const start = (page - 1) * showPage + 1;
 	const end = start + showPage - 1;
-	let DATA_JOB = dataJobs;
-	let DATA_FORUMS_FLAG = DATA_JOB?.filter((row, index) => {
+	let DATA_FORUM = dataJobs;
+	let DATA_FORUMS_FLAG = DATA_FORUM?.filter((row, index) => {
 		if (index + 1 >= start && index + 1 <= end) return true;
 	});
 	const DATA_COMMENT = [
@@ -123,7 +133,7 @@ export default function Forum() {
 	];
 	const forumSearchDebounce = useDebounce(forumSearch, 300);
 	if (forumSearchDebounce) {
-		DATA_FORUMS_FLAG = DATA_JOB?.filter((row, index) => {
+		DATA_FORUMS_FLAG = DATA_FORUM?.filter((row, index) => {
 			return (
 				row?.namePost
 					?.toLowerCase()
@@ -140,7 +150,7 @@ export default function Forum() {
 	}
 	const totalData = forumSearchDebounce
 		? DATA_FORUMS_FLAG.length
-		: DATA_JOB.length;
+		: DATA_FORUM.length;
 	const handleChangePage = (e, value) => {
 		dispatch(
 			actions.setData({

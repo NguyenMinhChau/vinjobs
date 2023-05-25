@@ -83,7 +83,7 @@
 	border-radius: 8px;
 }
 .actions_item:hover {
-	background-color: rgba(0, 0, 0, 0.03);
+	/* background-color: rgba(0, 0, 0, 0.03); */
 	color: var(--color-primary);
 }
 .actions_item i {
@@ -91,6 +91,128 @@
 }
 .slider_header_custom {
 	padding-bottom: 50%;
+}
+.actions_item_relative {
+	position: relative;
+}
+.actions_item_absolute {
+	position: absolute;
+	bottom: 90%;
+	right: 0;
+	min-width: 200px;
+	display: flex;
+	flex-direction: column;
+	background-color: var(--color-white);
+	box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.2),
+		-5px -5px 20px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+	padding: 10px 0;
+	z-index: 9999999999;
+	animation: fadeIn 0.3s linear;
+}
+.actions_item:hover .actions_item_absolute {
+	color: initial;
+}
+.actions_item_absolute:hover {
+	color: initial;
+}
+.textarea {
+	border: 1px solid var(--color-primary);
+	border-radius: 5px;
+	padding: 10px;
+	width: 100%;
+	outline: none;
+	resize: none;
+	font-size: 16px;
+	font-family: 'Times New Roman', Times, serif;
+	padding-right: 30px;
+}
+.btn_custom {
+	width: 100%;
+	padding: 5px;
+	min-height: 30px;
+	font-size: 14px;
+	color: var(--color-white);
+}
+.btn_custom:hover {
+	color: var(--color-white);
+}
+.divider {
+	border: 1px dashed #ccc;
+	margin: 12px 0;
+}
+.list_comment_container {
+	max-height: 300px;
+	overflow: auto;
+	padding: 8px;
+}
+.comment {
+	display: flex;
+	justify-content: flex-start;
+	margin-bottom: 12px;
+}
+.comment_item {
+	margin-top: 30px;
+}
+.comment_item:first-child {
+	margin-top: 0;
+}
+.avatar_comment {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	object-fit: fill;
+	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
+}
+.comment_infomation {
+	display: flex;
+	flex-direction: column;
+	margin-left: 12px;
+}
+.name_timer_container {
+	display: flex;
+	align-items: center;
+}
+.name_timer_container .name {
+	font-weight: bold;
+	color: red;
+	margin-right: 8px;
+}
+.name_timer_container .timer {
+	color: #ccc;
+}
+.content_comment_container {
+	line-height: 1.5;
+}
+.actions_comment_item {
+	font-size: 14px;
+	color: var(--color-primary);
+	text-decoration: underline;
+	cursor: pointer;
+	display: inline-block;
+}
+.content_item_child {
+	margin-left: 20px;
+}
+.content_emoji_container {
+	position: relative;
+}
+.icon_emoji_toggle {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+.icon_emoji_toggle i {
+	font-size: 20px;
+	cursor: pointer;
+}
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
 }
 @media (min-width: 46.25em) and (max-width: 63.9375em) {
 	.slider_header_custom {
