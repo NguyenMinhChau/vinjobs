@@ -77,9 +77,6 @@ export default function Forum() {
 	};
 	useEffect(() => {
 		document.title = `Diễn đàn | ${process.env.REACT_APP_TITLE_WEB}`;
-		if (window.FB) {
-			window.FB.XFBML.parse();
-		}
 	}, []);
 	let showPage = 5;
 	const start = (page - 1) * showPage + 1;
@@ -191,9 +188,8 @@ export default function Forum() {
 							</div>
 							<div className={`${cx('bottom_container')}`}>
 								<div className={`${cx('actions_item')}`}>
-									{/* <i class="bx bx-like bx-tada"></i>{' '}
-									<span>Thích</span> */}
-									<LikeFB slug={item?._id} page="forum" />
+									<i class="bx bx-like bx-tada"></i>{' '}
+									<span>Thích</span>
 								</div>
 								<div className={`${cx('actions_item')}`}>
 									<i class="bx bx-chat bx-tada"></i>{' '}
