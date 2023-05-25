@@ -1,24 +1,6 @@
-.container_forum {
+.detail_container {
 	padding: 12px;
 }
-.count_text {
-	font-weight: bold;
-	font-size: 25px;
-	margin: 8px;
-	color: var(--color-primary);
-	line-height: 1.5;
-	display: flex;
-	align-items: center;
-	flex: 2;
-}
-.content_search {
-	flex: 1;
-	margin: 0 8px;
-}
-.count_text i {
-	margin-right: 10px;
-}
-
 .top_container {
 	display: flex;
 	padding: 12px 12px 0 12px;
@@ -77,22 +59,10 @@
 	margin-top: 10px;
 	line-height: 1.5;
 }
-
-.pagination-countpage {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin-top: 12px;
-}
 .content_header_container {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-}
-.noda_text {
-	font-size: 18px;
-	margin: 10px 0;
-	font-style: italic;
 }
 .bottom_container {
 	--cols: 3;
@@ -119,42 +89,14 @@
 .actions_item i {
 	margin-right: 8px;
 }
-.topics_container {
-	/* border: 1px solid var(--color-primary); */
-	box-shadow: 5px 5px 10px #d9d9d9, -5px -5px 10px #e7e7e7;
-	border-radius: 10px;
-	min-height: 120px;
-	padding: 10px;
-	margin: 8px;
+.slider_header_custom {
+	padding-bottom: 50%;
 }
-.topic_title {
-	font-size: 20px;
-	font-weight: bold;
-	display: flex;
-	color: var(--color-primary);
+@media (min-width: 46.25em) and (max-width: 63.9375em) {
+	.slider_header_custom {
+		padding-bottom: 80%;
+	}
 }
-.line {
-	flex: 1;
-	margin: 0 5px;
-	border-bottom: 2px solid var(--color-primary);
-}
-.ul_topics {
-	display: flex;
-	flex-wrap: wrap;
-	margin-top: 15px;
-}
-.li_topics {
-	width: fit-content;
-	padding: 6px;
-	font-size: 14px;
-	border-radius: 15px;
-	background-color: #efefef;
-	margin: 4px;
-}
-.li_topics:hover {
-	text-decoration: underline;
-}
-
 /* MOBILE */
 @media (max-width: 46.25em) {
 	.list_forum {
@@ -190,5 +132,8 @@
 	}
 	.actions_item {
 		font-size: 12px;
+	}
+	.slider_header_custom {
+		padding-bottom: 100%;
 	}
 }

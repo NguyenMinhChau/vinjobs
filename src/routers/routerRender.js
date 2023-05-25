@@ -8,6 +8,7 @@ import {
 	ResetPwd,
 	Forum,
 	DetailJobContent,
+	DetailForumContent,
 	PageNotFound,
 } from '../layouts';
 import routers from './routers';
@@ -37,6 +38,10 @@ export const privateRouter = [
 	{
 		path: `${routers.jobs}${routers.detail}/:idContent`,
 		component: DetailJobContent,
+	},
+	{
+		path: `${routers.forum}${routers.detail}/:idForum`,
+		component: DetailForumContent,
 	},
 	{ path: routers.pageNotFound, component: PageNotFound, layout: null },
 ];

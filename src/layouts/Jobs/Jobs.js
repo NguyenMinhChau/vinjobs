@@ -17,6 +17,7 @@ import { autoFormatNumberInputChange } from '../../utils/format/NumberFormat';
 import { getAllJobContentSV } from '../../services/admin';
 import { getFirstXLines } from '../../utils/getStringHTML';
 import useDebounce from '../../utils/hooks/useDebounce';
+import Typed from 'react-typed';
 
 const cx = className.bind(styles);
 
@@ -229,13 +230,25 @@ export default function Jobs() {
 						{autoFormatNumberInputChange(totalData)} việc làm đang
 						chờ bạn
 					</p>
-					<FormInput
-						placeholder="Tìm kiếm..."
-						name="jobSearch"
-						value={jobSearch}
-						classNameField={`${cx('content_search')}`}
-						onChange={handleChangeSearch}
-					/>
+					<Typed
+						strings={[
+							'Tìm kiếm việc làm',
+							'Đầy đủ các lĩnh vực',
+							'Nhanh chóng, tiện lợi và hiệu quả',
+						]}
+						typeSpeed={60}
+						backSpeed={30}
+						showCursor={false}
+						loop
+						attr="placeholder"
+						className={`${cx('content_search')}`}
+					>
+						<FormInput
+							name="jobSearch"
+							value={jobSearch}
+							onChange={handleChangeSearch}
+						/>
+					</Typed>
 				</div>
 				<div className={`${cx('list_jobs')}`}>
 					<RenderItemJob data={DATA_JOBS_FLAG} />

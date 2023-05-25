@@ -46,7 +46,7 @@
 	margin: var(--spacing);
 	padding: 12px;
 	border-radius: 10px;
-	border: 1px solid var(--color-primary);
+	box-shadow: 5px 5px 10px #d9d9d9, -5px -5px 10px #e7e7e7;
 	min-height: 120px;
 	display: flex;
 	flex-wrap: wrap;
@@ -108,6 +108,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	margin-top: 12px;
 }
 
 .content_header_container {
@@ -138,5 +139,8 @@
 		align-items: flex-start;
 		flex-direction: column-reverse;
 		margin-right: 15px;
+	}
+	.content_search {
+		width: 100%;
 	}
 }

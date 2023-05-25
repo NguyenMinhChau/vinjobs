@@ -37,6 +37,7 @@
 .slider-title {
 	font-size: 3.5rem;
 	text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+	text-transform: uppercase;
 }
 @media (min-width: 46.25em) and (max-width: 63.9375em) {
 	.slider-header {

@@ -5,6 +5,7 @@ import className from 'classnames/bind';
 import styles from './Forum.module.css';
 import {
 	FormInput,
+	Modal,
 	SkeletonCP,
 	SliderHeader,
 	SnackbarCp,
@@ -20,6 +21,7 @@ import moment from 'moment';
 import useDebounce from '../../utils/hooks/useDebounce';
 import { actions } from '../../app/';
 import { getFirstXLines } from '../../utils/getStringHTML';
+import Typed from 'react-typed';
 
 const cx = className.bind(styles);
 // HELLO
@@ -28,9 +30,11 @@ export default function Forum() {
 	const {
 		currentUser,
 		pagination: { page, show },
-		data: { dataJobs, dataUser },
-		searchValue: { jobSearch },
+		data: { dataJobs, dataForum, dataUser },
+		searchValue: { forumSearch },
+		setItem: { dataItem },
 	} = state.set;
+	const [modalDetail, setModalDetail] = useState(false);
 	const [snackbar, setSnackbar] = useState({
 		open: false,
 		type: '',
@@ -45,8 +49,25 @@ export default function Forum() {
 			open: false,
 		});
 	};
+	const closeModalDetail = () => {
+		setModalDetail(false);
+	};
+	const openModalDetail = (item) => {
+		setModalDetail(true);
+		dispatch(
+			actions.setData({
+				setItem: {
+					idItem: item,
+					dataItem: item,
+				},
+			}),
+		);
+	};
 	useEffect(() => {
 		document.title = `Diễn đàn | ${process.env.REACT_APP_TITLE_WEB}`;
+		if (window.FB) {
+			window.FB.XFBML.parse();
+		}
 	}, []);
 	let showPage = 5;
 	const start = (page - 1) * showPage + 1;
@@ -55,28 +76,24 @@ export default function Forum() {
 	let DATA_FORUMS_FLAG = DATA_JOB?.filter((row, index) => {
 		if (index + 1 >= start && index + 1 <= end) return true;
 	});
-	const jobSearchDebounce = useDebounce(jobSearch, 300);
-	if (jobSearchDebounce) {
+	const forumSearchDebounce = useDebounce(forumSearch, 300);
+	if (forumSearchDebounce) {
 		DATA_FORUMS_FLAG = DATA_JOB?.filter((row, index) => {
 			return (
 				row?.namePost
 					?.toLowerCase()
-					.includes(jobSearchDebounce.toLowerCase()) ||
+					.includes(forumSearchDebounce.toLowerCase()) ||
 				row?.description
 					?.toLowerCase()
-					.includes(jobSearchDebounce.toLowerCase()) ||
-				row?.wage
-					?.toLowerCase()
-					.includes(jobSearchDebounce.toLowerCase()) ||
+					.includes(forumSearchDebounce.toLowerCase()) ||
 				moment(row?.createdAt)
 					.format('DD/MM/YYYY')
 					?.toLowerCase()
-					.includes(jobSearchDebounce.toLowerCase()) ||
-				row?.location?.includes(jobSearchDebounce)
+					.includes(forumSearchDebounce.toLowerCase())
 			);
 		});
 	}
-	const totalData = jobSearchDebounce
+	const totalData = forumSearchDebounce
 		? DATA_FORUMS_FLAG.length
 		: DATA_JOB.length;
 	const handleChangePage = (e, value) => {
@@ -89,16 +106,6 @@ export default function Forum() {
 			}),
 		);
 	};
-	const handleViewDetail = (item) => {
-		dispatch(
-			actions.setData({
-				setItem: {
-					idItem: item,
-					dataItem: item,
-				},
-			}),
-		);
-	};
 	const handleChangeSearch = (e) => {
 		const { name, value } = e.target;
 		dispatch(
@@ -106,6 +113,16 @@ export default function Forum() {
 				searchValue: {
 					...state.set.searchValue,
 					[name]: value,
+				},
+			}),
+		);
+	};
+	const handleViewDetail = (item) => {
+		dispatch(
+			actions.setData({
+				setItem: {
+					idItem: item,
+					dataItem: item,
 				},
 			}),
 		);
@@ -123,13 +140,13 @@ export default function Forum() {
 					} else {
 						content = item?.content;
 					}
-					const location = item?.location?.join(', ');
 					return (
 						<div className={`${cx('list_item')}`} key={index}>
 							<div className={`${cx('top_container')}`}>
 								<Link
+									to={`${routers.forum}${routers.detail}/${item?._id}`}
 									className={`${cx('image_container')}`}
-									to="##"
+									onClick={() => handleViewDetail(item)}
 								>
 									<img
 										src={`${URL}${item?.thumbnail}`}
@@ -144,33 +161,20 @@ export default function Forum() {
 								</Link>
 								<div className={`${cx('content_container')}`}>
 									<Link
+										to={`${routers.forum}${routers.detail}/${item?._id}`}
 										className={`${cx('title_forum')}`}
-										to="##"
+										onClick={() => handleViewDetail(item)}
 									>
 										{item?.namePost}
 									</Link>
-									<div className={`${cx('actor_container')}`}>
-										<img
-											src=""
-											alt=""
-											onError={(e) =>
-												(e.target.src = `${LOGO_COMPANY}`)
-											}
-											className={`${cx(
-												'actor_image_thumbnail',
-											)}`}
-										/>
-										<p className={`${cx('actor_name')}`}>
-											Vinjob{' '}
-											<span
-												className={`${cx(
-													'actor_timer',
-												)}`}
-											>
-												• Hôm nay
-											</span>
-										</p>
-									</div>
+									<div
+										className={`${cx(
+											'content_forum_container',
+										)}`}
+										dangerouslySetInnerHTML={{
+											__html: content,
+										}}
+									></div>
 								</div>
 							</div>
 							<div className={`${cx('bottom_container')}`}>
@@ -191,6 +195,16 @@ export default function Forum() {
 					);
 				})}
 			</>
+		);
+	};
+	const RenderForumDetail = ({ item }) => {
+		return (
+			<div
+				className={`${cx('content_forum_container')} mt0`}
+				dangerouslySetInnerHTML={{
+					__html: item?.content,
+				}}
+			></div>
 		);
 	};
 	return (
@@ -215,49 +229,84 @@ export default function Forum() {
 							class="bx bx-news bx-tada"
 							style={{ color: '#157bfb' }}
 						></i>{' '}
-						{autoFormatNumberInputChange(totalData)} tin tức mới
-						nhất
+						{DATA_FORUMS_FLAG.length > 0
+							? `${autoFormatNumberInputChange(
+									totalData,
+							  )} tin tức mới nhất`
+							: 'Hiện chưa có tin tức nào'}
 					</p>
-					{/* <FormInput
-						placeholder="Tìm kiếm..."
-						name="jobSearch"
-						value={jobSearch}
-						classNameField={`${cx('content_search')}`}
-						onChange={handleChangeSearch}
-					/> */}
+					<Typed
+						strings={[
+							'Tìm kiếm tin tức',
+							'Luôn cập nhật những tin tức mới nhất',
+							'Mang đến cho khách hàng thông tin chính xác nhất',
+						]}
+						typeSpeed={60}
+						backSpeed={30}
+						showCursor={false}
+						loop
+						attr="placeholder"
+						className={`${cx('content_search')}`}
+					>
+						<FormInput
+							name="forumSearch"
+							value={forumSearch}
+							onChange={handleChangeSearch}
+						/>
+					</Typed>
 				</div>
 				<div className={`${cx('list_forums_topics')}`}>
 					<div className={`${cx('list_forums')}`}>
 						<RenderItemForum data={DATA_FORUMS_FLAG} />
 					</div>
-					<div className={`${cx('list_topics')}`}>
-						<div className={`${cx('topics_container')}`}>
-							<div className={`${cx('topic_title')}`}>
-								<span>Chủ đề nóng</span>{' '}
-								<span className={`${cx('line')}`}></span>
-							</div>
-							<div className={`${cx('ul_topics')}`}>
-								<Link className={`${cx('li_topics')}`} to="##">
-									Công nghệ
-								</Link>
-								<Link className={`${cx('li_topics')}`} to="##">
-									Nhân sự
-								</Link>
-								<Link className={`${cx('li_topics')}`} to="##">
-									Tài chính
-								</Link>
-								<Link className={`${cx('li_topics')}`} to="##">
-									Dịch vụ
-								</Link>
-								<Link className={`${cx('li_topics')}`} to="##">
-									Chứng khoán
-								</Link>
-								<Link className={`${cx('li_topics')}`} to="##">
-									Cổ phiếu
-								</Link>
+					{DATA_FORUMS_FLAG.length > 0 && (
+						<div className={`${cx('list_topics')}`}>
+							<div className={`${cx('topics_container')}`}>
+								<div className={`${cx('topic_title')}`}>
+									<span>Chủ đề nóng</span>{' '}
+									<span className={`${cx('line')}`}></span>
+								</div>
+								<div className={`${cx('ul_topics')}`}>
+									<Link
+										className={`${cx('li_topics')}`}
+										to="##"
+									>
+										Công nghệ
+									</Link>
+									<Link
+										className={`${cx('li_topics')}`}
+										to="##"
+									>
+										Nhân sự
+									</Link>
+									<Link
+										className={`${cx('li_topics')}`}
+										to="##"
+									>
+										Tài chính
+									</Link>
+									<Link
+										className={`${cx('li_topics')}`}
+										to="##"
+									>
+										Dịch vụ
+									</Link>
+									<Link
+										className={`${cx('li_topics')}`}
+										to="##"
+									>
+										Chứng khoán
+									</Link>
+									<Link
+										className={`${cx('li_topics')}`}
+										to="##"
+									>
+										Cổ phiếu
+									</Link>
+								</div>
 							</div>
 						</div>
-					</div>
+					)}
 				</div>
 				<div className={`${cx('pagination-countpage')}`}>
 					{DATA_FORUMS_FLAG.length > 0 ? (
@@ -280,10 +329,10 @@ export default function Forum() {
 						</Stack>
 					) : (
 						<div className={`${cx('noda_text')}`}>
-							{jobSearchDebounce ? (
+							{forumSearchDebounce ? (
 								<span>
 									Không tìm thấy tin tức:{' '}
-									<b>{jobSearchDebounce}</b>
+									<b>{forumSearchDebounce}</b>
 								</span>
 							) : (
 								<span>
@@ -295,6 +344,15 @@ export default function Forum() {
 					)}
 				</div>
 			</div>
+			{modalDetail && (
+				<Modal
+					titleHeader={dataItem?.namePost || 'Chi tiết diễn đàn'}
+					openModal={openModalDetail}
+					closeModal={closeModalDetail}
+				>
+					<RenderForumDetail item={dataItem} />
+				</Modal>
+			)}
 		</div>
 	);
 }

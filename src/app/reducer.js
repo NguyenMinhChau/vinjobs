@@ -15,6 +15,7 @@ export const initialState = {
 		pagination: { page: 1, show: 10 },
 		searchValue: {
 			jobSearch: '',
+			forumSearch: '',
 		},
 		data: {
 			dataJobs: [],

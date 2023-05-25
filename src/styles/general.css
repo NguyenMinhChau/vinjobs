@@ -12,7 +12,18 @@
 .ml4 {
 	margin-left: 4px;
 }
-
+.mt0 {
+	margin-top: 0px;
+}
+.mr0 {
+	margin-right: 0px;
+}
+.ml0 {
+	margin-left: 0px;
+}
+.p0 {
+	padding: 0px;
+}
 .mt8 {
 	margin-top: 8px;
 }
@@ -98,8 +109,17 @@
 	flex-direction: row-reverse;
 }
 
+.flex-column {
+	display: flex;
+	flex-direction: column;
+}
+
 .w100 {
 	width: 100%;
+}
+.mh250 {
+	min-height: 250px;
+	max-height: 250px;
 }
 
 .text-middle {
@@ -146,12 +166,38 @@
 .text-primary {
 	color: var(--color-primary) !important;
 }
+.cr_default {
+	cursor: default !important;
+}
 
+.bgi_custom_filter_brightness_50 {
+	filter: brightness(0.5);
+}
+.bgi_custom_filter_brightness_60 {
+	filter: brightness(0.6);
+}
+.bgi_custom_filter_brightness_70 {
+	filter: brightness(0.7);
+}
 .bgi_custom_filter_brightness_80 {
 	filter: brightness(0.8);
 }
 ul {
 	list-style-position: inside !important;
+}
+.Mui-selected {
+	background-color: var(--color-primary) !important;
+	color: var(--color-white) !important;
+}
+.MuiMenuItem-root {
+	transition: all 0.2s linear;
+}
+.MuiMenuItem-root:hover {
+	background-color: var(--primary-hover) !important;
+	color: var(--color-black) !important;
+}
+.no_boxshadow {
+	box-shadow: none !important;
 }
 
 /* TABLET */

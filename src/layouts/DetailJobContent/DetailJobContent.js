@@ -50,12 +50,10 @@ function DetailJobContent() {
 	return (
 		<div className={`${cx('container')}`}>
 			<SliderHeader
-				bgiClassName={'bgi_custom_filter_brightness_80'}
+				bgiClassName={'bgi_custom_filter_brightness_60'}
 				classContainer={`${cx('slider_header_custom')}`}
 				urlImage={`${URL}${dataItem?.post?.thumbnail}`}
-				title={`<b>${dataItem?.post?.namePost || '---'}  - ${
-					dataItem?.post?.description || '---'
-				}</b>`}
+				title={`<b>${dataItem?.post?.namePost || '---'}</b>`}
 				animateName="animate__bounceInUp"
 			/>
 			<SnackbarCp
