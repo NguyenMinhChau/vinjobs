@@ -216,14 +216,14 @@ function DetailForumContent() {
 						>
 							Sửa
 						</div>
-						<div
+						{/* <div
 							className={`${cx('actions_comment_item')}`}
 							onClick={(e) => {
 								openModalDeleteComment(e, item?.id);
 							}}
 						>
 							Xóa
-						</div>
+						</div> */}
 					</div>
 				</div>
 			</div>
