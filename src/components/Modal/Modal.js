@@ -47,7 +47,7 @@ function Modal({
 							isProcess={isProcessCancel}
 							disabled={isProcessCancel}
 						>
-							Thoát
+							Đóng
 						</Button>
 						{actionButtonText && (
 							<Button

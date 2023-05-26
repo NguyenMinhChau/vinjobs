@@ -12,9 +12,15 @@ function ShareTelegram({ slug, name, desc, page }) {
 				title={name}
 				summary="blabla"
 				url={`https://vinjob.com.vn/${page}/detail/${slug}`}
-				className="flex-start"
+				className="flex-start w100"
 			>
-				<TelegramIcon style={{ height: '25px', width: '25px' }} />
+				<TelegramIcon
+					style={{
+						height: '25px',
+						width: '25px',
+						borderRadius: '50%',
+					}}
+				/>
 				<p className={`${cx('name_social_share')} ml8`}>Telegram</p>
 			</TelegramShareButton>
 		</div>

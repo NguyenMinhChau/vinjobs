@@ -190,6 +190,7 @@
 	text-decoration: underline;
 	cursor: pointer;
 	display: inline-block;
+	margin-right: 12px;
 }
 .content_item_child {
 	margin-left: 20px;

@@ -19,6 +19,7 @@ import {
 import { autoFormatNumberInputChange } from '../../utils/format/NumberFormat';
 import { actions } from '../../app/';
 import Picker from 'emoji-picker-react';
+import { setStore, getStore } from '../../utils/localStore/localStore';
 
 const cx = className.bind(styles);
 
@@ -27,7 +28,7 @@ function DetailForumContent() {
 	const {
 		currentUser,
 		comment,
-		setItem: { idItem, dataItem },
+		setItem: { dataItem },
 	} = state.set;
 	const textAreaRef = useRef();
 	const [snackbar, setSnackbar] = useState({
@@ -38,7 +39,15 @@ function DetailForumContent() {
 	const [modalComment, setModalComment] = useState(false);
 	const [openShare, setOpenShare] = useState(false);
 	const [openEmoji, setOpenEmoji] = useState(false);
+	const [modalDeleteComment, setModalDeleteComment] = useState(false);
 	const [isProcessComment, setIsProcessComment] = useState(false);
+	const [isProcessUpdateComment, setIsProcessUpdateComment] = useState(false);
+	const [isUpdate, setIsUpdate] = useState(false);
+	const [idUpdate, setIdUpdate] = useState(null);
+	const [isReplies, setIsReplies] = useState(false);
+	const [idReplies, setIdReplies] = useState(null);
+	const [idItem, setIdItem] = useState(null);
+	const [isProcessDelComment, setIsProcessDelComment] = useState(false);
 	const handleCloseSnackbar = (event, reason) => {
 		if (reason === 'clickaway') {
 			return;
@@ -55,18 +64,30 @@ function DetailForumContent() {
 	const closeModalComment = (e) => {
 		e.stopPropagation();
 		setModalComment(false);
+		setIsUpdate(false);
+		setIsReplies(false);
+		dispatch(actions.setData({ comment: '' }));
 	};
 	const openModalComment = (e, item) => {
 		e.stopPropagation();
 		setModalComment(true);
-		// dispatch(
-		// 	actions.setData({
-		// 		setItem: {
-		// 			idItem: item,
-		// 			dataItem: item,
-		// 		},
-		// 	}),
-		// );
+	};
+	const openModalDeleteComment = async (e, idDelete) => {
+		e.stopPropagation();
+		setModalDeleteComment(true);
+		await setStore({
+			...currentUser,
+			idData: idDelete,
+		});
+		await dispatch(
+			actions.setData({
+				currentUser: getStore(),
+			}),
+		);
+	};
+	const closeModalDeleteComment = (e) => {
+		e.stopPropagation();
+		setModalDeleteComment(false);
 	};
 	const toggleEmoji = () => {
 		setOpenEmoji(!openEmoji);
@@ -85,12 +106,73 @@ function DetailForumContent() {
 	}, [comment, openEmoji, modalComment]);
 	const URL = process.env.REACT_APP_URL_IMAGE;
 	const DATA_COMMENT = [
-		{ id: 1, children: [{}, {}, {}] },
-		{ id: 2, children: [{}, {}] },
-		{ id: 3, children: [{}, {}, {}, {}] },
-		{ id: 4, children: [{}] },
-		{ id: 5, children: [] },
+		{
+			id: 1,
+			comment: 'Bình luận đầu tiên 📢',
+			username: 'Nguyễn Minh Châu',
+			userId: 1,
+			parentId: null,
+			createdAt: new Date(),
+		},
+		{
+			id: 2,
+			comment: 'Trả lời bình luận đầu tiên 📞',
+			username: 'Vinjob',
+			userId: 2,
+			parentId: 1,
+			createdAt: new Date(),
+		},
+		{
+			id: 3,
+			comment: 'Bình luận thứ 2 📣',
+			username: 'Nguyễn Văn A',
+			userId: 3,
+			parentId: null,
+			createdAt: new Date(),
+		},
+		{
+			id: 4,
+			comment: 'Trả lời bình luận thứ 2',
+			username: 'Nguyễn Văn B',
+			userId: 4,
+			parentId: 3,
+			createdAt: new Date(),
+		},
+		{
+			id: 5,
+			comment: 'Trả lời bình luận thứ 2',
+			username: 'Nguyễn Văn C',
+			userId: 5,
+			parentId: 3,
+			createdAt: new Date(),
+		},
 	];
+	const getCommentParent = () => {
+		return DATA_COMMENT.filter((row) => {
+			return row.parentId === null;
+		});
+	};
+	const getCommentChild = (idParent) => {
+		return DATA_COMMENT.filter((row) => {
+			return row.parentId === idParent;
+		});
+	};
+	const clickRepliesComment = (idReplies) => {
+		textAreaRef.current.focus();
+		setIsReplies(true);
+		setIdReplies(idReplies);
+	};
+	const clickUpdateComment = (item) => {
+		setIsUpdate(true);
+		setIsReplies(false);
+		dispatch(
+			actions.setData({
+				comment: item?.comment,
+			}),
+		);
+		textAreaRef.current.focus();
+		setIdUpdate(item?.id);
+	};
 	const RenderCommentItem = ({ item, noReply }) => {
 		return (
 			<div className={`${cx('comment')}`}>
@@ -103,29 +185,46 @@ function DetailForumContent() {
 				</div>
 				<div className={`${cx('comment_infomation')}`}>
 					<div className={`${cx('name_timer_container')}`}>
-						<p className={`${cx('name')}`}>Vinjob</p>
-						<p className={`${cx('timer')}`}>
-							{moment(new Date()).format('DD/MM/YYYY HH:mm:ss')}
+						<p className={`${cx('name')}`}>{item?.username}</p>
+						<p
+							className={`${cx('timer')}`}
+							title={moment(item?.createdAt).format(
+								'DD/MM/YYYY HH:mm:ss',
+							)}
+						>
+							{moment(item?.createdAt).fromNow()}
 						</p>
 					</div>
 					<div
 						className={`${cx('content_comment_container')}`}
 						dangerouslySetInnerHTML={{
-							__html: `Bình luận đầu tiên`,
+							__html: item?.comment,
 						}}
 					></div>
-					{!noReply && (
-						<div className={`${cx('actions_comment_container')}`}>
+					<div className={`${cx('actions_comment_container')}`}>
+						{!noReply && (
 							<div
 								className={`${cx('actions_comment_item')}`}
-								onClick={() => {
-									textAreaRef.current.focus();
-								}}
+								onClick={() => clickRepliesComment(item?.id)}
 							>
 								Trả lời
 							</div>
+						)}
+						<div
+							className={`${cx('actions_comment_item')}`}
+							onClick={() => clickUpdateComment(item)}
+						>
+							Sửa
 						</div>
-					)}
+						<div
+							className={`${cx('actions_comment_item')}`}
+							onClick={(e) => {
+								openModalDeleteComment(e, item?.id);
+							}}
+						>
+							Xóa
+						</div>
+					</div>
 				</div>
 			</div>
 		);
@@ -133,14 +232,57 @@ function DetailForumContent() {
 	const handleSendComment = () => {
 		setIsProcessComment(true);
 		setTimeout(() => {
-			setModalComment(false);
 			setIsProcessComment(false);
+			dispatch(actions.setData({ comment: '' }));
 			setSnackbar({
 				open: true,
 				message: `Bạn đã bình luận: ${comment}. Chức năng đang phát triển!`,
 				type: 'success',
 			});
 		}, 3000);
+	};
+	const handleRepliesComment = () => {
+		setIsProcessComment(true);
+		setTimeout(() => {
+			setIsProcessComment(false);
+			setIsReplies(false);
+			dispatch(actions.setData({ comment: '' }));
+			setSnackbar({
+				open: true,
+				message: `Bạn đã trả lời bình luận ${idReplies}: ${comment}. Chức năng đang phát triển!`,
+				type: 'success',
+			});
+		}, 3000);
+	};
+	const handleUpdateComment = (e, id) => {
+		setIsProcessUpdateComment(true);
+		setTimeout(() => {
+			setIsProcessUpdateComment(false);
+			setIsUpdate(false);
+			dispatch(actions.setData({ comment: '' }));
+			setSnackbar({
+				open: true,
+				message: `Bạn đã cập nhật bình luận ${idUpdate}: ${comment}. Chức năng đang phát triển!`,
+				type: 'success',
+			});
+		}, 3000);
+	};
+	const handleDeleteComment = () => {
+		setIsProcessDelComment(true);
+		setTimeout(() => {
+			setIsProcessDelComment(false);
+			setModalDeleteComment(false);
+			setSnackbar({
+				open: true,
+				message: `Xóa ${currentUser?.idData}. Chức năng đang được phát triển!`,
+				type: 'success',
+			});
+		}, 3000);
+	};
+	const handleCancelUpdate = () => {
+		setIsUpdate(false);
+		setIsReplies(false);
+		dispatch(actions.setData({ comment: '' }));
 	};
 	return (
 		<div className={`${cx('container')}`}>
@@ -267,25 +409,48 @@ function DetailForumContent() {
 							</div>
 						)}
 					</div>
-
 					<Button
 						className={`${cx('btn_custom')}`}
-						onClick={handleSendComment}
-						disabled={isProcessComment || !comment}
+						onClick={
+							isReplies ? handleRepliesComment : handleSendComment
+						}
+						disabled={isProcessComment || !comment || isUpdate}
 						isProcess={isProcessComment}
 					>
-						Bình luận
+						{isReplies ? 'Trả lời bình luận' : 'Bình luận'}
 					</Button>
+					{isUpdate && (
+						<div className="flex-row">
+							<Button
+								className={`${cx(
+									'btn_custom',
+								)} warningbgc ml0 mt8 mr4`}
+								onClick={handleUpdateComment}
+								disabled={isProcessUpdateComment || !comment}
+								isProcess={isProcessUpdateComment}
+							>
+								Cập nhật
+							</Button>
+							<Button
+								className={`${cx(
+									'btn_custom',
+								)} confirmbgc mt8 ml4`}
+								onClick={handleCancelUpdate}
+							>
+								Hủy bỏ
+							</Button>
+						</div>
+					)}
 					<div className={`${cx('divider')}`}></div>
 					<div className={`${cx('list_comment_container')}`}>
-						{DATA_COMMENT.map((item, index) => {
+						{getCommentParent().map((item, index) => {
 							return (
 								<div
 									className={`${cx('comment_item')}`}
 									key={index}
 								>
-									<RenderCommentItem />
-									{item?.children?.map(
+									<RenderCommentItem item={item} />
+									{getCommentChild(item?.id)?.map(
 										(itemChild, indexChild) => {
 											return (
 												<div
@@ -296,6 +461,7 @@ function DetailForumContent() {
 												>
 													<RenderCommentItem
 														noReply
+														item={itemChild}
 													/>
 												</div>
 											);
@@ -305,6 +471,20 @@ function DetailForumContent() {
 							);
 						})}
 					</div>
+				</Modal>
+			)}
+			{modalDeleteComment && (
+				<Modal
+					titleHeader="Xóa bình luận"
+					openModal={openModalDeleteComment}
+					closeModal={closeModalDeleteComment}
+					actionButtonText="Xóa"
+					classNameButton={'cancelbgc'}
+					disabled={isProcessDelComment}
+					isProcess={isProcessDelComment}
+					onClick={handleDeleteComment}
+				>
+					<p>Bạn có chắc muốn xóa bình luận này?</p>
 				</Modal>
 			)}
 		</div>
