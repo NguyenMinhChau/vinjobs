@@ -34,6 +34,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Picker from 'emoji-picker-react';
 import { getAllJobContentSV } from '../../services/admin';
 import { setStore, getStore } from '../../utils/localStore/localStore';
+import fb, { Comments } from '../../firebase';
 
 const cx = className.bind(styles);
 // HELLO
@@ -59,6 +60,7 @@ export default function Forum() {
 	const [isReplies, setIsReplies] = useState(false);
 	const [idReplies, setIdReplies] = useState(null);
 	const [isProcessDelComment, setIsProcessDelComment] = useState(false);
+	const [comments, setComments] = useState([]);
 	const [idItem, setIdItem] = useState(null);
 	const [snackbar, setSnackbar] = useState({
 		open: false,
@@ -66,6 +68,16 @@ export default function Forum() {
 		message: '',
 	});
 	const textAreaRef = useRef();
+	const getAllComments = async () => {
+		const snapshot = await Comments.get();
+		snapshot.forEach((doc) => {
+			setComments((prev) => [...prev, doc.data()]);
+		});
+	};
+	const timestamp = fb.firestore.Timestamp.now();
+	const uniqueComments = [
+		...new Map(comments.map((item) => [item.id, item])).values(),
+	];
 	const handleCloseSnackbar = (event, reason) => {
 		if (reason === 'clickaway') {
 			return;
@@ -98,17 +110,23 @@ export default function Forum() {
 		setIsReplies(false);
 		dispatch(actions.setData({ comment: '' }));
 	};
-	const openModalComment = (e, item) => {
+	const openModalComment = (e) => {
 		e.stopPropagation();
-		setModalComment(true);
-		dispatch(
-			actions.setData({
-				setItem: {
-					idItem: item,
-					dataItem: item,
-				},
-			}),
-		);
+		if (!currentUser) {
+			setSnackbar({
+				open: true,
+				type: 'error',
+				message: 'Bạn phải đăng nhập để bình luận',
+			});
+		} else if (currentUser?.rule === 'user') {
+			setSnackbar({
+				open: true,
+				type: 'error',
+				message: 'Bạn không có quyền bình luận',
+			});
+		} else {
+			setModalComment(true);
+		}
 	};
 	const openModalDeleteComment = async (e, idDelete) => {
 		e.stopPropagation();
@@ -143,6 +161,7 @@ export default function Forum() {
 	};
 	useEffect(() => {
 		getAllJobsSV();
+		getAllComments();
 		document.title = `Diễn đàn | ${process.env.REACT_APP_TITLE_WEB}`;
 	}, []);
 	let showPage = 5;
@@ -152,51 +171,10 @@ export default function Forum() {
 	let DATA_FORUMS_FLAG = DATA_FORUM?.filter((row, index) => {
 		if (index + 1 >= start && index + 1 <= end) return true;
 	});
-	const DATA_COMMENT = [
-		{
-			id: 1,
-			comment: 'Bình luận đầu tiên 📢',
-			username: 'Nguyễn Minh Châu',
-			userId: 1,
-			parentId: null,
-			createdAt: new Date(),
-		},
-		{
-			id: 2,
-			comment: 'Trả lời bình luận đầu tiên 📞',
-			username: 'Vinjob',
-			userId: 2,
-			parentId: 1,
-			createdAt: new Date(),
-		},
-		{
-			id: 3,
-			comment: 'Bình luận thứ 2 📣',
-			username: 'Nguyễn Văn A',
-			userId: 3,
-			parentId: null,
-			createdAt: new Date(),
-		},
-		{
-			id: 4,
-			comment: 'Trả lời bình luận thứ 2',
-			username: 'Nguyễn Văn B',
-			userId: 4,
-			parentId: 3,
-			createdAt: new Date(),
-		},
-		{
-			id: 5,
-			comment: 'Trả lời bình luận thứ 2',
-			username: 'Nguyễn Văn C',
-			userId: 5,
-			parentId: 3,
-			createdAt: new Date(),
-		},
-	];
+	const DATA_COMMENT = uniqueComments || [];
 	const getCommentParent = () => {
 		return DATA_COMMENT.filter((row) => {
-			return row.parentId === null;
+			return row.parentId === null && row.idPost === currentUser?.idPost;
 		});
 	};
 	const getCommentChild = (idParent) => {
@@ -306,27 +284,28 @@ export default function Forum() {
 								</div>
 							</div>
 							<div className={`${cx('bottom_container')}`}>
-								<Tooltip
-									title={autoFormatNumberInputChange(1762882)}
+								<div className={`${cx('actions_item')}`}>
+									<i class="bx bx-like bx-tada"></i>{' '}
+									<span>Thích</span>
+								</div>
+								<div
+									className={`${cx('actions_item')}`}
+									onClick={async (e) => {
+										openModalComment(e);
+										await setStore({
+											...currentUser,
+											idPost: item?._id,
+										});
+										await dispatch(
+											actions.setData({
+												currentUser: getStore(),
+											}),
+										);
+									}}
 								>
-									<div className={`${cx('actions_item')}`}>
-										<i class="bx bx-like bx-tada"></i>{' '}
-										<span>Thích</span>
-									</div>
-								</Tooltip>
-								<Tooltip
-									title={autoFormatNumberInputChange(982)}
-								>
-									<div
-										className={`${cx('actions_item')}`}
-										onClick={(e) =>
-											openModalComment(e, item)
-										}
-									>
-										<i class="bx bx-chat bx-tada"></i>{' '}
-										<span>Bình luận</span>
-									</div>
-								</Tooltip>
+									<i class="bx bx-chat bx-tada"></i>{' '}
+									<span>Bình luận</span>
+								</div>
 								<div
 									className={`${cx(
 										'actions_item',
@@ -411,11 +390,11 @@ export default function Forum() {
 						<p className={`${cx('name')}`}>{item?.username}</p>
 						<p
 							className={`${cx('timer')}`}
-							title={moment(item?.createdAt).format(
+							title={moment(item?.createdAt?.toDate()).format(
 								'DD/MM/YYYY HH:mm:ss',
 							)}
 						>
-							{moment(item?.createdAt).fromNow()}
+							{moment(item?.createdAt?.toDate()).fromNow()}
 						</p>
 					</div>
 					<div
@@ -439,14 +418,14 @@ export default function Forum() {
 						>
 							Sửa
 						</div>
-						{/* <div
+						<div
 							className={`${cx('actions_comment_item')}`}
 							onClick={(e) => {
 								openModalDeleteComment(e, item?.id);
 							}}
 						>
 							Xóa
-						</div> */}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -454,53 +433,100 @@ export default function Forum() {
 	};
 	const handleSendComment = () => {
 		setIsProcessComment(true);
-		setTimeout(() => {
-			setIsProcessComment(false);
-			dispatch(actions.setData({ comment: '' }));
-			setSnackbar({
-				open: true,
-				message: `Bạn đã bình luận: ${comment}. Chức năng đang phát triển!`,
-				type: 'success',
+		const id = Comments.doc().id;
+		Comments.doc(id)
+			.set({
+				id: id,
+				idPost: currentUser?.idPost,
+				username: currentUser?.username,
+				comment: comment,
+				userId: currentUser?.id,
+				parentId: null,
+				createdAt: timestamp,
+				updatedAt: timestamp,
+			})
+			.then((docRef) => {
+				getAllComments();
+				setIsProcessComment(false);
+				dispatch(actions.setData({ comment: '' }));
+			})
+			.catch((err) => {
+				setIsProcessComment(false);
+				setSnackbar({
+					open: true,
+					message: 'Bình luận thất bại!',
+					type: 'error',
+				});
 			});
-		}, 3000);
 	};
 	const handleRepliesComment = () => {
 		setIsProcessComment(true);
-		setTimeout(() => {
-			setIsProcessComment(false);
-			setIsReplies(false);
-			dispatch(actions.setData({ comment: '' }));
-			setSnackbar({
-				open: true,
-				message: `Bạn đã trả lời bình luận ${idReplies}: ${comment}. Chức năng đang phát triển!`,
-				type: 'success',
+		const id = Comments.doc().id;
+		Comments.doc(id)
+			.set({
+				id: id,
+				username: currentUser?.username,
+				comment: comment,
+				userId: currentUser?.id,
+				parentId: idReplies,
+				createdAt: timestamp,
+				updatedAt: timestamp,
+			})
+			.then((docRef) => {
+				getAllComments();
+				setIsProcessComment(false);
+				setIsReplies(false);
+				dispatch(actions.setData({ comment: '' }));
+			})
+			.catch((err) => {
+				setIsProcessComment(false);
+				setSnackbar({
+					open: true,
+					message: 'Trả lời bình luận thất bại!',
+					type: 'error',
+				});
 			});
-		}, 3000);
 	};
 	const handleUpdateComment = (e, id) => {
 		setIsProcessUpdateComment(true);
-		setTimeout(() => {
-			setIsProcessUpdateComment(false);
-			setIsUpdate(false);
-			dispatch(actions.setData({ comment: '' }));
-			setSnackbar({
-				open: true,
-				message: `Bạn đã cập nhật bình luận ${idUpdate}: ${comment}. Chức năng đang phát triển!`,
-				type: 'success',
+		Comments.doc(id)
+			.update({
+				comment: comment,
+				updatedAt: timestamp,
+			})
+			.then((docRef) => {
+				getAllComments();
+				setIsProcessUpdateComment(false);
+				setIsUpdate(false);
+				dispatch(actions.setData({ comment: '' }));
+			})
+			.catch((err) => {
+				console.log(err);
+				setIsProcessUpdateComment(false);
+				setSnackbar({
+					open: true,
+					message: 'Sửa bình luận thất bại!',
+					type: 'error',
+				});
 			});
-		}, 3000);
 	};
 	const handleDeleteComment = () => {
 		setIsProcessDelComment(true);
-		setTimeout(() => {
-			setIsProcessDelComment(false);
-			setModalDeleteComment(false);
-			setSnackbar({
-				open: true,
-				message: `Xóa ${currentUser?.idData}. Chức năng đang được phát triển!`,
-				type: 'success',
+		Comments.doc(currentUser?.idData)
+			.delete()
+			.then((docRef) => {
+				getAllComments();
+				setIsProcessDelComment(false);
+				setModalDeleteComment(false);
+			})
+			.catch((err) => {
+				setIsProcessDelComment(false);
+				setSnackbar({
+					open: true,
+					message: 'Xóa bình luận thất bại!',
+					type: 'error',
+				});
 			});
-		}, 3000);
 	};
 	const handleCancelUpdate = () => {
 		setIsUpdate(false);
@@ -714,7 +740,9 @@ export default function Forum() {
 								className={`${cx(
 									'btn_custom',
 								)} warningbgc ml0 mt8 mr4`}
-								onClick={handleUpdateComment}
+								onClick={(e) =>
+									handleUpdateComment(e, idUpdate)
+								}
 								disabled={isProcessUpdateComment || !comment}
 								isProcess={isProcessUpdateComment}
 							>
@@ -731,35 +759,50 @@ export default function Forum() {
 						</div>
 					)}
 					<div className={`${cx('divider')}`}></div>
-					<div className={`${cx('list_comment_container')}`}>
-						{getCommentParent().map((item, index) => {
-							return (
-								<div
-									className={`${cx('comment_item')}`}
-									key={index}
-								>
-									<RenderCommentItem item={item} />
-									{getCommentChild(item?.id)?.map(
-										(itemChild, indexChild) => {
-											return (
-												<div
-													key={indexChild}
-													className={`${cx(
-														'content_item_child',
-													)}`}
-												>
-													<RenderCommentItem
-														noReply
-														item={itemChild}
-													/>
-												</div>
-											);
-										},
-									)}
-								</div>
-							);
-						})}
-					</div>
+
+					{getCommentParent().length > 0 ? (
+						<>
+							<p className="italic mb8">
+								{autoFormatNumberInputChange(
+									getCommentParent().length,
+								)}{' '}
+								bình luận
+							</p>
+							<div className={`${cx('list_comment_container')}`}>
+								{getCommentParent().map((item, index) => {
+									return (
+										<div
+											className={`${cx('comment_item')}`}
+											key={index}
+										>
+											<RenderCommentItem item={item} />
+											{getCommentChild(item?.id)?.map(
+												(itemChild, indexChild) => {
+													return (
+														<div
+															key={indexChild}
+															className={`${cx(
+																'content_item_child',
+															)}`}
+														>
+															<RenderCommentItem
+																noReply
+																item={itemChild}
+															/>
+														</div>
+													);
+												},
+											)}
+										</div>
+									);
+								})}
+							</div>
+						</>
+					) : (
+						<p className="text-center italic">
+							Hiện chưa có bình luận nào.
+						</p>
+					)}
 				</Modal>
 			)}
 			{modalDeleteComment && (
