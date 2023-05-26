@@ -174,11 +174,11 @@ function DetailForumContent() {
 						<p className={`${cx('name')}`}>{item?.username}</p>
 						<p
 							className={`${cx('timer')}`}
-							title={moment(item?.createdAt).format(
+							title={moment(item?.createdAt?.toDate()).format(
 								'DD/MM/YYYY HH:mm:ss',
 							)}
 						>
-							{moment(item?.createdAt).fromNow()}
+							{moment(item?.createdAt?.toDate()).fromNow()}
 						</p>
 					</div>
 					<div
