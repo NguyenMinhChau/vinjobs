@@ -21,11 +21,11 @@ const LIST_CONTENTS = [
 		name: 'Việc làm',
 		component: <JobsContent />,
 	},
-	// {
-	// 	id: 3,
-	// 	name: 'Diễn đàn',
-	// 	component: <ForumContent />,
-	// },
+	{
+		id: 2,
+		name: 'Diễn đàn',
+		component: <ForumContent />,
+	},
 	// {
 	// 	id: 4,
 	// 	name: 'Liên hệ hợp tác',

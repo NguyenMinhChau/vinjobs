@@ -15,6 +15,7 @@ import { getStore } from '../../utils/localStore/localStore';
 import General from '../General/General';
 import DataForumContentHeader from '../../utils/FakeData/ForumContentHeader';
 import LOGO_COMPANY from '../../assets/images/logo_company.png';
+import moment from 'moment';
 
 const cx = className.bind(styles);
 
@@ -69,6 +70,7 @@ function ForumContent() {
 					return (
 						<tr key={index}>
 							<td>{handleUtils.indexTable(page, show, index)}</td>
+							<td>NguyenMinhChau</td>
 							<td className="item-w200">
 								<div
 									className={`${cx('content')}`}
@@ -87,6 +89,12 @@ function ForumContent() {
 									className={`${cx('thumbnail')}`}
 								/>
 							</td>
+							<td className="item-w150">
+								{moment(new Date()).format(
+									'DD/MM/YYYY HH:mm:ss',
+								)}
+							</td>
+							<td>TUYEN_DUNG</td>
 							<td>
 								<ActionsTable
 									view

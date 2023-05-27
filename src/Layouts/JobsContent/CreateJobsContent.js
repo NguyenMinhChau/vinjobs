@@ -351,9 +351,9 @@ function CreateJobsContent() {
 						!topic
 					}
 				>
-					Gửi
+					{idJobsContent ? 'Cập nhật' : 'Gửi'}
 				</Button>
-				{idJobsContent && (
+				{/* {idJobsContent && (
 					<Button
 						className={`${cx('btn')} vipbgc text-center`}
 						isProcess={isProcessThumbnail}
@@ -362,7 +362,7 @@ function CreateJobsContent() {
 					>
 						Cập nhật ảnh
 					</Button>
-				)}
+				)} */}
 			</div>
 		</div>
 	);

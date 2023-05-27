@@ -173,7 +173,7 @@ function CreateForumContent() {
 					onError={(e) => (e.target.src = LOGO_COMPANY)}
 				/>
 			</div>
-			<label className={`${cx('label')}`}>Hình ảnh (Tối đa 5 ảnh)</label>
+			{/* <label className={`${cx('label')}`}>Hình ảnh (Tối đa 5 ảnh)</label>
 			<div className={`${cx('multiple_upload_container')}`}>
 				<MultipleUpload width={'100%'} />
 				<div className={`${cx('image_multiple_container')}`}>
@@ -189,7 +189,7 @@ function CreateForumContent() {
 						);
 					})}
 				</div>
-			</div>
+			</div> */}
 			<div className={`${cx('button_container')}`}>
 				<Button
 					className="cancelbgc text-center"
