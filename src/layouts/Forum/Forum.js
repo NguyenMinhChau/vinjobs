@@ -374,15 +374,17 @@ export default function Forum() {
 										className={`${cx('actions_item')}`}
 										onClick={async (e) => {
 											openModalComment(e);
-											await setStore({
-												...currentUser,
-												idPost: item?._id,
-											});
-											await dispatch(
-												actions.setData({
-													currentUser: getStore(),
-												}),
-											);
+											if (currentUser) {
+												await setStore({
+													...currentUser,
+													idPost: item?._id,
+												});
+												await dispatch(
+													actions.setData({
+														currentUser: getStore(),
+													}),
+												);
+											}
 										}}
 									>
 										<i class="bx bx-chat bx-tada"></i>{' '}
