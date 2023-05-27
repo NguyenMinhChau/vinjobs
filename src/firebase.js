@@ -17,7 +17,8 @@ const fb = firebase;
 const db = fb.firestore();
 
 const Comments = db.collection('comments');
+const Likes = db.collection('likes');
 
-export { Comments };
+export { Comments, Likes };
 
 export default fb;

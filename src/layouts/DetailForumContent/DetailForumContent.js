@@ -20,7 +20,7 @@ import { autoFormatNumberInputChange } from '../../utils/format/NumberFormat';
 import { actions } from '../../app/';
 import Picker from 'emoji-picker-react';
 import { setStore, getStore } from '../../utils/localStore/localStore';
-import fb, { Comments } from '../../firebase';
+import fb, { Comments, Likes } from '../../firebase';
 
 const cx = className.bind(styles);
 
@@ -48,6 +48,7 @@ function DetailForumContent() {
 	const [isReplies, setIsReplies] = useState(false);
 	const [idReplies, setIdReplies] = useState(null);
 	const [comments, setComments] = useState([]);
+	const [likes, setLikes] = useState([]);
 	const [idItem, setIdItem] = useState(null);
 	const [isProcessDelComment, setIsProcessDelComment] = useState(false);
 	const handleCloseSnackbar = (event, reason) => {
@@ -66,9 +67,18 @@ function DetailForumContent() {
 			setComments((prev) => [...prev, doc.data()]);
 		});
 	};
+	const getAllLikes = async () => {
+		const snapshot = await Likes.get();
+		snapshot.forEach((doc) => {
+			setLikes((prev) => [...prev, doc.data()]);
+		});
+	};
 	const timestamp = fb.firestore.Timestamp.now();
 	const uniqueComments = [
 		...new Map(comments.map((item) => [item.id, item])).values(),
+	];
+	const uniqueLikes = [
+		...new Map(likes.map((item) => [item.idPost, item])).values(),
 	];
 	const toggleShare = () => {
 		setOpenShare(!openShare);
@@ -129,6 +139,7 @@ function DetailForumContent() {
 	useEffect(() => {
 		getForumById();
 		getAllComments();
+		getAllLikes();
 		document.title = `Chi tiết diễn đàn | ${process.env.REACT_APP_TITLE_WEB}`;
 	}, []);
 	const URL = process.env.REACT_APP_URL_IMAGE;
@@ -159,6 +170,46 @@ function DetailForumContent() {
 		textAreaRef.current.focus();
 		setIdUpdate(item?.id);
 	};
+	const handleLikePost = (idPost) => {
+		if (!currentUser) {
+			setSnackbar({
+				open: true,
+				type: 'error',
+				message: 'Bạn phải đăng nhập để thích bài viết',
+			});
+		} else {
+			Likes.doc(idPost)
+				.get()
+				.then((doc) => {
+					if (doc.exists) {
+						const data = doc.data();
+						if (data.likes.includes(currentUser?.id)) {
+							Likes.doc(idPost).update({
+								likes: data.likes.filter((item) => {
+									return item !== currentUser?.id;
+								}),
+							});
+						} else {
+							Likes.doc(idPost).update({
+								likes: [...data.likes, currentUser?.id],
+							});
+						}
+					} else {
+						Likes.doc(idPost).set({
+							idPost: idPost,
+							likes: [currentUser?.id],
+						});
+					}
+				});
+		}
+	};
+	const DATA_LIKES = uniqueLikes || [];
+	const checkIdUserInLikes = (idUser) => {
+		return DATA_LIKES.filter((item) => {
+			return item.idPost === dataItem?.post?._id;
+		})[0]?.likes?.includes(idUser);
+	};
+	const isLike = checkIdUserInLikes(currentUser?.id);
 	const RenderCommentItem = ({ item, noReply }) => {
 		return (
 			<div className={`${cx('comment')}`}>
@@ -345,28 +396,56 @@ function DetailForumContent() {
 						</div>
 					</div>
 					<div className={`${cx('bottom_container')}`}>
-						<div className={`${cx('actions_item')}`}>
-							<i class="bx bx-like bx-tada"></i>{' '}
-							<span>Thích</span>
-						</div>
-						<div
-							className={`${cx('actions_item')}`}
-							onClick={async (e) => {
-								openModalComment(e);
-								await setStore({
-									...currentUser,
-									idPost: dataItem?.post?._id,
-								});
-								await dispatch(
-									actions.setData({
-										currentUser: getStore(),
-									}),
-								);
-							}}
+						<Tooltip
+							title={
+								DATA_LIKES.filter((row) => {
+									return row.idPost === dataItem?.post?._id;
+								})[0]?.likes?.length
+							}
 						>
-							<i class="bx bx-chat bx-tada"></i>{' '}
-							<span>Bình luận</span>
-						</div>
+							<div
+								className={`${cx(
+									'actions_item',
+									isLike && 'like',
+								)}`}
+								onClick={() => {
+									handleLikePost(dataItem?.post?._id);
+									getAllLikes();
+								}}
+							>
+								<i class="bx bx-like bx-tada"></i>{' '}
+								<span>{isLike ? 'Bỏ thích' : 'Thích'}</span>
+							</div>
+						</Tooltip>
+						<Tooltip
+							title={
+								DATA_COMMENT.filter((row) => {
+									return (
+										row.parentId === null &&
+										row.idPost === dataItem?.post?._id
+									);
+								}).length
+							}
+						>
+							<div
+								className={`${cx('actions_item')}`}
+								onClick={async (e) => {
+									openModalComment(e);
+									await setStore({
+										...currentUser,
+										idPost: dataItem?.post?._id,
+									});
+									await dispatch(
+										actions.setData({
+											currentUser: getStore(),
+										}),
+									);
+								}}
+							>
+								<i class="bx bx-chat bx-tada"></i>{' '}
+								<span>Bình luận</span>
+							</div>
+						</Tooltip>
 						<div
 							className={`${cx(
 								'actions_item',

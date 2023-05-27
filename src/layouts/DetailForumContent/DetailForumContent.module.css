@@ -207,6 +207,9 @@
 	font-size: 20px;
 	cursor: pointer;
 }
+.like {
+	color: var(--color-primary);
+}
 @keyframes fadeIn {
 	from {
 		opacity: 0;

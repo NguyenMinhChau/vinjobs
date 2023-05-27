@@ -34,7 +34,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Picker from 'emoji-picker-react';
 import { getAllJobContentSV } from '../../services/admin';
 import { setStore, getStore } from '../../utils/localStore/localStore';
-import fb, { Comments } from '../../firebase';
+import fb, { Comments, Likes } from '../../firebase';
 
 const cx = className.bind(styles);
 // HELLO
@@ -61,6 +61,7 @@ export default function Forum() {
 	const [idReplies, setIdReplies] = useState(null);
 	const [isProcessDelComment, setIsProcessDelComment] = useState(false);
 	const [comments, setComments] = useState([]);
+	const [likes, setLikes] = useState([]);
 	const [idItem, setIdItem] = useState(null);
 	const [snackbar, setSnackbar] = useState({
 		open: false,
@@ -74,9 +75,18 @@ export default function Forum() {
 			setComments((prev) => [...prev, doc.data()]);
 		});
 	};
+	const getAllLikes = async () => {
+		const snapshot = await Likes.get();
+		snapshot.forEach((doc) => {
+			setLikes((prev) => [...prev, doc.data()]);
+		});
+	};
 	const timestamp = fb.firestore.Timestamp.now();
 	const uniqueComments = [
 		...new Map(comments.map((item) => [item.id, item])).values(),
+	];
+	const uniqueLikes = [
+		...new Map(likes.map((item) => [item.idPost, item])).values(),
 	];
 	const handleCloseSnackbar = (event, reason) => {
 		if (reason === 'clickaway') {
@@ -162,6 +172,7 @@ export default function Forum() {
 	useEffect(() => {
 		getAllJobsSV();
 		getAllComments();
+		getAllLikes();
 		document.title = `Diễn đàn | ${process.env.REACT_APP_TITLE_WEB}`;
 	}, []);
 	let showPage = 5;
@@ -234,6 +245,45 @@ export default function Forum() {
 		);
 	};
 	const URL = process.env.REACT_APP_URL_IMAGE;
+	const handleLikePost = (idPost) => {
+		if (!currentUser) {
+			setSnackbar({
+				open: true,
+				type: 'error',
+				message: 'Bạn phải đăng nhập để thích bài viết',
+			});
+		} else {
+			Likes.doc(idPost)
+				.get()
+				.then((doc) => {
+					if (doc.exists) {
+						const data = doc.data();
+						if (data.likes.includes(currentUser?.id)) {
+							Likes.doc(idPost).update({
+								likes: data.likes.filter((item) => {
+									return item !== currentUser?.id;
+								}),
+							});
+						} else {
+							Likes.doc(idPost).update({
+								likes: [...data.likes, currentUser?.id],
+							});
+						}
+					} else {
+						Likes.doc(idPost).set({
+							idPost: idPost,
+							likes: [currentUser?.id],
+						});
+					}
+				});
+		}
+	};
+	const DATA_LIKES = uniqueLikes || [];
+	const checkIdUserInLikes = (idUser) => {
+		return DATA_LIKES.map((item) => {
+			return item?.likes?.includes(idUser);
+		});
+	};
 	const RenderItemForum = ({ data }) => {
 		return (
 			<>
@@ -246,6 +296,7 @@ export default function Forum() {
 					} else {
 						content = item?.content;
 					}
+					let isLike = checkIdUserInLikes(currentUser?.id);
 					return (
 						<div className={`${cx('list_item')}`} key={index}>
 							<div className={`${cx('top_container')}`}>
@@ -284,28 +335,60 @@ export default function Forum() {
 								</div>
 							</div>
 							<div className={`${cx('bottom_container')}`}>
-								<div className={`${cx('actions_item')}`}>
-									<i class="bx bx-like bx-tada"></i>{' '}
-									<span>Thích</span>
-								</div>
-								<div
-									className={`${cx('actions_item')}`}
-									onClick={async (e) => {
-										openModalComment(e);
-										await setStore({
-											...currentUser,
-											idPost: item?._id,
-										});
-										await dispatch(
-											actions.setData({
-												currentUser: getStore(),
-											}),
-										);
-									}}
+								<Tooltip
+									title={
+										DATA_LIKES.filter((row) => {
+											return row.idPost === item?._id;
+										})[0]?.likes?.length
+									}
 								>
-									<i class="bx bx-chat bx-tada"></i>{' '}
-									<span>Bình luận</span>
-								</div>
+									<div
+										className={`${cx(
+											'actions_item',
+											isLike[index] && 'like',
+										)}`}
+										onClick={() => {
+											handleLikePost(item?._id);
+											getAllLikes();
+										}}
+									>
+										<i class="bx bx-like bx-tada"></i>{' '}
+										<span>
+											{isLike[index]
+												? 'Bỏ thích'
+												: 'Thích'}
+										</span>
+									</div>
+								</Tooltip>
+								<Tooltip
+									title={
+										DATA_COMMENT.filter((row) => {
+											return (
+												row.parentId === null &&
+												row.idPost === item?._id
+											);
+										}).length
+									}
+								>
+									<div
+										className={`${cx('actions_item')}`}
+										onClick={async (e) => {
+											openModalComment(e);
+											await setStore({
+												...currentUser,
+												idPost: item?._id,
+											});
+											await dispatch(
+												actions.setData({
+													currentUser: getStore(),
+												}),
+											);
+										}}
+									>
+										<i class="bx bx-chat bx-tada"></i>{' '}
+										<span>Bình luận</span>
+									</div>
+								</Tooltip>
 								<div
 									className={`${cx(
 										'actions_item',
