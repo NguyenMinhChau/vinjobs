@@ -264,16 +264,19 @@ export default function Forum() {
 									return item !== currentUser?.id;
 								}),
 							});
+							getAllLikes();
 						} else {
 							Likes.doc(idPost).update({
 								likes: [...data.likes, currentUser?.id],
 							});
+							getAllLikes();
 						}
 					} else {
 						Likes.doc(idPost).set({
 							idPost: idPost,
 							likes: [currentUser?.id],
 						});
+						getAllLikes();
 					}
 				});
 		}
@@ -349,7 +352,6 @@ export default function Forum() {
 										)}`}
 										onClick={() => {
 											handleLikePost(item?._id);
-											getAllLikes();
 										}}
 									>
 										<i class="bx bx-like bx-tada"></i>{' '}

@@ -189,16 +189,19 @@ function DetailForumContent() {
 									return item !== currentUser?.id;
 								}),
 							});
+							getAllLikes();
 						} else {
 							Likes.doc(idPost).update({
 								likes: [...data.likes, currentUser?.id],
 							});
+							getAllLikes();
 						}
 					} else {
 						Likes.doc(idPost).set({
 							idPost: idPost,
 							likes: [currentUser?.id],
 						});
+						getAllLikes();
 					}
 				});
 		}
@@ -410,7 +413,6 @@ function DetailForumContent() {
 								)}`}
 								onClick={() => {
 									handleLikePost(dataItem?.post?._id);
-									getAllLikes();
 								}}
 							>
 								<i class="bx bx-like bx-tada"></i>{' '}
