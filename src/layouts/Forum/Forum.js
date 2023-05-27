@@ -128,12 +128,6 @@ export default function Forum() {
 				type: 'error',
 				message: 'Bạn phải đăng nhập để bình luận',
 			});
-		} else if (currentUser?.rule === 'user') {
-			setSnackbar({
-				open: true,
-				type: 'error',
-				message: 'Bạn không có quyền bình luận',
-			});
 		} else {
 			setModalComment(true);
 		}
@@ -519,101 +513,132 @@ export default function Forum() {
 		);
 	};
 	const handleSendComment = () => {
-		setIsProcessComment(true);
-		const id = Comments.doc().id;
-		Comments.doc(id)
-			.set({
-				id: id,
-				idPost: currentUser?.idPost,
-				username: currentUser?.username,
-				comment: comment,
-				userId: currentUser?.id,
-				parentId: null,
-				createdAt: timestamp,
-				updatedAt: timestamp,
-			})
-			.then((docRef) => {
-				getAllComments();
-				setIsProcessComment(false);
-				dispatch(actions.setData({ comment: '' }));
-			})
-			.catch((err) => {
-				setIsProcessComment(false);
-				setSnackbar({
-					open: true,
-					message: 'Bình luận thất bại!',
-					type: 'error',
-				});
+		if (currentUser?.rule === 'user') {
+			setSnackbar({
+				open: true,
+				type: 'error',
+				message: 'Bạn không có quyền bình luận',
 			});
+		} else {
+			setIsProcessComment(true);
+			const id = Comments.doc().id;
+			Comments.doc(id)
+				.set({
+					id: id,
+					idPost: currentUser?.idPost,
+					username: currentUser?.username,
+					comment: comment,
+					userId: currentUser?.id,
+					parentId: null,
+					createdAt: timestamp,
+					updatedAt: timestamp,
+				})
+				.then((docRef) => {
+					getAllComments();
+					setIsProcessComment(false);
+					dispatch(actions.setData({ comment: '' }));
+				})
+				.catch((err) => {
+					setIsProcessComment(false);
+					setSnackbar({
+						open: true,
+						message: 'Bình luận thất bại!',
+						type: 'error',
+					});
+				});
+		}
 	};
 	const handleRepliesComment = () => {
-		setIsProcessComment(true);
-		const id = Comments.doc().id;
-		Comments.doc(id)
-			.set({
-				id: id,
-				username: currentUser?.username,
-				comment: comment,
-				userId: currentUser?.id,
-				parentId: idReplies,
-				createdAt: timestamp,
-				updatedAt: timestamp,
-			})
-			.then((docRef) => {
-				getAllComments();
-				setIsProcessComment(false);
-				setIsReplies(false);
-				dispatch(actions.setData({ comment: '' }));
-			})
-			.catch((err) => {
-				setIsProcessComment(false);
-				setSnackbar({
-					open: true,
-					message: 'Trả lời bình luận thất bại!',
-					type: 'error',
-				});
+		if (currentUser?.rule === 'user') {
+			setSnackbar({
+				open: true,
+				type: 'error',
+				message: 'Bạn không có quyền bình luận',
 			});
+		} else {
+			setIsProcessComment(true);
+			const id = Comments.doc().id;
+			Comments.doc(id)
+				.set({
+					id: id,
+					username: currentUser?.username,
+					comment: comment,
+					userId: currentUser?.id,
+					parentId: idReplies,
+					createdAt: timestamp,
+					updatedAt: timestamp,
+				})
+				.then((docRef) => {
+					getAllComments();
+					setIsProcessComment(false);
+					setIsReplies(false);
+					dispatch(actions.setData({ comment: '' }));
+				})
+				.catch((err) => {
+					setIsProcessComment(false);
+					setSnackbar({
+						open: true,
+						message: 'Trả lời bình luận thất bại!',
+						type: 'error',
+					});
+				});
+		}
 	};
 	const handleUpdateComment = (e, id) => {
-		setIsProcessUpdateComment(true);
-		Comments.doc(id)
-			.update({
-				comment: comment,
-				updatedAt: timestamp,
-			})
-			.then((docRef) => {
-				getAllComments();
-				setIsProcessUpdateComment(false);
-				setIsUpdate(false);
-				dispatch(actions.setData({ comment: '' }));
-			})
-			.catch((err) => {
-				console.log(err);
-				setIsProcessUpdateComment(false);
-				setSnackbar({
-					open: true,
-					message: 'Sửa bình luận thất bại!',
-					type: 'error',
-				});
+		if (currentUser?.rule === 'user') {
+			setSnackbar({
+				open: true,
+				type: 'error',
+				message: 'Bạn không có quyền bình luận',
 			});
+		} else {
+			setIsProcessUpdateComment(true);
+			Comments.doc(id)
+				.update({
+					comment: comment,
+					updatedAt: timestamp,
+				})
+				.then((docRef) => {
+					getAllComments();
+					setIsProcessUpdateComment(false);
+					setIsUpdate(false);
+					dispatch(actions.setData({ comment: '' }));
+				})
+				.catch((err) => {
+					console.log(err);
+					setIsProcessUpdateComment(false);
+					setSnackbar({
+						open: true,
+						message: 'Sửa bình luận thất bại!',
+						type: 'error',
+					});
+				});
+		}
 	};
 	const handleDeleteComment = () => {
-		setIsProcessDelComment(true);
-		Comments.doc(currentUser?.idData)
-			.delete()
-			.then((docRef) => {
-				getAllComments();
-				setIsProcessDelComment(false);
-				setModalDeleteComment(false);
-			})
-			.catch((err) => {
-				setIsProcessDelComment(false);
-				setSnackbar({
-					open: true,
-					message: 'Xóa bình luận thất bại!',
-					type: 'error',
-				});
+		if (currentUser?.rule === 'user') {
+			setSnackbar({
+				open: true,
+				type: 'error',
+				message: 'Bạn không có quyền bình luận',
 			});
+			setIsProcessDelComment(true);
+			Comments.doc(currentUser?.idData)
+				.delete()
+				.then((docRef) => {
+					getAllComments();
+					setIsProcessDelComment(false);
+					setModalDeleteComment(false);
+				})
+				.catch((err) => {
+					setIsProcessDelComment(false);
+					setSnackbar({
+						open: true,
+						message: 'Xóa bình luận thất bại!',
+						type: 'error',
+					});
+				});
+		}
 	};
 	const handleCancelUpdate = () => {
 		setIsUpdate(false);
