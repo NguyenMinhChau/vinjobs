@@ -15,7 +15,7 @@ export default function ContentOne({
 	children,
 }) {
 	return (
-		<div className={`${cx('content-container')}`} data-aos="fade-up">
+		<div className={`${cx('content-container')}`} data-aos="fade-down">
 			<div className={`${cx('content-left')}`}>
 				<div className={`${cx('left')}`}>{textVerticle}</div>
 				<div className={`${cx('middle')}`}>
