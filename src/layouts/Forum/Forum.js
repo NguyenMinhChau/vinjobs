@@ -32,7 +32,7 @@ import {
 } from '../../SocialPlugin';
 import Tooltip from '@mui/material/Tooltip';
 import Picker from 'emoji-picker-react';
-import { getAllJobContentSV } from '../../services/admin';
+import { getAllForumContentSV } from '../../services/admin';
 import { setStore, getStore } from '../../utils/localStore/localStore';
 import fb, { Comments, Likes } from '../../firebase';
 
@@ -156,15 +156,15 @@ export default function Forum() {
 	const toggleEmoji = () => {
 		setOpenEmoji(!openEmoji);
 	};
-	const getAllJobsSV = () => {
-		getAllJobContentSV({
+	const getAllForumSV = () => {
+		getAllForumContentSV({
 			setSnackbar,
 			dispatch,
 			state,
 		});
 	};
 	useEffect(() => {
-		getAllJobsSV();
+		getAllForumSV();
 		getAllComments();
 		getAllLikes();
 		document.title = `Diễn đàn | ${process.env.REACT_APP_TITLE_WEB}`;
@@ -172,7 +172,7 @@ export default function Forum() {
 	let showPage = 5;
 	const start = (page - 1) * showPage + 1;
 	const end = start + showPage - 1;
-	let DATA_FORUM = dataJobs;
+	let DATA_FORUM = dataForum;
 	let DATA_FORUMS_FLAG = DATA_FORUM?.filter((row, index) => {
 		if (index + 1 >= start && index + 1 <= end) return true;
 	});
@@ -553,7 +553,7 @@ export default function Forum() {
 			setSnackbar({
 				open: true,
 				type: 'error',
-				message: 'Bạn không có quyền bình luận',
+				message: 'Bạn không có quyền trả lời bình luận',
 			});
 		} else {
 			setIsProcessComment(true);
@@ -589,7 +589,7 @@ export default function Forum() {
 			setSnackbar({
 				open: true,
 				type: 'error',
-				message: 'Bạn không có quyền bình luận',
+				message: 'Bạn không có quyền cập nhật bình luận',
 			});
 		} else {
 			setIsProcessUpdateComment(true);
@@ -620,8 +620,9 @@ export default function Forum() {
 			setSnackbar({
 				open: true,
 				type: 'error',
-				message: 'Bạn không có quyền bình luận',
+				message: 'Bạn không có quyền xóa bình luận',
 			});
+		} else {
 			setIsProcessDelComment(true);
 			Comments.doc(currentUser?.idData)
 				.delete()

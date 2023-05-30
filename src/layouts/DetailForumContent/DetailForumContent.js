@@ -7,7 +7,7 @@ import styles from './DetailForumContent.module.css';
 import { SliderHeader, SnackbarCp, Button, Modal } from '../../components';
 import moment from 'moment';
 import { useAppContext } from '../../utils';
-import { getJobByIdSV } from '../../services/admin';
+import { getForumByIdSV } from '../../services/admin';
 import LOGO_COMPANY from '../../assets/images/logo-company.png';
 import Tooltip from '@mui/material/Tooltip';
 import {
@@ -123,7 +123,7 @@ function DetailForumContent() {
 		setOpenEmoji(!openEmoji);
 	};
 	const getForumById = () => {
-		getJobByIdSV({
+		getForumByIdSV({
 			id_post: idForum,
 			setSnackbar,
 			dispatch,
@@ -140,7 +140,7 @@ function DetailForumContent() {
 	const DATA_COMMENT = uniqueComments || [];
 	const getCommentParent = () => {
 		return DATA_COMMENT.filter((row) => {
-			return row.parentId === null && row.idPost === dataItem?.post?._id;
+			return row.parentId === null && row.idPost === dataItem?._id;
 		});
 	};
 	const getCommentChild = (idParent) => {
@@ -203,7 +203,7 @@ function DetailForumContent() {
 	const DATA_LIKES = uniqueLikes || [];
 	const checkIdUserInLikes = (idUser) => {
 		return DATA_LIKES.filter((item) => {
-			return item.idPost === dataItem?.post?._id;
+			return item.idPost === dataItem?._id;
 		})[0]?.likes?.includes(idUser);
 	};
 	const isLike = checkIdUserInLikes(currentUser?.id);
@@ -304,7 +304,7 @@ function DetailForumContent() {
 			setSnackbar({
 				open: true,
 				type: 'error',
-				message: 'Bạn không có quyền bình luận',
+				message: 'Bạn không có quyền trả lời bình luận',
 			});
 		} else {
 			setIsProcessComment(true);
@@ -340,7 +340,7 @@ function DetailForumContent() {
 			setSnackbar({
 				open: true,
 				type: 'error',
-				message: 'Bạn không có quyền bình luận',
+				message: 'Bạn không có quyền cập nhật bình luận',
 			});
 		} else {
 			setIsProcessUpdateComment(true);
@@ -371,8 +371,9 @@ function DetailForumContent() {
 			setSnackbar({
 				open: true,
 				type: 'error',
-				message: 'Bạn không có quyền bình luận',
+				message: 'Bạn không có quyền xóa bình luận',
 			});
+		} else {
 			setIsProcessDelComment(true);
 			Comments.doc(currentUser?.idData)
 				.delete()
@@ -401,8 +402,8 @@ function DetailForumContent() {
 			<SliderHeader
 				bgiClassName={'bgi_custom_filter_brightness_60'}
 				classContainer={`${cx('slider_header_custom')}`}
-				urlImage={`${URL}${dataItem?.post?.thumbnail}`}
-				title={`<b>${dataItem?.post?.namePost || '---'}</b>`}
+				urlImage={`${URL}${dataItem?.thumbnail}`}
+				title={`<b>${dataItem?.namePost || '---'}</b>`}
 				animateName="animate__bounceInUp"
 			/>
 			<SnackbarCp
@@ -418,7 +419,7 @@ function DetailForumContent() {
 							<div
 								className={`${cx('content_forum_container')}`}
 								dangerouslySetInnerHTML={{
-									__html: dataItem?.post?.content,
+									__html: dataItem?.content,
 								}}
 							></div>
 						</div>
@@ -427,7 +428,7 @@ function DetailForumContent() {
 						<Tooltip
 							title={
 								DATA_LIKES.filter((row) => {
-									return row.idPost === dataItem?.post?._id;
+									return row.idPost === dataItem?._id;
 								})[0]?.likes?.length
 							}
 						>
@@ -437,7 +438,7 @@ function DetailForumContent() {
 									isLike && 'like',
 								)}`}
 								onClick={() => {
-									handleLikePost(dataItem?.post?._id);
+									handleLikePost(dataItem?._id);
 								}}
 							>
 								<i class="bx bx-like bx-tada"></i>{' '}
@@ -449,7 +450,7 @@ function DetailForumContent() {
 								DATA_COMMENT.filter((row) => {
 									return (
 										row.parentId === null &&
-										row.idPost === dataItem?.post?._id
+										row.idPost === dataItem?._id
 									);
 								}).length
 							}
@@ -461,7 +462,7 @@ function DetailForumContent() {
 									if (currentUser) {
 										await setStore({
 											...currentUser,
-											idPost: dataItem?.post?._id,
+											idPost: dataItem?._id,
 										});
 										await dispatch(
 											actions.setData({
@@ -489,21 +490,21 @@ function DetailForumContent() {
 									className={`${cx('actions_item_absolute')}`}
 								>
 									<ShareFB
-										slug={dataItem?.post?._id}
-										name={dataItem?.post?.namePost}
-										desc={dataItem?.post?.description}
+										slug={dataItem?._id}
+										name={dataItem?.namePost}
+										desc={dataItem?.description}
 										page="forum"
 									/>
 									<ShareLinkedln
-										slug={dataItem?.post?._id}
-										name={dataItem?.post?.namePost}
-										desc={dataItem?.post?.description}
+										slug={dataItem?._id}
+										name={dataItem?.namePost}
+										desc={dataItem?.description}
 										page="forum"
 									/>
 									<ShareTelegram
-										slug={dataItem?.post?._id}
-										name={dataItem?.post?.namePost}
-										desc={dataItem?.post?.description}
+										slug={dataItem?._id}
+										name={dataItem?.namePost}
+										desc={dataItem?.description}
 										page="forum"
 									/>
 								</div>

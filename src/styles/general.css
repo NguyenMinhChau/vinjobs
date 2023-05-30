@@ -207,6 +207,9 @@ ul {
 	width: 100% !important;
 	margin-bottom: 12px !important;
 }
+.MuiSnackbar-root {
+	z-index: 99999999999999 !important;
+}
 
 /* TABLET */
 @media (min-width: 46.25em) and (max-width: 63.9375em) {
