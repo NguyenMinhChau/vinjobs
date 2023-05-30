@@ -322,6 +322,15 @@ export default function Forum() {
 										{item?.namePost}
 									</Link>
 									<div
+										className={`${cx('timer')}`}
+										title={moment(item?.createdAt).format(
+											'DD/MM/YYYY HH:mm:ss',
+										)}
+									>
+										Đăng vào:{' '}
+										{moment(item?.createdAt).fromNow()}
+									</div>
+									<div
 										className={`${cx(
 											'content_forum_container',
 										)}`}
