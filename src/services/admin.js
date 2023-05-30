@@ -9,6 +9,7 @@ import {
 	adminPut,
 	userGet,
 } from '../utils/Axios/axiosInstance';
+import { Likes } from '../firebase';
 
 // ===================================
 export const getUsersSV = async (props = {}) => {
@@ -630,7 +631,6 @@ export const addForumContentSV = async (props = {}) => {
 		setIsProcess,
 		editorForumRef,
 	} = props;
-	console.log(props);
 	try {
 		const resPost = await adminPost(
 			`forum/${id_user}`,
@@ -648,6 +648,14 @@ export const addForumContentSV = async (props = {}) => {
 				},
 			},
 		);
+		Likes.doc(resPost?.metadata?._id)
+			.get()
+			.then((doc) => {
+				Likes.doc(resPost?.metadata?._id).set({
+					idPost: resPost?.metadata?._id,
+					likes: [],
+				});
+			});
 		setIsProcess(false);
 		editorForumRef.current.setContent('');
 		dispatch(
@@ -693,6 +701,7 @@ export const deleteForumContentSV = async (props = {}) => {
 			{},
 			{ headers: { Authorization: `Bearer ${token}` } },
 		);
+		await Likes.doc(id_post).delete();
 		setIsProcess(false);
 		dispatch(
 			actions.toggleModal({
