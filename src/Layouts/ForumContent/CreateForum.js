@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react';
 import className from 'classnames/bind';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styles from './ForumContent.module.css';
-import { useAppContext } from '../../utils';
+import { useAppContext, requestRefreshToken } from '../../utils';
 import {
 	Button,
 	EditorTiny,
@@ -16,6 +17,11 @@ import {
 import routers from '../../routers/routers';
 import { actions } from '../../app/';
 import DataTopicContent from '../../utils/FakeData/TopicContent';
+import {
+	getForumByIdSV,
+	addForumContentSV,
+	updateForumContentSV,
+} from '../../services/admin';
 import LOGO_COMPANY from '../../assets/images/logo_company.png';
 
 const cx = className.bind(styles);
@@ -23,11 +29,14 @@ const cx = className.bind(styles);
 function CreateForumContent() {
 	const { state, dispatch } = useAppContext();
 	const {
+		currentUser,
 		multipleFile,
 		singleFile,
 		editor: { title, subTitle, topic },
 		searchValues: { topicSearch },
+		edit: { itemData },
 	} = state.set;
+	const history = useNavigate();
 	const { idForumContent } = useParams();
 	const editorForumRef = useRef(null);
 	const [isProcess, setIsProcess] = useState(false);
@@ -49,8 +58,20 @@ function CreateForumContent() {
 	const handleToogleSelectTopic = () => {
 		setToggleSelectTopic(!toggleSelectTopic);
 	};
+	const getForumById = (dataToken) => {
+		getForumByIdSV({
+			id_post: idForumContent,
+			setSnackbar,
+			dispatch,
+			state,
+			token: dataToken?.token,
+		});
+	};
 	useEffect(() => {
 		document.title = `Bài đăng diễn đàn | ${process.env.REACT_APP_TITLE_WEB}`;
+		if (idForumContent) {
+			getForumById();
+		}
 	}, []);
 	useEffect(() => {
 		dispatch(
@@ -95,19 +116,65 @@ function CreateForumContent() {
 		);
 		setToggleSelectTopic(false);
 	};
-	const handleCreateContent = () => {
-		console.log(
-			singleFile,
+	const createContent = (dataToken) => {
+		addForumContentSV({
+			id_user: currentUser?.id,
+			setSnackbar,
+			dispatch,
+			state,
+			token: dataToken?.token,
 			title,
-			subTitle,
-			topic,
-			multipleFile,
-			editorForumRef?.current?.getContent(),
+			desc: subTitle,
+			content: editorForumRef?.current?.getContent(),
+			thumbnail: singleFile[0],
+			type: topic?.type,
+			history,
+			setIsProcess,
+			editorForumRef,
+		});
+	};
+	const handleCreateContent = () => {
+		setIsProcess(true);
+		requestRefreshToken(
+			currentUser,
+			createContent,
+			state,
+			dispatch,
+			actions,
+		);
+	};
+	const updateForumContent = (dataToken) => {
+		updateForumContentSV({
+			id_post: idForumContent,
+			setSnackbar,
+			dispatch,
+			state,
+			setIsProcess,
+			title,
+			desc: subTitle,
+			content: editorForumRef?.current?.getContent(),
+			thumbnail: singleFile[0],
+			type: topic?.type,
+			token: dataToken?.token,
+			history,
+		});
+	};
+	const handleUpdateForumContent = () => {
+		setIsProcess(true);
+		requestRefreshToken(
+			currentUser,
+			updateForumContent,
+			state,
+			dispatch,
+			actions,
 		);
 	};
 	// <div dangerouslySetInnerHTML={{ __html: data.description }}></div>
+	const URL = process.env.REACT_APP_URL_IMAGE;
 	const urlImageSingle =
-		singleFile.length > 0 ? URL.createObjectURL(singleFile[0]) : '';
+		singleFile.length > 0
+			? window.URL.createObjectURL(singleFile?.[0])
+			: '';
 	let urlMultipleImages = [1, 2, 3, 4, 5];
 	if (multipleFile.length > 0) {
 		urlMultipleImages = multipleFile.map((item) => {
@@ -161,17 +228,22 @@ function CreateForumContent() {
 			<EditorTiny
 				textInitial="Nội dung trang diễn đàn..."
 				ref={editorForumRef}
-				value=""
+				value={itemData?.content}
 			/>
 			<label className={`${cx('label')}`}>Hình ảnh</label>
 			<div className={`${cx('single_upload_container')}`}>
 				<SingleUpload width={'100%'} />
-				<img
-					src={urlImageSingle}
-					alt=""
-					className={`${cx('image_single')}`}
-					onError={(e) => (e.target.src = LOGO_COMPANY)}
-				/>
+				{(singleFile.length > 0 || itemData?.thumbnail) && (
+					<img
+						src={
+							`${urlImageSingle}` ||
+							`${URL}${itemData?.thumbnail}`
+						}
+						alt=""
+						className={`${cx('image_single')}`}
+						onError={(e) => (e.target.src = LOGO_COMPANY)}
+					/>
+				)}
 			</div>
 			{/* <label className={`${cx('label')}`}>Hình ảnh (Tối đa 5 ảnh)</label>
 			<div className={`${cx('multiple_upload_container')}`}>
@@ -200,15 +272,14 @@ function CreateForumContent() {
 				<Button
 					className="probgc text-center"
 					isProcess={isProcess}
-					onClick={handleCreateContent}
-					disabled={
-						isProcess ||
-						!editorForumRef?.current?.getContent() ||
-						singleFile.length === 0 ||
-						multipleFile.length === 0
+					onClick={
+						!idForumContent
+							? handleCreateContent
+							: handleUpdateForumContent
 					}
+					disabled={isProcess || !title || !subTitle || !topic}
 				>
-					Gửi
+					{idForumContent ? 'Cập nhật' : 'Gửi'}
 				</Button>
 			</div>
 		</div>

@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-lone-blocks */
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import className from 'classnames/bind';
 import styles from './ForumContent.module.css';
 import { actions } from '../../app/';
@@ -8,6 +10,7 @@ import {
 	handleUtils,
 	localStoreUtils,
 	useAppContext,
+	requestRefreshToken,
 } from '../../utils';
 import { ActionsTable, Icons, Modal, SnackbarCp } from '../../components';
 import routers from '../../routers/routers';
@@ -16,6 +19,11 @@ import General from '../General/General';
 import DataForumContentHeader from '../../utils/FakeData/ForumContentHeader';
 import LOGO_COMPANY from '../../assets/images/logo_company.png';
 import moment from 'moment';
+import {
+	getAllForumContentSV,
+	deleteForumContentSV,
+} from '../../services/admin';
+import { getFirstXLines } from '../../utils/getStringHTML';
 
 const cx = className.bind(styles);
 
@@ -25,6 +33,7 @@ function ForumContent() {
 		currentUser,
 		searchValues: { forumContent },
 		pagination: { page, show },
+		data: { dataUser, dataForumContent },
 	} = state.set;
 	const { modalDelete } = state.toggle;
 	const [isProcess, setIsProcess] = useState(false);
@@ -33,6 +42,17 @@ function ForumContent() {
 		type: '',
 		message: '',
 	});
+	const getAllForumSV = (dataToken) => {
+		getAllForumContentSV({
+			token: dataToken?.token,
+			setSnackbar,
+			dispatch,
+			state,
+		});
+	};
+	useEffect(() => {
+		getAllForumSV();
+	}, []);
 	const handleCloseSnackbar = (event, reason) => {
 		if (reason === 'clickaway') {
 			return;
@@ -42,10 +62,18 @@ function ForumContent() {
 			open: false,
 		});
 	};
+	const URL = process.env.REACT_APP_URL_IMAGE;
 	let showPage = 10;
 	const start = (page - 1) * showPage + 1;
 	const end = start + showPage - 1;
-	const dataForumContentFlag = [1, 2, 3];
+	let dataForumContentFlag = dataForumContent || [];
+	if (forumContent) {
+		dataForumContentFlag = dataForumContent.filter((x) => {
+			return x?.type
+				?.toLowerCase()
+				?.includes(forumContent?.toLowerCase());
+		});
+	}
 	const modalDeleteTrue = (e, id) => {
 		return deleteUtils.deleteTrue(e, id, dispatch, state, actions);
 	};
@@ -67,21 +95,32 @@ function ForumContent() {
 		return (
 			<>
 				{data.map((item, index) => {
+					const username = dataUser?.filter((x) => {
+						return item?.idUser === x?._id;
+					})[0]?.username;
+					let count = (item?.content?.match(/(\n|<br>)/g) || [])
+						.length;
+					let content = '';
+					if (count > 3) {
+						content = getFirstXLines(item?.content, 3) + '...';
+					} else {
+						content = item?.content;
+					}
 					return (
 						<tr key={index}>
 							<td>{handleUtils.indexTable(page, show, index)}</td>
-							<td>NguyenMinhChau</td>
+							<td>{username}</td>
 							<td className="item-w200">
 								<div
 									className={`${cx('content')}`}
 									dangerouslySetInnerHTML={{
-										__html: `❤️<b>The first test verifies that the Counter component renders with a count of 0 by default. In the second test, we pass in a value of 1 for the initialCount prop and test whether the rendered count value is also 1.</b>. Finally, the third test checks whether the Counter component updates the count correctly after the increment button is clicked.`,
+										__html: content,
 									}}
 								></div>
 							</td>
 							<td className="item-w150">
 								<img
-									src=""
+									src={`${URL}${item?.thumbnail}`}
 									alt=""
 									onError={(e) =>
 										(e.target.src = LOGO_COMPANY)
@@ -90,20 +129,20 @@ function ForumContent() {
 								/>
 							</td>
 							<td className="item-w150">
-								{moment(new Date()).format(
+								{moment(item?.createdAt).format(
 									'DD/MM/YYYY HH:mm:ss',
 								)}
 							</td>
-							<td>TUYEN_DUNG</td>
+							<td>{item?.type}</td>
 							<td>
 								<ActionsTable
 									view
-									linkView={`${routers.content}/${routers.updateforumcontent}/1`}
+									linkView={`${routers.content}/${routers.updateforumcontent}/${item?._id}`}
 									onClickDel={async (e) => {
-										modalDeleteTrue(e, item.id);
+										modalDeleteTrue(e, item?._id);
 										await localStoreUtils.setStore({
 											...currentUser,
-											idUpdate: item?.id,
+											idUpdate: item?._id,
 										});
 										await dispatch(
 											actions.setData({
@@ -122,12 +161,24 @@ function ForumContent() {
 			</>
 		);
 	};
-	const deleteRecuiterContent = async (id) => {
-		await 1;
-		dispatch(
-			actions.toggleModal({
-				modalDelete: false,
-			}),
+	const deleteForumContent = (dataToken, id) => {
+		deleteForumContentSV({
+			id_post: id,
+			setSnackbar,
+			dispatch,
+			state,
+			token: dataToken?.token,
+			setIsProcess,
+		});
+	};
+	const deleteRecuiterContent = (id) => {
+		requestRefreshToken(
+			currentUser,
+			deleteForumContent,
+			state,
+			dispatch,
+			actions,
+			id,
 		);
 	};
 	return (
