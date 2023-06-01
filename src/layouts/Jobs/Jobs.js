@@ -9,6 +9,7 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { FormInput, SliderHeader, SnackbarCp } from '../../components';
 import LOGO_COMPANY from '../../assets/images/logo-company.png';
+import LOGO_SLIDER from '../../assets/images/viec_lam_bgc.png';
 import { routers } from '../../routers';
 import moment from 'moment';
 import { useAppContext } from '../../utils';
@@ -208,9 +209,7 @@ export default function Jobs() {
 	return (
 		<div className={`${cx('container')}`}>
 			<SliderHeader
-				urlImage={
-					'https://images.unsplash.com/photo-1598257006675-0aaec40301f9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTR8fHJlY3J1aXRtZW50fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=2000&q=2000'
-				}
+				urlImage={LOGO_SLIDER}
 				title={`<b>VIỆC LÀM</b>`}
 				animateName="animate__bounceInUp"
 			/>

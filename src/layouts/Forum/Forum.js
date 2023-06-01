@@ -16,6 +16,7 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { Link } from 'react-router-dom';
 import LOGO_COMPANY from '../../assets/images/logo-company.png';
+import LOGO_SLIDER from '../../assets/images/dien_dan_bgc.png';
 import { useAppContext } from '../../utils';
 import { autoFormatNumberInputChange } from '../../utils/format/NumberFormat';
 import { routers } from '../../routers';
@@ -658,9 +659,7 @@ export default function Forum() {
 	return (
 		<div className={`${cx('container')}`}>
 			<SliderHeader
-				urlImage={
-					'https://images.unsplash.com/photo-1468971050039-be99497410af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NjV8fHJlY3J1aXRtZW50fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=2000&q=2000'
-				}
+				urlImage={LOGO_SLIDER}
 				title={`<b>DIỄN ĐÀN</b>`}
 				animateName="animate__fadeInBottomLeft"
 			/>
