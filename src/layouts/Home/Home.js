@@ -139,8 +139,8 @@ export default function Home() {
 				>
 					<div className={`${cx('line')}`}>
 						<span className="fwb fz16">Địa chỉ trụ sở chính:</span>{' '}
-						The River Thủ Thiêm, 23 Đ. Trần Bạch Đằng, An Khánh,
-						Quận 2, Thành phố Hồ Chí Minh
+						4.70 Tầng 4, Tòa nhà RiverGate, Số 151_155 Bến Vân Đồn,
+						Phường 06, Quận 4, Thành phố Hồ Chí Minh
 					</div>
 					<div className={`${cx('line')}`}>
 						<span className="fwb fz16">Số điện thoại:</span>{' '}
